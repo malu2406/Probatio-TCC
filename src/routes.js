@@ -24,6 +24,10 @@ router.post('/cadastro', async (req, res) => {
   res.send('Cadastro realizado com sucesso!');
 });
 
+router.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
 router.post('/login', (req, res) => {
   const { email, senha } = req.body;
 
