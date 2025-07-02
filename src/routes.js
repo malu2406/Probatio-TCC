@@ -4,6 +4,11 @@ const router = express.Router();
 const path = require('path');
 
 // Rota para exibir a página de cadastro
+
+router.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+})
+
 router.get('/cadastro', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'cadastro.html'));
 });
@@ -17,6 +22,18 @@ router.post('/cadastro', async (req, res) => {
   // await prisma.usuario.create({ data: { nome, email, senha } });
 
   res.send('Cadastro realizado com sucesso!');
+});
+
+router.post('/login', (req, res) => {
+  const { email, senha } = req.body;
+
+  // Aqui você pode validar o usuário com o banco de dados
+  // Exemplo simplificado:
+  if (email === "admin@teste.com" && senha === "1234") {
+    res.send('Login bem-sucedido!');
+  } else {
+    res.send('Email ou senha incorretos.');
+  }
 });
 
 module.exports = router;
