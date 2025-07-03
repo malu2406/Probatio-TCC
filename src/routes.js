@@ -46,14 +46,17 @@ router.post('/login', async (req, res) => {
     });
 
     if (usuario && usuario.senha === senha) {
-      res.send('Login bem-sucedido!');
+      res.sendFile(path.join(__dirname, 'views', 'inicio.html'))
     } else {
-      res.send('Email ou senha incorretos.');
+      res.redirect('/login?erro=1');
+      
     }
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao fazer login.');
   }
 });
+
+
 
 module.exports = router;
