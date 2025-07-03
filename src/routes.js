@@ -30,9 +30,6 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res) => {
   const { email, senha } = req.body;
-
-  // Aqui você pode validar o usuário com o banco de dados
-  // Exemplo simplificado:
   if (email === "schroedereduarda17@gmail.com" && senha === "1234") {
     res.send('Login bem-sucedido!');
   } else {
