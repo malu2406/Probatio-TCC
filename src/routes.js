@@ -57,6 +57,36 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.get('/inicio', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'inicio.html'));
+});
+
+router.get('/materias', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'materias.html'));
+});
+
+router.get('/simulado', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'simulado.html'));
+});
+
+router.get('/estasticas', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'estasticas.html'));
+});
+
+router.get('/flashcards', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'flashcards.html'));
+});
+
+router.get('/noticias', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'noticias.html'));
+});
+
+router.get('/pomodoro', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'pomodoro.html'));
+});
+
+
+
 
 
 module.exports = router;
