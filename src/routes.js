@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcrypt');
 
 const prisma = new PrismaClient();
 
@@ -21,9 +22,17 @@ router.post('/cadastro', async (req, res) => {
   const { nome, numero, email, senha } = req.body;
 
   try {
+    const senhaHash = await bcrypt.hash(senha, 10);
+
     await prisma.user.create({
-      data: { nome, numero: parseInt(numero), email, senha },
+      data: { 
+        nome, 
+        numero: parseInt(numero), 
+        email, 
+        senha: senhaHash 
+      },
     });
+
     res.send('Cadastro realizado com sucesso!');
   } catch (error) {
     console.error(error);
@@ -45,11 +54,11 @@ router.post('/login', async (req, res) => {
       where: { email },
     });
 
-    if (usuario && usuario.senha === senha) {
-      res.sendFile(path.join(__dirname, 'views', 'inicio.html'))
+
+     if (usuario && await bcrypt.compare(senha, usuario.senha)) {
+      res.sendFile(path.join(__dirname, 'views', 'inicio.html'));
     } else {
       res.redirect('/login?erro=1');
-      
     }
   } catch (error) {
     console.error(error);

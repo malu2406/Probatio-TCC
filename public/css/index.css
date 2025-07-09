@@ -1,0 +1,29 @@
+body{
+    background-color: #fafbfc;
+}
+
+#container{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    margin-right: 200px;
+    margin-left: 200px;
+}
+
+header{
+    justify-content: space-between  ;
+    flex-direction: row;
+    display: flex;
+    margin-left: 10px;
+    
+}
+nav, ul {
+ display: flex;
+ justify-content: space-between;
+ padding: 1rem;
+}
+
+nav ul li {
+ margin-left: 4rem;
+}
+
