@@ -1,29 +1,221 @@
-body{
-    background-color: #fafbfc;
+@font-face {
+  font-family: 'probatio';
+  src: url('/fonts/GenerateChangesDemo.ttf') format('opentype');
 }
 
-#container{
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    margin-right: 200px;
-    margin-left: 200px;
+body {
+  background-color: #fafbfc;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+   padding-top: 80px; /* Espaço para o header fixo */
 }
 
-header{
-    justify-content: space-between  ;
-    flex-direction: row;
-    display: flex;
-    margin-left: 10px;
-    
+#container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
-nav, ul {
- display: flex;
- justify-content: space-between;
- padding: 1rem;
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff8a;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 11%;
+  box-sizing: border-box;
+}
+
+header:hover{
+      background-color: #fafbfc;
+      transition: all 0.5s;
+
+}
+
+
+#header_esquerda {
+  display: flex;
+  align-items: center;
+}
+
+nav ul {
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 nav ul li {
- margin-left: 4rem;
+  margin-left: 2rem;
+  list-style: none;
 }
 
+a {
+  text-decoration: none;
+  color: #202f5a;
+  font-size: clamp(14px, 2.5vh, 18px);
+    transform-origin: center;
+}
+
+a:hover{
+    color: #f6b737;
+    transition: all 0.4s;
+    font-size: clamp(18px, 2.5vh, 19px);
+    transform: translateY(-2px);
+    text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
+
+}
+
+h2{
+    color: #202f5a;
+}
+
+pezao {
+  color: #202f5a;
+}
+
+#logo {
+  font-family: 'probatio';
+  font-size: clamp(16px, 3vh, 24px);
+    position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#logo:hover {
+  color: #f6b737;
+  transform: translateY(-2px);
+  text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
+}
+.pezinho {
+  color: #f6b737;
+}
+
+.page1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem 0;
+  justify-content: center;
+  
+}
+
+.texto {
+  flex: 1;
+  min-width: 300px;
+  padding: 0 1rem;
+  
+}
+
+.dragon {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+#button_login, #button_cadastro {
+  display: inline-block;
+  padding: 12px 32px;
+  border-radius: 18px;
+  border: none;
+  background-color: #202f5a;
+  color: #ebe4e4;
+  text-decoration: none;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  margin: 0.5rem;
+}
+
+#button_login {
+  margin-left: auto; /* Empurra para a direita */
+  /* Mantendo seus estilos originais */
+  display: inline-block;
+  padding: 12px 32px;
+  border-radius: 18px;
+  border: none;
+  background-color: #202f5a;
+  color: #ebe4e4;
+  text-decoration: none;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+#button_login:hover, #button_cadastro:hover {
+  background-color: #20305ac2;
+  transition: all 0.5s;
+  transform: scale(1.1);
+}
+
+/* Media Queries  Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries */
+/* Media Queries  Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries */
+/* Media Queries  Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries */
+
+@media (max-width: 1024px) {
+  nav ul li {
+    margin-left: 1.5rem;
+  }
+  
+  .page1 {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  nav ul li {
+    margin: 0.5rem 0;
+    margin-left: 0;
+  }
+  
+  #button_login {
+    margin-top: 1rem;
+  }
+  
+  .page1 {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .texto {
+    order: 2;
+    text-align: center;
+  }
+  
+  .dragon {
+    order: 1;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  #button_login, #button_cadastro {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+  
+  .texto {
+    min-width: 100%;
+  }
+}

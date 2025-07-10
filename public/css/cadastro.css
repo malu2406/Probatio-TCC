@@ -1,0 +1,142 @@
+body{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+
+    .link{
+        font-size: 13px;
+        margin-top: 30px;
+        align-items: end;
+    }
+.container{
+    width: 80%;
+    height: 80%;
+    display: flex;
+
+    box-shadow: 5px 5px 10px rgba(0, 0, .212);
+}
+
+.form-image{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #202f5a;
+    padding: 1rem;
+}
+
+.form-image img{
+    width: 17rem;
+}
+
+.form{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: floralwhite;
+    padding: 3rem;
+    
+    
+}
+
+.form-header{
+    margin-bottom: 3rem;
+    display: flex;
+    
+    justify-content: space-between;
+}
+.login-button {
+  display: ruby;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.login-button button {
+  width: 100%;
+  padding: 12px 32px;
+  border-radius: 18px;
+  border: none;
+  background-color: #202f5a;
+  color: #ebe4e4;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.login-button button:hover {
+  background-color: transparent;
+  color: #202f5a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(32, 47, 90, 0.2);
+}
+
+.login-button a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+.continue-button{
+     display: inline-block;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.continue-button button{
+     width: 100%;
+  padding: 12px 32px;
+  border-radius: 18px;
+  border: none;
+  background-color: #202f5a;
+  color: #ebe4e4;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.continue-button button:hover{
+  background-color: transparent;
+  color: #202f5a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(32, 47, 90, 0.2);
+}
+
+.continue-button a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+
+/* Estilos para os inputs e labels */
+.input-group {
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-box {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.input-box label {
+  display: none; 
+}
+
+.input-box input{
+    width: 30vh;
+    height: 4vh;
+    border-color: #202f5a;
+    border-radius: 10px;
+    border: groove;
+}
