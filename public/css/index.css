@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'probatio';
-  src: url('/fonts/GenerateChangesDemo.ttf') format('opentype');
+  font-family: "probatio";
+  src: url("/fonts/GenerateChangesDemo.ttf") format("opentype");
 }
 
 body {
@@ -8,7 +8,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-   padding-top: 80px; /* Espaço para o header fixo */
+  padding-top: 80px; /* Espaço para o header fixo */
 }
 
 #container {
@@ -18,27 +18,28 @@ body {
   padding: 0 20px;
   box-sizing: border-box;
 }
-
 header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #ffffff8a;
+  background-color: #ffffffa3;
   z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 11%;
   box-sizing: border-box;
+  transition: background-color 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+    box-shadow 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+    transform 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
-header:hover{
-      background-color: #fafbfc;
-      transition: all 0.5s;
-
+header:hover {
+  background-color: #ffffff;
+  box-shadow: -2px 2px 20px rgba(142, 142, 142, 0.53);
+  transform: translateY(-2px);
 }
-
 
 #header_esquerda {
   display: flex;
@@ -63,31 +64,30 @@ a {
   text-decoration: none;
   color: #202f5a;
   font-size: clamp(14px, 2.5vh, 18px);
-    transform-origin: center;
+  transform-origin: center;
+  transition: color 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+    transform 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+    text-shadow 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
-a:hover{
-    color: #f6b737;
-    transition: all 0.4s;
-    font-size: clamp(18px, 2.5vh, 19px);
-    transform: translateY(-2px);
-    text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
-
+a:hover {
+  color: #f6b737;
+  text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
+  transform: translateY(-2px);
 }
-
-h2{
-    color: #202f5a;
+h2 {
+  color: #202f5a;
 }
-
 pezao {
   color: #202f5a;
 }
-
 #logo {
-  font-family: 'probatio';
+  font-family: "probatio";
   font-size: clamp(16px, 3vh, 24px);
-    position: relative;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  transition: color 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+    transform 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+    text-shadow 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
 #logo:hover {
@@ -95,6 +95,7 @@ pezao {
   transform: translateY(-2px);
   text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
 }
+
 .pezinho {
   color: #f6b737;
 }
@@ -106,14 +107,12 @@ pezao {
   gap: 2rem;
   padding: 2rem 0;
   justify-content: center;
-  
 }
 
 .texto {
   flex: 1;
   min-width: 300px;
   padding: 0 1rem;
-  
 }
 
 .dragon {
@@ -123,7 +122,8 @@ pezao {
   flex-shrink: 0;
 }
 
-#button_login, #button_cadastro {
+#button_login,
+#button_cadastro {
   display: inline-block;
   padding: 12px 32px;
   border-radius: 18px;
@@ -139,8 +139,7 @@ pezao {
 }
 
 #button_login {
-  margin-left: auto; /* Empurra para a direita */
-  /* Mantendo seus estilos originais */
+  margin-left: auto;
   display: inline-block;
   padding: 12px 32px;
   border-radius: 18px;
@@ -153,7 +152,8 @@ pezao {
   cursor: pointer;
   white-space: nowrap;
 }
-#button_login:hover, #button_cadastro:hover {
+#button_login:hover,
+#button_cadastro:hover {
   background-color: #20305ac2;
   transition: all 0.5s;
   transform: scale(1.1);
@@ -167,7 +167,7 @@ pezao {
   nav ul li {
     margin-left: 1.5rem;
   }
-  
+
   .page1 {
     gap: 1rem;
   }
@@ -178,31 +178,31 @@ pezao {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   nav ul {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   nav ul li {
     margin: 0.5rem 0;
     margin-left: 0;
   }
-  
+
   #button_login {
     margin-top: 1rem;
   }
-  
+
   .page1 {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .texto {
     order: 2;
     text-align: center;
   }
-  
+
   .dragon {
     order: 1;
     max-width: 300px;
@@ -210,11 +210,12 @@ pezao {
 }
 
 @media (max-width: 480px) {
-  #button_login, #button_cadastro {
+  #button_login,
+  #button_cadastro {
     padding: 10px 24px;
     font-size: 14px;
   }
-  
+
   .texto {
     min-width: 100%;
   }

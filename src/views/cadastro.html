@@ -1,62 +1,88 @@
-<!-- src/views/cadastro.html -->
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Cadastro</title>
-    <link rel="stylesheet" href="/css/cadastro.css">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="/css/cadastro.css" />
+  </head>
 
-</head>
+  <body>
+    <div class="container">
+      <div class="form-image">
+        <img src="/images/dragon-remove.png" />
+      </div>
+      <div class="form">
+        <form action="/cadastro" method="POST">
+          <div class="form-header">
+            <div class="title">
+              <h2>Cadastro de Usuário</h2>
+            </div>
+          </div>
 
-<body>
-  <div class="container">
-    <div class="form-image">
-      <img src="/images/dragon-remove.png">
+          <div class="input-group">
+            <div class="input-box">
+              <label for="nome">Nome:</label>
+              <input
+                type="text"
+                name="nome"
+                id="nome"
+                placeholder="Digite seu Nome"
+                required
+              />
+            </div>
+            <div class="input-box">
+              <label for="numero">Número:</label>
+              <input
+                type="tel"
+                name="numero"
+                id="numero"
+                placeholder="(xx) xxxx-xxxx"
+                required
+              />
+            </div>
+            <div class="input-box">
+              <label for="email">Email:</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Digite seu email"
+                required
+              />
+            </div>
+            <div class="input-box">
+              <label for="senha">Senha:</label>
+              <input
+                type="password"
+                name="senha"
+                id="senha"
+                placeholder="Digite sua senha"
+                required
+              />
+            </div>
+            <div class="input-box">
+              <label for="senha">Confirme a senha:</label>
+              <input
+                type="password"
+                name="confirmesenha"
+                id="confirmesenha"
+                placeholder="Digite sua senha"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="continue-button">
+            <button type="submit">Cadastrar</button>
+          </div>
+
+          <div class="link">
+            <a href="/login">É novo aqui? Crie uma conta</a>
+
+            <a href="/">Voltar para tela inicial</a>
+          </div>
+        </form>
+      </div>
     </div>
-    <div class="form">
-      <form action="/cadastro" method="POST">
-        <div class="form-header">
-          <div class="title">
-            <h2>Cadastro de Usuário</h2>
-          </div>
-            
-        </div>
-
-        <div class="input-group">
-          <div class="input-box">
-            <label for="nome">Nome:</label>
-            <input type="text" name="nome" id="nome" placeholder="Digite seu Nome" required><br>
-          </div>
-          <div class="input-box">
-            <label for="numero">Número:</label>
-            <input type="tel" name="numero" id="numero" placeholder="(xx) xxxx-xxxx" required><br>
-          </div>
-          <div class="input-box">
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" placeholder="Digite seu email" required><br>
-          </div>
-          <div class="input-box">
-            <label for="senha">Senha:</label>
-            <input type="password" name="senha" id="senha" placeholder="Digite sua senha" required><br>
-          </div>
-          <div class="input-box">
-            <label for="senha">Confirme a senha:</label>
-            <input type="password" name="confirmesenha" id="confirmesenha" placeholder="Digite sua senha" required><br>
-          </div>
-        </div>    
-    <div class="continue-button">
-      <button type="submit">Cadastrar</button>
-    </div>
-     <div class="login-button">
-            <button><a href="/login">Login</a></button>
-            <div class="link"><a href="/">Voltar para tela inicial</a></div>
-      </div> 
-    
-
-  </div>
-
-  </form>
-
-
-</body>
+  </body>
 </html>
