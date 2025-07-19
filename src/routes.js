@@ -93,4 +93,8 @@ router.get("/pomodoro", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
 });
 
+router.get("/teste_api", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "teste_api.html"));
+});
+
 module.exports = router;
