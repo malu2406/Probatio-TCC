@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/malu2406/Probatio-TCC#readme",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "nodemon": "^3.1.10"
   }
 }

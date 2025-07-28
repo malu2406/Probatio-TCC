@@ -4,19 +4,59 @@
   <head>
     <meta charset="UTF-8" />
     <title>Login</title>
+    <link rel="stylesheet" href="/css/login.css" />
   </head>
+
   <body>
-    <h2>Login</h2>
-    <form action="/login" method="POST">
-      <label for="email">Email:</label>
-      <input type="email" name="email" id="email" required /><br />
+    <div class="container">
+      <div class="form-image">
+        <img src="/images/dragon-remove.png" />
+      </div>
+      <div class="form">
+        <form action="/login" method="POST">
+          <div class="form-header">
+            <div class="title">
+              <h1>Entrar</h1>
+            </div>
+          </div>
 
-      <label for="senha">Senha:</label>
-      <input type="password" name="senha" id="senha" required /><br />
+          <div class="input-group">
+            <div class="input-box">
+              <label for="nome">Email:</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Digite seu email"
+                required
+              />
+            </div>
+            </div>
+            <div class="input-box">
+              <label for="senha">Senha:</label>
+              <input
+                type="password"
+                name="senha"
+                id="senha"
+                placeholder="Digite sua senha"
+                required
+              />
+            </div>
 
-      <button type="submit">Entrar</button>
-    </form>
+          <div class="continue-button">
+            <button type="submit">Entrar</button>
+          </div>
 
-    <a href="/">Voltar para tela inicial</a>
+          <div class="link">
+            <a href="/cadastro">É novo aqui? Crie uma conta</a>
+
+            <a href="">Esqueci a senha</a>
+
+            <a href="/">Voltar</a>
+          </div>
+        </form>
+      </div>
+    </div>
   </body>
 </html>
+

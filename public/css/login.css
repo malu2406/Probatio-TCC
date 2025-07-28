@@ -14,11 +14,17 @@ h1{
 .link a {
   color: #8a94a6;
   font-size: 14px;
-  display: inline-block;
-  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   transition: all 0.3s ease;
+}
+
+.link{
+  margin-top: 1rem;
 }
 
 .link a:hover {
