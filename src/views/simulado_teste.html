@@ -5,116 +5,507 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Simulado</title>
     <style>
+      /* Reset e Variáveis */
+      :root {
+        --primary: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary: #3f37c9;
+        --success: #4cc9f0;
+        --error: #f72585;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --gray: #6c757d;
+        --border-radius: 12px;
+        --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
       body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
+        background-color: #f5f7ff;
+        color: var(--dark);
+        line-height: 1.6;
+        padding: 20px;
+        min-height: 100vh;
       }
-      button {
-        margin: 5px;
-        padding: 10px;
-        font-size: 16px;
+
+      /* Layout Principal */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
       }
-      .resposta {
-        display: block;
-        margin: 5px 0;
-        padding: 8px;
+
+      .simulado-container {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 30px;
+        margin-top: 20px;
+      }
+
+      /* Cabeçalho */
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        color: var(--primary);
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      /* Navegação entre Etapas */
+      .step-navigation {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+      }
+
+      .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 15px;
+      }
+
+      .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--light);
+        color: var(--gray);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 8px;
+        border: 2px solid var(--gray);
+      }
+
+      .step.active .step-number {
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .step.completed .step-number {
+        background-color: var(--success);
+        color: white;
+        border-color: var(--success);
+      }
+
+      .step-label {
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      .step.active .step-label {
+        color: var(--primary);
+        font-weight: 500;
+      }
+
+      /* Cards de Disciplina/Subdisciplina */
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 25px;
+        text-align: center;
         cursor: pointer;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        transition: var(--transition);
+        border: 1px solid #e9ecef;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
       }
-      .resposta.correta {
-        background-color: #c8e6c9;
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary);
       }
-      .resposta.errada {
-        background-color: #ffcdd2;
+
+      .card h3 {
+        color: var(--primary);
+        margin-bottom: 10px;
       }
-      .hidden {
-        display: none;
+
+      /* Questão */
+      .question-container {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 30px;
+        margin-top: 20px;
+        position: relative;
       }
-      #imagem-questao {
+
+      .question-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .question-number {
+        background: var(--primary);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+      }
+
+      .question-text {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        line-height: 1.7;
+      }
+
+      .question-image {
         max-width: 100%;
-        margin: 10px 0;
+        height: auto;
         border-radius: 8px;
+        margin: 20px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        display: block;
+      }
+
+      /* Alternativas */
+      .options-container {
+        margin-top: 25px;
+      }
+
+      .option {
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        border-radius: var(--border-radius);
+        background: var(--light);
+        cursor: pointer;
+        transition: var(--transition);
+        border: 2px solid transparent;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .option:hover {
+        background: #e9ecef;
+      }
+
+      .option-letter {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: white;
+        color: var(--primary);
+        text-align: center;
+        line-height: 30px;
+        margin-right: 15px;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      .option.correct {
+        background: rgba(76, 201, 240, 0.2);
+        border-color: var(--success);
+        color: #155724;
+      }
+
+      .option.correct .option-letter {
+        background: var(--success);
+        color: white;
+      }
+
+      .option.incorrect {
+        background: rgba(247, 37, 133, 0.1);
+        border-color: var(--error);
+        color: #721c24;
+      }
+
+      .option.incorrect .option-letter {
+        background: var(--error);
+        color: white;
+      }
+
+      /* Botões */
+      .button {
+        padding: 12px 25px;
+        border-radius: var(--border-radius);
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .button-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .button-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+      }
+
+      .button-secondary {
+        background: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+      }
+
+      .button-secondary:hover {
+        background: #f0f4ff;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        justify-content: center;
+      }
+
+      /* Feedback e Loaders */
+      .loading {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border: 3px solid rgba(67, 97, 238, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--primary);
+        animation: spin 1s ease-in-out infinite;
+        margin: 20px auto;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-message {
+        color: var(--error);
+        background: rgba(247, 37, 133, 0.1);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        margin: 20px 0;
+        text-align: center;
+        border-left: 4px solid var(--error);
+      }
+
+      .success-message {
+        color: #155724;
+        background: rgba(76, 201, 240, 0.2);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        margin: 20px 0;
+        text-align: center;
+        border-left: 4px solid var(--success);
+      }
+
+      /* Responsividade */
+      @media (max-width: 768px) {
+        .card-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .question-container {
+          padding: 20px;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+
+        .button {
+          width: 100%;
+        }
+      }
+
+      /* Efeitos Visuais */
+      .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Esconder elementos */
+      .hidden {
+        display: none !important;
       }
     </style>
   </head>
   <body>
     <h1>Escolha uma disciplina</h1>
+    <div id="loading">Carregando...</div>
+    <div id="error-message"></div>
     <div id="disciplinas"></div>
 
     <div id="subdisciplinas-container" class="hidden">
       <h2>Escolha uma subdisciplina</h2>
       <div id="subdisciplinas"></div>
+      <button id="voltar-disciplinas">Voltar</button>
     </div>
 
     <div id="questao-container" class="hidden">
-      <h2>Questão</h2>
+      <h2>Questão <span id="contador-questao"></span></h2>
       <p id="enunciado"></p>
-      <!-- Aqui vamos inserir a imagem da questão -->
       <img id="imagem-questao" class="hidden" alt="Imagem da questão" />
       <div id="alternativas"></div>
       <button id="proxima" class="hidden">Próxima questão</button>
+      <button id="voltar-subdisciplinas">Voltar</button>
     </div>
 
     <script>
-      const apiBase = "/api"; // ajuste conforme rota do seu backend
-
+      const apiBase = "http://localhost:3000/api";
       let questoes = [];
       let indiceQuestao = 0;
+      let totalQuestoes = 0;
+
+      function showError(message) {
+        document.getElementById("error-message").textContent = message;
+      }
+
+      function clearError() {
+        document.getElementById("error-message").textContent = "";
+      }
+
+      function showLoading(show) {
+        document.getElementById("loading").style.display = show
+          ? "block"
+          : "none";
+      }
 
       async function fetchDisciplinas() {
-        const res = await fetch(`${apiBase}/disciplinas`);
-        const data = await res.json();
-        const div = document.getElementById("disciplinas");
-        div.innerHTML = "";
-        data.forEach((d) => {
-          const btn = document.createElement("button");
-          btn.textContent = d.nome;
-          btn.onclick = () => fetchSubdisciplinas(d.id);
-          div.appendChild(btn);
-        });
+        try {
+          clearError();
+          showLoading(true);
+          const res = await fetch(`${apiBase}/disciplinas`);
+          if (!res.ok) throw new Error("Falha ao carregar disciplinas");
+
+          const data = await res.json();
+          const div = document.getElementById("disciplinas");
+          div.innerHTML = data
+            .map(
+              (d) =>
+                `<button onclick="fetchSubdisciplinas(${d.id})">${d.nome}</button>`
+            )
+            .join("");
+
+          document
+            .getElementById("subdisciplinas-container")
+            .classList.add("hidden");
+          document.getElementById("questao-container").classList.add("hidden");
+          showLoading(false);
+        } catch (error) {
+          showError(error.message);
+          showLoading(false);
+        }
       }
 
       async function fetchSubdisciplinas(disciplinaId) {
-        document
-          .getElementById("subdisciplinas-container")
-          .classList.remove("hidden");
-        document.getElementById("questao-container").classList.add("hidden");
-        const res = await fetch(
-          `${apiBase}/disciplinas/${disciplinaId}/subdisciplinas`
-        );
-        const data = await res.json();
-        const div = document.getElementById("subdisciplinas");
-        div.innerHTML = "";
-        data.forEach((s) => {
-          const btn = document.createElement("button");
-          btn.textContent = s.nome;
-          btn.onclick = () => fetchQuestoes(s.id);
-          div.appendChild(btn);
-        });
+        try {
+          clearError();
+          showLoading(true);
+          const res = await fetch(
+            `${apiBase}/disciplinas/${disciplinaId}/subdisciplinas`
+          );
+          if (!res.ok) throw new Error("Falha ao carregar subdisciplinas");
+
+          const data = await res.json();
+          const div = document.getElementById("subdisciplinas");
+          div.innerHTML = data
+            .map(
+              (s) =>
+                `<button onclick="fetchQuestoes(${s.id})">${s.nome}</button>`
+            )
+            .join("");
+
+          document
+            .getElementById("subdisciplinas-container")
+            .classList.remove("hidden");
+          document.getElementById("questao-container").classList.add("hidden");
+          showLoading(false);
+        } catch (error) {
+          showError(error.message);
+          showLoading(false);
+        }
       }
 
       async function fetchQuestoes(subdisciplinaId) {
-        document.getElementById("questao-container").classList.remove("hidden");
-        const res = await fetch(
-          `${apiBase}/subdisciplinas/${subdisciplinaId}/questoes`
-        );
-        questoes = await res.json();
-        indiceQuestao = 0;
-        mostrarQuestao();
+        try {
+          clearError();
+          showLoading(true);
+          const res = await fetch(
+            `${apiBase}/subdisciplinas/${subdisciplinaId}/questoes`
+          );
+          if (!res.ok) throw new Error("Falha ao carregar questões");
+
+          questoes = await res.json();
+          totalQuestoes = questoes.length;
+          indiceQuestao = 0;
+
+          if (questoes.length === 0) {
+            throw new Error(
+              "Nenhuma questão disponível para esta subdisciplina"
+            );
+          }
+
+          mostrarQuestao();
+          document
+            .getElementById("questao-container")
+            .classList.remove("hidden");
+          showLoading(false);
+        } catch (error) {
+          showError(error.message);
+          showLoading(false);
+        }
       }
 
       function mostrarQuestao() {
         const q = questoes[indiceQuestao];
         if (!q) {
+          document.getElementById("proxima").classList.add("hidden");
           alert("Fim das questões!");
-          document.getElementById("questao-container").classList.add("hidden");
           return;
         }
 
         document.getElementById("enunciado").textContent = q.enunciado;
+        document.getElementById("contador-questao").textContent = `(${
+          indiceQuestao + 1
+        }/${totalQuestoes})`;
 
-        // Mostra ou esconde a imagem
         const img = document.getElementById("imagem-questao");
         if (q.imagem) {
           img.src = q.imagem;
@@ -131,7 +522,7 @@
           const texto = q[`alternativa_${letra}`];
           if (!texto) return;
           const btn = document.createElement("button");
-          btn.textContent = texto;
+          btn.textContent = `${letra.toUpperCase()}) ${texto}`;
           btn.className = "resposta";
           btn.onclick = () =>
             responder(letra.toUpperCase(), q.resposta_correta, btn);
@@ -146,23 +537,32 @@
         botoes.forEach((b) => {
           b.disabled = true;
           if (b === botao) {
-            if (escolhida === correta) {
-              b.classList.add("correta");
-            } else {
-              b.classList.add("errada");
-            }
-          } else if (b.textContent === correta) {
+            b.classList.add(escolhida === correta ? "correta" : "errada");
+          } else if (b.textContent.startsWith(`${correta})`)) {
             b.classList.add("correta");
           }
         });
         document.getElementById("proxima").classList.remove("hidden");
       }
 
+      // Event listeners
       document.getElementById("proxima").onclick = () => {
         indiceQuestao++;
         mostrarQuestao();
       };
 
+      document.getElementById("voltar-disciplinas").onclick = () => {
+        document
+          .getElementById("subdisciplinas-container")
+          .classList.add("hidden");
+        fetchDisciplinas();
+      };
+
+      document.getElementById("voltar-subdisciplinas").onclick = () => {
+        document.getElementById("questao-container").classList.add("hidden");
+      };
+
+      // Inicialização
       fetchDisciplinas();
     </script>
   </body>
