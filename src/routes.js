@@ -1,98 +1,113 @@
-// src/routes.js
 const express = require("express");
 const router = express.Router();
 const path = require("path");
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
+const session = require("express-session");
 
 const prisma = new PrismaClient();
 
-// Página inicial
+// Middleware de autenticação
+function checkAuth(req, res, next) {
+  if (!req.session.user) {
+    return res.redirect("/login");
+  }
+  next();
+}
+
+// Rotas públicas
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
-// Página de cadastro
 router.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "cadastro.html"));
 });
 
-// Envio do formulário de cadastro
 router.post("/cadastro", async (req, res) => {
   const { nome, numero, email, senha } = req.body;
 
+  // Validação básica
+  if (!nome || !email || !senha) {
+    return res.status(400).send("Preencha todos os campos obrigatórios");
+  }
+
   try {
     const senhaHash = await bcrypt.hash(senha, 10);
-
     await prisma.user.create({
       data: {
         nome,
-        numero: parseInt(numero),
+        numero: parseInt(numero) || 0,
         email,
         senha: senhaHash,
       },
     });
-
-    res.send("Cadastro realizado com sucesso!");
+    res.redirect("/login?success=1");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Erro ao cadastrar usuário.");
+    res
+      .status(500)
+      .send("Erro ao cadastrar usuário. O email já pode estar em uso.");
   }
 });
 
-// Página de login
 router.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 
-// Verificação do login
 router.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
   try {
-    const usuario = await prisma.user.findUnique({
-      where: { email },
-    });
+    const usuario = await prisma.user.findUnique({ where: { email } });
 
-    if (usuario && (await bcrypt.compare(senha, usuario.senha))) {
-      res.sendFile(path.join(__dirname, "views", "inicio.html"));
-    } else {
-      res.redirect("/login?erro=1");
+    if (!usuario || !(await bcrypt.compare(senha, usuario.senha))) {
+      return res.redirect("/login?error=1");
     }
+
+    req.session.user = {
+      id: usuario.id,
+      email: usuario.email,
+      nome: usuario.nome,
+    };
+
+    res.redirect("/inicio");
   } catch (error) {
     console.error(error);
     res.status(500).send("Erro ao fazer login.");
   }
 });
 
-router.get("/inicio", (req, res) => {
+// Rotas protegidas
+router.get("/inicio", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "inicio.html"));
 });
 
-router.get("/materias", (req, res) => {
+router.get("/materias", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "materias.html"));
 });
 
-router.get("/simulado", (req, res) => {
+router.get("/simulado", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "simulado.html"));
 });
 
-router.get("/estasticas", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "estasticas.html"));
+router.get("/estatisticas", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "estatisticas.html"));
 });
 
-router.get("/flashcards", (req, res) => {
+router.get("/flashcards", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "flashcards.html"));
 });
 
-router.get("/noticias", (req, res) => {
+router.get("/noticias", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "noticias.html"));
 });
 
-router.get("/pomodoro", (req, res) => {
+router.get("/pomodoro", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
 });
 
+// API
 router.get("/api/disciplinas", async (req, res) => {
   try {
     const disciplinas = await prisma.disciplina.findMany();
@@ -104,8 +119,8 @@ router.get("/api/disciplinas", async (req, res) => {
 });
 
 router.get("/api/disciplinas/:id/subdisciplinas", async (req, res) => {
-  const disciplinaId = parseInt(req.params.id);
   try {
+    const disciplinaId = parseInt(req.params.id);
     const subdisciplinas = await prisma.subdisciplina.findMany({
       where: { disciplinaId },
     });
@@ -117,8 +132,8 @@ router.get("/api/disciplinas/:id/subdisciplinas", async (req, res) => {
 });
 
 router.get("/api/subdisciplinas/:id/questoes", async (req, res) => {
-  const subdisciplinaId = parseInt(req.params.id);
   try {
+    const subdisciplinaId = parseInt(req.params.id);
     const questoes = await prisma.questao.findMany({
       where: { subdisciplinaId },
     });
@@ -129,8 +144,15 @@ router.get("/api/subdisciplinas/:id/questoes", async (req, res) => {
   }
 });
 
-router.get("/simulado_teste", (req, res) => {
+// Rota de teste
+router.get("/simulado_teste", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "simulado_teste.html"));
+});
+
+// Logout
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
 });
 
 module.exports = router;
