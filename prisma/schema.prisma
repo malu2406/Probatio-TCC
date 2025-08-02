@@ -26,3 +26,38 @@ model User {
   email     String   @unique
   senha     String
 }
+
+
+
+model Disciplina {
+  id          Int          @id @default(autoincrement())
+  nome        String       @unique
+  subdisciplinas Subdisciplina[]
+  questoes    Questao[]
+}
+
+model Subdisciplina {
+  id           Int        @id @default(autoincrement())
+  nome         String
+  disciplinaId Int
+  disciplina   Disciplina @relation(fields: [disciplinaId], references: [id])
+  questoes     Questao[]
+}
+
+model Questao {
+  id               Int          @id @default(autoincrement())
+  createdAt        DateTime     @default(now())
+  enunciado        String
+  imagem           String?  // ← novo campo
+  alternativa_a    String
+  alternativa_b    String
+  alternativa_c    String
+  alternativa_d    String
+  alternativa_e    String
+  resposta_correta String
+  ano              Int
+  disciplinaId     Int
+  disciplina       Disciplina   @relation(fields: [disciplinaId], references: [id])
+  subdisciplinaId  Int?
+  subdisciplina    Subdisciplina? @relation(fields: [subdisciplinaId], references: [id])
+}

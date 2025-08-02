@@ -93,8 +93,44 @@ router.get("/pomodoro", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
 });
 
-router.get("/teste_api", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "teste_api.html"));
+router.get("/api/disciplinas", async (req, res) => {
+  try {
+    const disciplinas = await prisma.disciplina.findMany();
+    res.json(disciplinas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao buscar disciplinas" });
+  }
+});
+
+router.get("/api/disciplinas/:id/subdisciplinas", async (req, res) => {
+  const disciplinaId = parseInt(req.params.id);
+  try {
+    const subdisciplinas = await prisma.subdisciplina.findMany({
+      where: { disciplinaId },
+    });
+    res.json(subdisciplinas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao buscar subdisciplinas" });
+  }
+});
+
+router.get("/api/subdisciplinas/:id/questoes", async (req, res) => {
+  const subdisciplinaId = parseInt(req.params.id);
+  try {
+    const questoes = await prisma.questao.findMany({
+      where: { subdisciplinaId },
+    });
+    res.json(questoes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao buscar questões" });
+  }
+});
+
+router.get("/simulado_teste", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "simulado_teste.html"));
 });
 
 module.exports = router;

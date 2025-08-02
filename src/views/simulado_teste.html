@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simulado</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      button {
+        margin: 5px;
+        padding: 10px;
+        font-size: 16px;
+      }
+      .resposta {
+        display: block;
+        margin: 5px 0;
+        padding: 8px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .resposta.correta {
+        background-color: #c8e6c9;
+      }
+      .resposta.errada {
+        background-color: #ffcdd2;
+      }
+      .hidden {
+        display: none;
+      }
+      #imagem-questao {
+        max-width: 100%;
+        margin: 10px 0;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Escolha uma disciplina</h1>
+    <div id="disciplinas"></div>
+
+    <div id="subdisciplinas-container" class="hidden">
+      <h2>Escolha uma subdisciplina</h2>
+      <div id="subdisciplinas"></div>
+    </div>
+
+    <div id="questao-container" class="hidden">
+      <h2>Questão</h2>
+      <p id="enunciado"></p>
+      <!-- Aqui vamos inserir a imagem da questão -->
+      <img id="imagem-questao" class="hidden" alt="Imagem da questão" />
+      <div id="alternativas"></div>
+      <button id="proxima" class="hidden">Próxima questão</button>
+    </div>
+
+    <script>
+      const apiBase = "/api"; // ajuste conforme rota do seu backend
+
+      let questoes = [];
+      let indiceQuestao = 0;
+
+      async function fetchDisciplinas() {
+        const res = await fetch(`${apiBase}/disciplinas`);
+        const data = await res.json();
+        const div = document.getElementById("disciplinas");
+        div.innerHTML = "";
+        data.forEach((d) => {
+          const btn = document.createElement("button");
+          btn.textContent = d.nome;
+          btn.onclick = () => fetchSubdisciplinas(d.id);
+          div.appendChild(btn);
+        });
+      }
+
+      async function fetchSubdisciplinas(disciplinaId) {
+        document
+          .getElementById("subdisciplinas-container")
+          .classList.remove("hidden");
+        document.getElementById("questao-container").classList.add("hidden");
+        const res = await fetch(
+          `${apiBase}/disciplinas/${disciplinaId}/subdisciplinas`
+        );
+        const data = await res.json();
+        const div = document.getElementById("subdisciplinas");
+        div.innerHTML = "";
+        data.forEach((s) => {
+          const btn = document.createElement("button");
+          btn.textContent = s.nome;
+          btn.onclick = () => fetchQuestoes(s.id);
+          div.appendChild(btn);
+        });
+      }
+
+      async function fetchQuestoes(subdisciplinaId) {
+        document.getElementById("questao-container").classList.remove("hidden");
+        const res = await fetch(
+          `${apiBase}/subdisciplinas/${subdisciplinaId}/questoes`
+        );
+        questoes = await res.json();
+        indiceQuestao = 0;
+        mostrarQuestao();
+      }
+
+      function mostrarQuestao() {
+        const q = questoes[indiceQuestao];
+        if (!q) {
+          alert("Fim das questões!");
+          document.getElementById("questao-container").classList.add("hidden");
+          return;
+        }
+
+        document.getElementById("enunciado").textContent = q.enunciado;
+
+        // Mostra ou esconde a imagem
+        const img = document.getElementById("imagem-questao");
+        if (q.imagem) {
+          img.src = q.imagem;
+          img.classList.remove("hidden");
+        } else {
+          img.src = "";
+          img.classList.add("hidden");
+        }
+
+        const altDiv = document.getElementById("alternativas");
+        altDiv.innerHTML = "";
+        const letras = ["a", "b", "c", "d", "e"];
+        letras.forEach((letra) => {
+          const texto = q[`alternativa_${letra}`];
+          if (!texto) return;
+          const btn = document.createElement("button");
+          btn.textContent = texto;
+          btn.className = "resposta";
+          btn.onclick = () =>
+            responder(letra.toUpperCase(), q.resposta_correta, btn);
+          altDiv.appendChild(btn);
+        });
+
+        document.getElementById("proxima").classList.add("hidden");
+      }
+
+      function responder(escolhida, correta, botao) {
+        const botoes = document.querySelectorAll("#alternativas button");
+        botoes.forEach((b) => {
+          b.disabled = true;
+          if (b === botao) {
+            if (escolhida === correta) {
+              b.classList.add("correta");
+            } else {
+              b.classList.add("errada");
+            }
+          } else if (b.textContent === correta) {
+            b.classList.add("correta");
+          }
+        });
+        document.getElementById("proxima").classList.remove("hidden");
+      }
+
+      document.getElementById("proxima").onclick = () => {
+        indiceQuestao++;
+        mostrarQuestao();
+      };
+
+      fetchDisciplinas();
+    </script>
+  </body>
+</html>
