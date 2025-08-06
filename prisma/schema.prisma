@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,12 +9,6 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
-//model Usuario {
-//  id    Int     @id @default(autoincrement())
-//  nome  String
-//  email String  @unique
-//}
 
 model User {
   id        Int      @id @default(autoincrement())
@@ -27,28 +19,35 @@ model User {
   senha     String
 }
 
-
-
 model Disciplina {
-  id          Int          @id @default(autoincrement())
-  nome        String       @unique
+  id             Int             @id @default(autoincrement())
+  nome           String          @unique
   subdisciplinas Subdisciplina[]
-  questoes    Questao[]
+  questoes       Questao[]
 }
 
 model Subdisciplina {
-  id           Int        @id @default(autoincrement())
-  nome         String
-  disciplinaId Int
-  disciplina   Disciplina @relation(fields: [disciplinaId], references: [id])
-  questoes     Questao[]
+  id            Int           @id @default(autoincrement())
+  nome          String
+  disciplinaId  Int
+  disciplina    Disciplina    @relation(fields: [disciplinaId], references: [id])
+  subcategorias Subcategoria[]
+  questoes      Questao[]
+}
+
+model Subcategoria {
+  id               Int          @id @default(autoincrement())
+  nome             String
+  subdisciplinaId  Int
+  subdisciplina    Subdisciplina @relation(fields: [subdisciplinaId], references: [id])
+  questoes         Questao[]
 }
 
 model Questao {
-  id               Int          @id @default(autoincrement())
-  createdAt        DateTime     @default(now())
-  enunciado        String
-  imagem           String?  // ← novo campo
+  id               Int           @id @default(autoincrement())
+  createdAt        DateTime      @default(now())
+  enunciado        String        @db.LongText
+  imagem           String?
   alternativa_a    String
   alternativa_b    String
   alternativa_c    String
@@ -57,7 +56,9 @@ model Questao {
   resposta_correta String
   ano              Int
   disciplinaId     Int
-  disciplina       Disciplina   @relation(fields: [disciplinaId], references: [id])
+  disciplina       Disciplina    @relation(fields: [disciplinaId], references: [id])
   subdisciplinaId  Int?
   subdisciplina    Subdisciplina? @relation(fields: [subdisciplinaId], references: [id])
+  subcategoriaId   Int?
+  subcategoria     Subcategoria?  @relation(fields: [subcategoriaId], references: [id])
 }
