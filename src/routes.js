@@ -87,10 +87,6 @@ router.get("/materias", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "materias.html"));
 });
 
-router.get("/simulado", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "simulado.html"));
-});
-
 router.get("/estatisticas", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "estatisticas.html"));
 });
