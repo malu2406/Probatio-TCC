@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Simulado</title>
     <style>
-      /* Reset e Variáveis */
+      /* Estilos Gerais */
       :root {
         --primary: #4361ee;
         --primary-dark: #3a56d4;
@@ -31,219 +31,127 @@
         background-color: #f5f7ff;
         color: var(--dark);
         line-height: 1.6;
-        padding: 20px;
         min-height: 100vh;
+        padding: 20px;
       }
 
-      /* Layout Principal */
+      /* Container Principal */
       .container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 20px;
       }
 
-      .simulado-container {
-        background: white;
-        border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
-        padding: 30px;
-        margin-top: 20px;
-      }
-
-      /* Cabeçalho */
-      .header {
+      h1,
+      h2,
+      h3 {
+        margin-bottom: 20px;
+        color: var(--primary);
         text-align: center;
-        margin-bottom: 30px;
       }
 
-      .header h1 {
-        color: var(--primary);
-        font-size: 2.2rem;
-        margin-bottom: 10px;
-        font-weight: 700;
-      }
-
-      /* Navegação entre Etapas */
-      .step-navigation {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 30px;
-      }
-
-      .step {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 15px;
-      }
-
-      .step-number {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: var(--light);
-        color: var(--gray);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        margin-bottom: 8px;
-        border: 2px solid var(--gray);
-      }
-
-      .step.active .step-number {
-        background-color: var(--primary);
-        color: white;
-        border-color: var(--primary);
-      }
-
-      .step.completed .step-number {
-        background-color: var(--success);
-        color: white;
-        border-color: var(--success);
-      }
-
-      .step-label {
-        color: var(--gray);
-        font-size: 0.9rem;
-      }
-
-      .step.active .step-label {
-        color: var(--primary);
-        font-weight: 500;
-      }
-
-      /* Cards de Disciplina/Subdisciplina */
-      .card-grid {
+      /* Cards de Seleção */
+      .selection-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 20px;
-        margin-top: 20px;
+        margin: 30px 0;
       }
 
-      .card {
-        background: white;
+      .selection-card {
+        background-color: white;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+        padding: 20px;
         border-radius: var(--border-radius);
-        padding: 25px;
-        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
         cursor: pointer;
         transition: var(--transition);
-        border: 1px solid #e9ecef;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--box-shadow);
+        text-align: center;
       }
 
-      .card:hover {
+      .selection-card:hover {
+        background-color: var(--primary);
+        color: white;
         transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        border-color: var(--primary);
-      }
-
-      .card h3 {
-        color: var(--primary);
-        margin-bottom: 10px;
       }
 
       /* Questão */
       .question-container {
-        background: white;
+        background-color: white;
         border-radius: var(--border-radius);
         padding: 30px;
         margin-top: 20px;
-        position: relative;
-      }
-
-      .question-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #e9ecef;
-      }
-
-      .question-number {
-        background: var(--primary);
-        color: white;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
+        box-shadow: var(--box-shadow);
       }
 
       .question-text {
-        font-size: 1.1rem;
-        margin-bottom: 25px;
+        font-size: 1.2rem;
+        margin: 20px 0;
         line-height: 1.7;
+        white-space: normal;
+      }
+
+      .question-text p {
+        margin-bottom: 1em;
       }
 
       .question-image {
         max-width: 100%;
         height: auto;
-        border-radius: 8px;
-        margin: 20px 0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: var(--border-radius);
+        margin: 20px auto;
         display: block;
       }
 
       /* Alternativas */
       .options-container {
-        margin-top: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin: 30px 0;
       }
 
       .option {
+        background-color: var(--light);
+        border: none;
         padding: 15px 20px;
-        margin-bottom: 15px;
         border-radius: var(--border-radius);
-        background: var(--light);
+        text-align: left;
+        font-size: 1rem;
         cursor: pointer;
         transition: var(--transition);
-        border: 2px solid transparent;
-        font-size: 1rem;
         display: flex;
         align-items: center;
       }
 
       .option:hover {
-        background: #e9ecef;
+        background-color: #e9ecef;
       }
 
-      .option-letter {
+      .option::before {
+        content: attr(data-letter);
         display: inline-block;
         width: 30px;
         height: 30px;
-        border-radius: 50%;
-        background: white;
+        background-color: white;
         color: var(--primary);
+        border-radius: 50%;
         text-align: center;
         line-height: 30px;
         margin-right: 15px;
         font-weight: bold;
-        flex-shrink: 0;
       }
 
       .option.correct {
-        background: rgba(76, 201, 240, 0.2);
-        border-color: var(--success);
-        color: #155724;
-      }
-
-      .option.correct .option-letter {
-        background: var(--success);
-        color: white;
+        background-color: rgba(76, 201, 240, 0.2);
+        border-left: 4px solid var(--success);
       }
 
       .option.incorrect {
-        background: rgba(247, 37, 133, 0.1);
-        border-color: var(--error);
-        color: #721c24;
-      }
-
-      .option.incorrect .option-letter {
-        background: var(--error);
-        color: white;
+        background-color: rgba(247, 37, 133, 0.1);
+        border-left: 4px solid var(--error);
       }
 
       /* Botões */
@@ -255,9 +163,6 @@
         cursor: pointer;
         transition: var(--transition);
         font-size: 1rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
       }
 
       .button-primary {
@@ -282,57 +187,38 @@
 
       .button-group {
         display: flex;
-        gap: 15px;
+        justify-content: space-between;
         margin-top: 30px;
-        justify-content: center;
+        gap: 15px;
       }
 
-      /* Feedback e Loaders */
-      .loading {
-        display: inline-block;
-        width: 30px;
-        height: 30px;
-        border: 3px solid rgba(67, 97, 238, 0.3);
-        border-radius: 50%;
-        border-top-color: var(--primary);
-        animation: spin 1s ease-in-out infinite;
-        margin: 20px auto;
+      /* Mensagens */
+      #loading,
+      #error-message {
+        text-align: center;
+        padding: 20px;
+        font-size: 1.1rem;
       }
 
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .error-message {
+      #error-message {
         color: var(--error);
         background: rgba(247, 37, 133, 0.1);
-        padding: 15px;
         border-radius: var(--border-radius);
         margin: 20px 0;
-        text-align: center;
         border-left: 4px solid var(--error);
       }
 
-      .success-message {
-        color: #155724;
-        background: rgba(76, 201, 240, 0.2);
-        padding: 15px;
-        border-radius: var(--border-radius);
-        margin: 20px 0;
-        text-align: center;
-        border-left: 4px solid var(--success);
+      /* Contador */
+      .question-counter {
+        font-size: 1rem;
+        color: var(--gray);
+        font-weight: normal;
       }
 
       /* Responsividade */
       @media (max-width: 768px) {
-        .card-grid {
+        .selection-grid {
           grid-template-columns: 1fr;
-        }
-
-        .question-container {
-          padding: 20px;
         }
 
         .button-group {
@@ -344,47 +230,67 @@
         }
       }
 
-      /* Efeitos Visuais */
-      .fade-in {
-        animation: fadeIn 0.5s ease-in-out;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* Esconder elementos */
+      /* Elementos ocultos */
       .hidden {
         display: none !important;
       }
     </style>
   </head>
   <body>
-    <h1>Escolha uma disciplina</h1>
-    <div id="loading">Carregando...</div>
-    <div id="error-message"></div>
-    <div id="disciplinas"></div>
+    <div class="container">
+      <!-- Tela de Disciplinas -->
+      <div id="disciplinas-screen">
+        <h1>Escolha uma disciplina</h1>
+        <div id="loading">Carregando...</div>
+        <div id="error-message"></div>
+        <div id="disciplinas" class="selection-grid"></div>
+      </div>
 
-    <div id="subdisciplinas-container" class="hidden">
-      <h2>Escolha uma subdisciplina</h2>
-      <div id="subdisciplinas"></div>
-      <button id="voltar-disciplinas">Voltar</button>
-    </div>
+      <!-- Tela de Subdisciplinas -->
+      <div id="subdisciplinas-screen" class="hidden">
+        <h2>Escolha uma subdisciplina</h2>
+        <div id="subdisciplinas" class="selection-grid"></div>
+        <div class="button-group">
+          <button id="voltar-disciplinas" class="button-secondary">
+            Voltar
+          </button>
+        </div>
+      </div>
 
-    <div id="questao-container" class="hidden">
-      <h2>Questão <span id="contador-questao"></span></h2>
-      <p id="enunciado"></p>
-      <img id="imagem-questao" class="hidden" alt="Imagem da questão" />
-      <div id="alternativas"></div>
-      <button id="proxima" class="hidden">Próxima questão</button>
-      <button id="voltar-subdisciplinas">Voltar</button>
+      <!-- Tela de Subcategorias -->
+      <div id="subcategorias-screen" class="hidden">
+        <h2>Escolha uma subcategoria</h2>
+        <div id="subcategorias" class="selection-grid"></div>
+        <div class="button-group">
+          <button id="voltar-subdisciplinas" class="button-secondary">
+            Voltar
+          </button>
+        </div>
+      </div>
+
+      <!-- Tela de Questões -->
+      <div id="questao-screen" class="hidden">
+        <div class="question-container">
+          <h2>
+            Questão <span class="question-counter" id="contador-questao"></span>
+          </h2>
+          <p class="question-text" id="enunciado"></p>
+          <img
+            id="imagem-questao"
+            class="question-image hidden"
+            alt="Imagem da questão"
+          />
+          <div class="options-container" id="alternativas"></div>
+          <div class="button-group">
+            <button id="voltar-subcategorias" class="button-secondary">
+              Voltar
+            </button>
+            <button id="proxima" class="button-primary hidden">
+              Próxima questão
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -392,6 +298,15 @@
       let questoes = [];
       let indiceQuestao = 0;
       let totalQuestoes = 0;
+      let currentSubcategoriaId = null;
+
+      // Elementos da interface
+      const screens = {
+        disciplinas: document.getElementById("disciplinas-screen"),
+        subdisciplinas: document.getElementById("subdisciplinas-screen"),
+        subcategorias: document.getElementById("subcategorias-screen"),
+        questao: document.getElementById("questao-screen"),
+      };
 
       function showError(message) {
         document.getElementById("error-message").textContent = message;
@@ -407,6 +322,14 @@
           : "none";
       }
 
+      function showScreen(screenName) {
+        Object.values(screens).forEach((screen) =>
+          screen.classList.add("hidden")
+        );
+        screens[screenName].classList.remove("hidden");
+      }
+
+      // Carrega disciplinas
       async function fetchDisciplinas() {
         try {
           clearError();
@@ -418,15 +341,15 @@
           const div = document.getElementById("disciplinas");
           div.innerHTML = data
             .map(
-              (d) =>
-                `<button onclick="fetchSubdisciplinas(${d.id})">${d.nome}</button>`
+              (d) => `
+            <div class="selection-card" onclick="fetchSubdisciplinas(${d.id})">
+              ${d.nome}
+            </div>
+          `
             )
             .join("");
 
-          document
-            .getElementById("subdisciplinas-container")
-            .classList.add("hidden");
-          document.getElementById("questao-container").classList.add("hidden");
+          showScreen("disciplinas");
           showLoading(false);
         } catch (error) {
           showError(error.message);
@@ -434,6 +357,7 @@
         }
       }
 
+      // Carrega subdisciplinas
       async function fetchSubdisciplinas(disciplinaId) {
         try {
           clearError();
@@ -447,15 +371,15 @@
           const div = document.getElementById("subdisciplinas");
           div.innerHTML = data
             .map(
-              (s) =>
-                `<button onclick="fetchQuestoes(${s.id})">${s.nome}</button>`
+              (s) => `
+            <div class="selection-card" onclick="fetchSubcategorias(${s.id})">
+              ${s.nome}
+            </div>
+          `
             )
             .join("");
 
-          document
-            .getElementById("subdisciplinas-container")
-            .classList.remove("hidden");
-          document.getElementById("questao-container").classList.add("hidden");
+          showScreen("subdisciplinas");
           showLoading(false);
         } catch (error) {
           showError(error.message);
@@ -463,13 +387,61 @@
         }
       }
 
-      async function fetchQuestoes(subdisciplinaId) {
+      // Carrega subcategorias
+      async function fetchSubcategorias(subdisciplinaId) {
         try {
           clearError();
           showLoading(true);
           const res = await fetch(
-            `${apiBase}/subdisciplinas/${subdisciplinaId}/questoes`
+            `${apiBase}/subdisciplinas/${subdisciplinaId}/subcategorias`
           );
+
+          if (!res.ok) {
+            // Se não houver subcategorias, busca questões diretamente
+            return fetchQuestoes(subdisciplinaId);
+          }
+
+          const data = await res.json();
+
+          if (data.length === 0) {
+            // Se não houver subcategorias, busca questões diretamente
+            return fetchQuestoes(subdisciplinaId);
+          }
+
+          const div = document.getElementById("subcategorias");
+          div.innerHTML = data
+            .map(
+              (sc) => `
+            <div class="selection-card" onclick="fetchQuestoes(${subdisciplinaId}, ${sc.id})">
+              ${sc.nome}
+            </div>
+          `
+            )
+            .join("");
+
+          showScreen("subcategorias");
+          showLoading(false);
+        } catch (error) {
+          showError(error.message);
+          showLoading(false);
+        }
+      }
+
+      // Carrega questões
+      async function fetchQuestoes(subdisciplinaId, subcategoriaId = null) {
+        try {
+          clearError();
+          showLoading(true);
+
+          let url = `${apiBase}/subdisciplinas/${subdisciplinaId}/questoes`;
+          if (subcategoriaId) {
+            url = `${apiBase}/subcategorias/${subcategoriaId}/questoes`;
+            currentSubcategoriaId = subcategoriaId;
+          } else {
+            currentSubcategoriaId = null;
+          }
+
+          const res = await fetch(url);
           if (!res.ok) throw new Error("Falha ao carregar questões");
 
           questoes = await res.json();
@@ -477,15 +449,11 @@
           indiceQuestao = 0;
 
           if (questoes.length === 0) {
-            throw new Error(
-              "Nenhuma questão disponível para esta subdisciplina"
-            );
+            throw new Error("Nenhuma questão disponível");
           }
 
           mostrarQuestao();
-          document
-            .getElementById("questao-container")
-            .classList.remove("hidden");
+          showScreen("questao");
           showLoading(false);
         } catch (error) {
           showError(error.message);
@@ -493,6 +461,19 @@
         }
       }
 
+      function formatarEnunciado(texto) {
+        // Primeiro substitui \n por <br>, depois divide por parágrafos
+        return texto
+          .replace(/\n/g, "<br>") // Substitui todas as quebras de linha por <br>
+          .split("<br><br>") // Divide por parágrafos (duas quebras)
+          .map((paragrafo) => {
+            if (paragrafo.trim() === "") return "";
+            return `<p>${paragrafo}</p>`;
+          })
+          .join("");
+      }
+
+      // Mostra questão atual
       function mostrarQuestao() {
         const q = questoes[indiceQuestao];
         if (!q) {
@@ -501,10 +482,16 @@
           return;
         }
 
-        document.getElementById("enunciado").textContent = q.enunciado;
-        document.getElementById("contador-questao").textContent = `(${
+        // Debug: verifique se o enunciado completo está chegando
+        console.log("Enunciado completo:", q.enunciado);
+
+        // Usa innerHTML em vez de textContent
+        document.getElementById("enunciado").innerHTML = formatarEnunciado(
+          q.enunciado
+        );
+        document.getElementById("contador-questao").textContent = `${
           indiceQuestao + 1
-        }/${totalQuestoes})`;
+        }/${totalQuestoes}`;
 
         const img = document.getElementById("imagem-questao");
         if (q.imagem) {
@@ -518,12 +505,15 @@
         const altDiv = document.getElementById("alternativas");
         altDiv.innerHTML = "";
         const letras = ["a", "b", "c", "d", "e"];
+
         letras.forEach((letra) => {
           const texto = q[`alternativa_${letra}`];
           if (!texto) return;
+
           const btn = document.createElement("button");
-          btn.textContent = `${letra.toUpperCase()}) ${texto}`;
-          btn.className = "resposta";
+          btn.className = "option";
+          btn.setAttribute("data-letter", letra.toUpperCase());
+          btn.innerHTML = `<span>${letra.toUpperCase()})</span> ${texto}`;
           btn.onclick = () =>
             responder(letra.toUpperCase(), q.resposta_correta, btn);
           altDiv.appendChild(btn);
@@ -532,35 +522,47 @@
         document.getElementById("proxima").classList.add("hidden");
       }
 
+      // Processa resposta
       function responder(escolhida, correta, botao) {
-        const botoes = document.querySelectorAll("#alternativas button");
+        const botoes = document.querySelectorAll(".option");
         botoes.forEach((b) => {
           b.disabled = true;
           if (b === botao) {
-            b.classList.add(escolhida === correta ? "correta" : "errada");
-          } else if (b.textContent.startsWith(`${correta})`)) {
-            b.classList.add("correta");
+            b.classList.add(escolhida === correta ? "correct" : "incorrect");
+          } else if (b.getAttribute("data-letter") === correta) {
+            b.classList.add("correct");
           }
         });
         document.getElementById("proxima").classList.remove("hidden");
       }
 
       // Event listeners
-      document.getElementById("proxima").onclick = () => {
+      document.getElementById("proxima").addEventListener("click", () => {
         indiceQuestao++;
         mostrarQuestao();
-      };
+      });
 
-      document.getElementById("voltar-disciplinas").onclick = () => {
-        document
-          .getElementById("subdisciplinas-container")
-          .classList.add("hidden");
-        fetchDisciplinas();
-      };
+      document
+        .getElementById("voltar-disciplinas")
+        .addEventListener("click", () => {
+          fetchDisciplinas();
+        });
 
-      document.getElementById("voltar-subdisciplinas").onclick = () => {
-        document.getElementById("questao-container").classList.add("hidden");
-      };
+      document
+        .getElementById("voltar-subdisciplinas")
+        .addEventListener("click", () => {
+          showScreen("subdisciplinas");
+        });
+
+      document
+        .getElementById("voltar-subcategorias")
+        .addEventListener("click", () => {
+          if (currentSubcategoriaId) {
+            showScreen("subcategorias");
+          } else {
+            showScreen("subdisciplinas");
+          }
+        });
 
       // Inicialização
       fetchDisciplinas();
