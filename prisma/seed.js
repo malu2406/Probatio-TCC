@@ -11,7 +11,7 @@ async function main() {
     }
 
     // Cria disciplinas com subdisciplinas e subcategorias
-    const [matematica, linguagens] = await Promise.all([
+    const [matematica, linguagens, ciencias_humanas] = await Promise.all([
       prisma.disciplina.create({
         data: {
           nome: "matematica",
@@ -57,6 +57,8 @@ async function main() {
                     { nome: "cultura_literaria" },
                     { nome: "literatura_luso_brasileira" },
                     { nome: "educacao_fisica" },
+                    { nome: "semantica" },
+                    { nome: "linguagem" },
                   ],
                 },
               },
@@ -86,6 +88,70 @@ async function main() {
           },
         },
       }),
+      prisma.disciplina.create({
+        data: {
+          nome: "ciencias_humanas",
+          subdisciplinas: {
+            create: [
+              {
+                nome: "historia",
+                subcategorias: {
+                  create: [
+                    { nome: "historia_antiga" },
+                    { nome: "historia_medieval" },
+                    { nome: "historia_moderna" },
+                    { nome: "brasil_colonia" },
+                    { nome: "brasil_imperio" },
+                    { nome: "historia_comtemporanea" },
+                    { nome: "brasil_republica" },
+                  ],
+                },
+              },
+              {
+                nome: "geografia",
+                subcategorias: {
+                  create: [
+                    { nome: "cartografia_astronomia" },
+                    { nome: "organizacao_territorio_brasileiro" },
+                    { nome: "geologia_geomorfologia" },
+                    { nome: "climatologia" },
+                    { nome: "vegetacao" },
+                    { nome: "hidrografia" },
+                    { nome: "dominios_morfoclimaticos" },
+                    { nome: "energia" },
+                    { nome: "populacao_demografia" },
+                    { nome: "geografia_agraria" },
+                    { nome: "industria" },
+                    { nome: "geografia_urbana" },
+                    { nome: "geografia_transportes" },
+                    { nome: "geopolitica" },
+                    { nome: "geografia_regional" },
+                  ],
+                },
+              },
+              {
+                nome: "filosofia",
+                subcategorias: {
+                  create: [{ nome: "filosofiaI" }, { nome: "filosofiaII" }],
+                },
+              },
+              {
+                nome: "sociologia",
+                subcategorias: {
+                  create: [{ nome: "sociologiaI" }, { nome: "sociologiaII" }],
+                },
+              },
+            ],
+          },
+        },
+        include: {
+          subdisciplinas: {
+            include: {
+              subcategorias: true,
+            },
+          },
+        },
+      }),
     ]);
 
     // Valida subdisciplinas e subcategorias
@@ -101,6 +167,18 @@ async function main() {
     const espanhol = linguagens.subdisciplinas.find(
       (s) => s.nome === "espanhol"
     );
+    const historia = ciencias_humanas.subdisciplinas.find(
+      (s) => s.nome === "historia"
+    );
+    const geografia = ciencias_humanas.subdisciplinas.find(
+      (s) => s.nome === "geografia"
+    );
+    const filosofia = ciencias_humanas.subdisciplinas.find(
+      (s) => s.nome === "filosofia"
+    );
+    const sociologia = ciencias_humanas.subdisciplinas.find(
+      (s) => s.nome === "sociologia"
+    );
 
     // Subcategorias de Inglês
     const reading = ingles.subcategorias.find((s) => s.nome === "reading");
@@ -113,6 +191,7 @@ async function main() {
     const gramaticaEspanhol = espanhol.subcategorias.find(
       (s) => s.nome === "gramática"
     );
+    // Subcategorias de portugues
 
     const variacao_linguistica = portugues.subcategorias.find(
       (s) => s.nome === "variacao_linguistica"
@@ -127,11 +206,97 @@ async function main() {
     );
 
     const literatura_luso_brasileira = portugues.subcategorias.find(
-      (s) => s.nome === "literatura_luso-brasileira"
+      (s) => s.nome === "literatura_luso_brasileira"
     );
 
     const educacao_fisica = portugues.subcategorias.find(
       (s) => s.nome === "educacao_fisica"
+    );
+    const semantica = portugues.subcategorias.find(
+      (s) => s.nome === "semantica"
+    );
+    const linguagem = portugues.subcategorias.find(
+      (s) => s.nome === "linguagem"
+    );
+    //subcategorias de historia
+    const historia_antiga = historia.subcategorias.find(
+      (s) => s.nome === "historia_antiga"
+    );
+
+    const historia_medieval = historia.subcategorias.find(
+      (s) => s.nome === "historia_medieval"
+    );
+
+    const historia_moderna = historia.subcategorias.find(
+      (s) => s.nome === "historia_moderna"
+    );
+
+    const brasil_colonia = historia.subcategorias.find(
+      (s) => s.nome === "brasil_colonia"
+    );
+
+    const brasil_imperio = historia.subcategorias.find(
+      (s) => s.nome === "brasil_imperio"
+    );
+    const historia_comtemporanea = historia.subcategorias.find(
+      (s) => s.nome === "historia_comtemporanea"
+    );
+    const brasil_republica = historia.subcategorias.find(
+      (s) => s.nome === "brasil_republica"
+    );
+
+    //subcategoria de geografia
+    const cartografia_astronomia = geografia.subcategorias.find(
+      (s) => s.nome === "cartografia_astronomia"
+    );
+
+    const organizacao_territorio_brasileiro = geografia.subcategorias.find(
+      (s) => s.nome === "organizacao_territorio_brasileiro"
+    );
+
+    const geologia_geomorfologia = geografia.subcategorias.find(
+      (s) => s.nome === "geologia_geomorfologia"
+    );
+
+    const climatologia = geografia.subcategorias.find(
+      (s) => s.nome === "climatologia"
+    );
+
+    const vegetacao = geografia.subcategorias.find(
+      (s) => s.nome === "vegetacao"
+    );
+
+    const hidrografia = geografia.subcategorias.find(
+      (s) => s.nome === "hidrografia"
+    );
+    const dominios_morfoclimaticos = geografia.subcategorias.find(
+      (s) => s.nome === "dominios_morfoclimaticos"
+    );
+    const energia = geografia.subcategorias.find((s) => s.nome === "energia");
+    const populacao_demografia = geografia.subcategorias.find(
+      (s) => s.nome === "populacao_demografia"
+    );
+
+    const geografia_agraria = geografia.subcategorias.find(
+      (s) => s.nome === "geografia_agraria"
+    );
+
+    const industria = geografia.subcategorias.find(
+      (s) => s.nome === "industria"
+    );
+
+    const geografia_urbana = geografia.subcategorias.find(
+      (s) => s.nome === "geografia_urbana"
+    );
+
+    const geografia_transportes = geografia.subcategorias.find(
+      (s) => s.nome === "geografia_transportes"
+    );
+    const geopolitica = geografia.subcategorias.find(
+      (s) => s.nome === "geopolitica"
+    );
+    const geografia_regional = geografia.subcategorias.find(
+      (s) => s.nome === "geografia_regional"
     );
 
     await prisma.questao.createMany({
@@ -1242,7 +1407,7 @@ em razão do(a)`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: genero_textuais_interpretacao_texto.id,
         },
         //27
         {
@@ -1280,7 +1445,7 @@ usa uma postura de empatia explicitada em`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: genero_textuais_interpretacao_texto.id,
         },
         //28
         {
@@ -1334,7 +1499,7 @@ Machado de Assis, o autor desse texto`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: cultura_literaria.id,
         },
         //29
         {
@@ -1368,7 +1533,7 @@ que associa a adoção`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: semantica.id,
         },
         //30
         {
@@ -1432,7 +1597,7 @@ no Texto I, uma vez que ambos`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: literatura_luso_brasileira.id,
         },
         //31
         {
@@ -1468,7 +1633,7 @@ aspectos daquele contexto, no qual o narrador ironiza a`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: literatura_luso_brasileira.id,
         },
         //32
         {
@@ -1504,7 +1669,7 @@ transmite uma sensibilidade lírica centrada na`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: cultura_literaria.id,
         },
         //33
         {
@@ -1523,7 +1688,7 @@ tem a finalidade de`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: genero_textuais_interpretacao_texto.id,
         },
         //34
         {
@@ -1571,7 +1736,7 @@ para a`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: linguagem.id,
         },
         //35
         {
@@ -1602,12 +1767,11 @@ fez valer. Eu daria o dobro, o triplo, toda a minha riqueza por este momento.
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: literatura_luso_brasileira.id,
         },
         //36
-        //COLOCAR A IMAGEM!!
         {
-          imagem: "/images/questoes/questao36I.png",
+          imagem: "/images/questoes/questao36certa.png",
           enunciado: `A leitura comparativa das duas esculturas, separadas por mais de 2500 anos, indica a`,
           alternativa_a:
             "valorização da arte antiga por artistas contemporâneos.",
@@ -1623,7 +1787,7 @@ fez valer. Eu daria o dobro, o triplo, toda a minha riqueza por este momento.
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: genero_textuais_interpretacao_texto.id,
         },
         //37
         {
@@ -1665,7 +1829,7 @@ recurso persuasivo, a`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: genero_textuais_interpretacao_texto.id,
         },
         //38
         {
@@ -1693,7 +1857,7 @@ a tentativa de pessoas`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: cultura_literaria.id,
         },
         //39
         {
@@ -1742,161 +1906,391 @@ fazia da língua em suas composições, pois esse uso`,
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: variacao_linguistica.id,
         },
         //40
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `O festival folclórico de Parintins, no Amazonas,
+anunciou que o Boi Caprichoso levou, em 2018, seu
+23º título — contra 31 do adversário Boi Garantido.
+Desde o fim do evento que não paro de cantar duas
+músicas que aprendi no Bumbódromo (arena onde ocorre
+o espetáculo). Revezo entre “meu amor, eu sou feliz, ééé
+azul o meu país”, obviamente do boi azul, o Caprichoso;
+e “vermelhou o curral, a ideologia avermelhou”, do boi
+vermelho, o Garantido. Esse revezamento seria proibido
+em Parintins, cidade tão dividida entre as torcidas dos bois.
+Em Parintins, você tem de ter um lado. Há aqueles que
+tentam fugir e dizem que são “garanchoso”, com os quais
+me identifiquei, mas esses são vistos com certo desdém.
+\n\nDYNIEWICZ, L. Disponível em: https://viagem.estadao.com.br.
+\n\nAcesso em: 22 nov. 2018 (adaptado).
+\n\nA apropriação de elementos como rivalidade, competitividade,
+torcida e gritos de guerra pelo festival de Parintins evidencia a`,
+          alternativa_a: "escolha de um local específico para a festa.",
+          alternativa_b: "importância atribuída pelos turistas aos bois",
+          alternativa_c: "interação social estabelecida após o evento.",
+          alternativa_d:
+            "aproximação da manifestação folclórica com o esporte.",
+          alternativa_e: "composição de enredos musicais pelos “garanchosos”.",
           resposta_correta: "D",
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: cultura_literaria.id,
         },
         //41
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `O Brasil somou cerca de 60 mil novos casos de câncer
+de mama até o final de 2019, número que corresponde a
+25% de todos os diagnósticos da condição registrados no
+país, segundo dados do Instituto Nacional do Câncer (Inca).
+Apesar de o Outubro Rosa ser o mês de conscientização
+sobre a questão voltada para as mulheres, é muito importante
+lembrar que um dos grandes mitos da medicina é o de que
+o câncer de mama não afeta o sexo masculino.
+Fatores importantes para detectar o câncer de mama
+masculino:
+\n\n1. Genética: se houver casos na família, as chances são
+um pouco mais elevadas.
+\n\n2. Hormônios: homens podem desenvolver tecido real das
+glândulas mamárias por tomarem certos medicamentos
+ou apresentarem níveis hormonais anormais.
+\n\n3. Caroços: é necessário que os médicos se atentem a
+alguns sintomas suspeitos, como um caroço na área
+do tórax.
+\n\n4. Retração na pele: em situações mais graves do câncer
+de mama masculino, é possível também ocorrer uma
+retração do mamilo.
+\n\nDisponível em: https://pebmed.com.br.
+\n\nAcesso em: 24 nov. 2021 (adaptado).
+\n\nAs informações dessa reportagem auxiliam no combate
+ao câncer de mama masculino por apresentarem um
+alerta sobre o(s)`,
+          alternativa_a: "sinais indicadores da doença.",
+          alternativa_b: "índice de crescimento de casos.",
+          alternativa_c: "exames para diagnóstico do tumor.",
+          alternativa_d: "mitos a respeito da herança genética.",
+          alternativa_e: "período de campanhas de conscientização",
           resposta_correta: "A",
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: genero_textuais_interpretacao_texto.id,
         },
         //42
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `
+Feijoada à minha moda
+\n\nAmiga Helena Sangirardi
+\n\nConforme um dia prometi
+\n\nOnde, confesso que esqueci
+\n\nE embora — perdoe — tão tarde
+\n\n(Melhor do que nunca!) este poeta
+\n\nSegundo manda a boa ética
+\n\nEnvia-lhe a receita (poética)
+\n\nDe sua feijoada completa.
+\n\nEm atenção ao adiantado
+\n\nDa hora em que abrimos o olho
+\n\nO feijão deve, já catado
+\n\nNos esperar, feliz, de molho.
+\n\nUma vez cozido o feijão
+\n\n(Umas quatro horas, fogo médio)
+\n\nNós, bocejando o nosso tédio
+\n\nNos chegaremos ao fogão
+\n\n[...]
+\n\nDe carne-seca suculenta
+\n\nGordos paios, nédio toucinho
+\n\n(Nunca orelhas de bacorinho
+\n\nQue a tornam em excesso opulenta!)
+\n\n[...]
+\n\nEnquanto ao lado, em fogo brando
+\n\nDesmilinguindo-se de gozo
+\n\nDeve também se estar fritando
+\n\nO torresminho delicioso
+\n\nEm cuja gordura, de resto
+\n\n(Melhor gordura nunca houve!)
+\n\nDeve depois frigir a couve
+\n\nPicada, em fogo alegre e presto.
+\n\n[...]
+\n\nDever cumprido. Nunca é vã
+\n\nA palavra de um poeta... — jamais!
+\n\nAbraça-a, em Brillat-Savarin,
+\n\nO seu Vinicius de Moraes.
+\n\nMORAES, V. In: CÍCERO, A.; QUEIROZ, E. (Org.). Vinicius de Moraes:
+ nova antologia poética. São Paulo: Cia. das Letras, 2005 (fragmento).
+\n\nApesar de haver marcas formais de carta e receita,
+a característica que define esse texto como poema
+é o(a)`,
+          alternativa_a: "nomeação de um interlocutor.",
+          alternativa_b: "manifestação de intimidade.",
+          alternativa_c: "descrição de procedimentos.",
+          alternativa_d: "utilização de uma linguagem expressiva.",
+          alternativa_e: "apresentação de ingredientes culinários.",
           resposta_correta: "D",
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: cultura_literaria.id,
         },
         //43
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          imagem: "/images/questoes/questao43certa.png",
+          enunciado: `O experimento realizado por Regina Valkenborgh resultou
+no entendimento de que a`,
+          alternativa_a:
+            "técnica fotográfica alternativa limita o registro de imagens.",
+          alternativa_b:
+            "apreciação da natureza depende de registro fotográfico.",
+          alternativa_c:
+            "criatividade artística decorre do conhecimento científico.",
+          alternativa_d: "câmera de criação caseira tem valor tecnológico.",
+          alternativa_e: "produção artística pode ser resultado do acaso.",
           resposta_correta: "E",
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: genero_textuais_interpretacao_texto.id,
         },
         //44
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `Os Jogos Olímpicos já não são mais os mesmos.
+E isso não é nem uma crítica, nem um elogio. É uma
+constatação. Esse movimento começou com o vôlei de
+praia tornando-se esporte olímpico em 1996, passou pela
+chegada do BMX Racing como primeiro “radical” a entrar
+no programa em 2008, e agora atinge seu momento mais
+insólito com a inclusão do break dance como modalidade
+dos Jogos de Paris, em 2024. Para os mais tradicionalistas,
+o cruzamento da linha que delimitava o que é esporte e o
+que é cultura e arte é uma afronta ao espírito dos Jogos
+Olímpicos. Skate e surfe, que há anos têm competições na
+televisão, pareciam estar na divisa entre esses dois mundos,
+o limite do aceitável pelos puristas. O break dance estaria
+do lado de “lá” dessa fronteira. Para o Comitê Olímpico
+Internacional, a decisão faz parte de uma estratégia de
+se comunicar com jovens urbanos que se exercitam e se
+entretêm de uma maneira muito diferente da dos seus avós.
+\n\nDisponível em: www.uol.com.br. Acesso em: 19 nov. 2021 (adaptado).
+\n\nA mudança no programa olímpico mencionada no texto
+mostra que o esporte está se`,
+          alternativa_a: "aproximando da aventura.",
+          alternativa_b: "mantendo em sua forma padrão.",
+          alternativa_c: "tornando uma forma de dança.",
+          alternativa_d: "afastando de elementos culturais.",
+          alternativa_e: "adaptando às demandas do seu tempo.",
           resposta_correta: "E",
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: cultura_literaria.id,
         },
         //45
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `Memes e fake news: o impacto na
+educação das crianças
+\n\nHá quem diga que o Brasil nunca mais foi o mesmo
+depois dos memes. Na economia da velocidade, alguns
+apostam no humor, outros no engajamento político, e tem
+gente investindo alto na mentira também. Diante desse
+cenário, uma pergunta se torna essencial: será que todo
+mundo está conseguindo traduzir as mensagens postadas,
+curtidas e compartilhadas?
+\n\nEssa dúvida incentivou uma professora de língua
+portuguesa a desenvolver uma proposta de leitura e análise
+crítica de memes com estudantes do ensino fundamental, na
+rede pública do Distrito Federal, na cidade de Samambaia.
+“Percebi que muitos alunos e pais estavam divulgando
+conteúdos sem saber o que havia por trás das palavras”,
+relata a professora.
+\n\n“O que antes era engraçado para os alunos passou
+a ser visto com outros olhos”, afirma a professora. Para
+ela, que utilizou a representação da criança em memes
+de WhatsApp como material gerador das discussões em
+sala de aula, aguçar o olhar sobre essas mensagens
+impacta diretamente a atitude de postar, curtir e compartilhar
+conteúdos ao estimular o uso consciente da informação
+que circula nas plataformas de mídia social.
+\n\nLetramento político e midiático é um desafio
+intergeracional. Em tempos de notícias falsas, de imagens
+manipuladas e de memes sendo usados como triunfo
+da verdade de cada um, checagem de informação e
+interpretação de texto acabam se tornando moedas valiosas.
+\n\nDisponível em: https://lunetas.com.br. Acesso em: 15 jan. 2024 (adaptado).
+\n\nAo abordar a relação dos memes com a educação,
+a reportagem sustenta uma crítica à`,
+          alternativa_a:
+            "falta de fiscalização no uso de aplicativos de mensagens por crianças.",
+          alternativa_b:
+            "divulgação de informação manipulada em postagens virtuais.",
+          alternativa_c:
+            "utilização de ferramentas digitais no trabalho educacional.",
+          alternativa_d:
+            "exploração de conteúdos humorísticos nas mídias sociais.",
+          alternativa_e: "propagação de mensagens com objetivos políticos.",
           resposta_correta: "B",
           ano: 2024,
           disciplinaId: linguagens.id,
           subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          subcategoriaId: linguagem.id,
         },
+
+        //CIENCIAS HUMANAS E SUAS TECNOLOGIAS!!
         //46
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `TEXTO I
+\n\nUm terremoto de magnitude 5,9 atingiu a cidade de
+Valparaíso, na costa chilena. O terremoto ocorreu a uma
+profundidade de 112 quilômetros.
+\n\nTerremoto de magnitude 5,9 atinge Valparaíso, no Chile.
+\n\nDisponível em: www.cnnbrasil.com.br.
+ \n\nAcesso em: 6 nov. 2021 (adaptado).
+\n\nTEXTO II
+Um tremor de terra de magnitude 4,8 foi registrado
+no município de Atalaia do Norte, no interior do estado do
+Amazonas. O abalo é de magnitude considerada mediana
+para os níveis do Brasil. Os eventos dessa região costumam
+ser resultado das atividades da placa de Nazca.
+\n\nTremor de terra de magnitude 4,8 é registrado no interior do
+\n\nAmazonas. Disponível em: https://g1.globo.com.
+\n\nAcesso em: 6 nov. 2021 (adaptado).
+\n\nTEXTO III
+Moradores usaram as redes sociais para relatar tremores
+de terra no interior de São Paulo. As atividades foram
+registradas nas cidades de Júlio Mesquita e Guaimbê e
+tiveram magnitude 3,0 na escala Richter, o que é considerado
+pequeno e sem previsão de danos.
+\n\nMoradores do interior de SP relatam tremores de terra.
+\n\nDisponível em: https://noticias.r7.com.
+\n\nAcesso em: 6 nov. 2021 (adaptado).
+\n\nAs diferenças entre os eventos geológicos relatados
+decorrem de distintas posições geográficas das cidades
+em relação a:`,
+          alternativa_a: "Planícies costeiras.",
+          alternativa_b: "Bacias continentais.",
+          alternativa_c: "Zonas de subducção.",
+          alternativa_d: "Áreas de denudação.",
+          alternativa_e: "Vertentes escarpadas.",
           resposta_correta: "C",
           ano: 2024,
-          disciplinaId: linguagens.id,
-          subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          disciplinaId: ciencias_humanas.id,
+          subdisciplinaId: geografia.id,
+          subcategoriaId: geologia_geomorfologia.id,
         },
-        //47
+        //47 TROCAAAAAAAAAAAAAAAAAAR
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `Tal qual num exército, não se compreende um efetivo
+composto apenas de oficiais. Também na saúde pública,
+os funcionários técnicos graduados necessitam ser
+assistidos por auxiliares em número suficiente e com
+preparo adequado, constituído pelas enfermeiras de saúde
+pública, educadoras ou visitadoras sanitárias, técnicos de
+laboratório, inspetores ou guardas etc., para não falarmos
+no pessoal burocrático, não especializado.
+PAULA SOUZA, G. H.; VIEIRA, F. B. Centro de saúde “eixo” de
+organização sanitária. Boletim do Instituto de Higiene
+de São Paulo, n. 59 (adaptado).
+O texto dos sanitaristas atuantes nas décadas de 1920 e
+1930 veicula uma mensagem caracterizada pela`,
+          alternativa_a: "higienização moral",
+          alternativa_b: "imposição eugênica",
+          alternativa_c: "assimilação cultural.",
+          alternativa_d: "hegemonização identitária",
+          alternativa_e: "hierarquização profissional.",
           resposta_correta: "E",
           ano: 2024,
-          disciplinaId: linguagens.id,
-          subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          disciplinaId: ciencias_humanas.id,
+          subdisciplinaId: geografia.id,
+          subcategoriaId: geografia_agraria.id,
         },
         //48
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `O rompimento da barragem de Fundão levou muito
+consigo. A lama soterrou sonhos e modificou de forma
+permanente centenas de vidas nascidas e criadas em
+Bento Rodrigues e Paracatu, em Mariana (MG). Mas não
+somente. Ao se estender ao longo do rio, outras famílias e
+histórias foram atingidas de formas diferentes. Ao fugirem
+dos rejeitos que rapidamente tomaram as localidades,
+deixaram para trás os resquícios da vida que tiveram até
+o 5 de novembro de 2015. Nada jamais seria igual.
+SANTOS, P. Histórias soterradas. Curinga,
+n. 19, nov. 2016 (adaptado).
+Conforme o texto, o evento gerou o seguinte impacto na
+relação entre as pessoas e o seu espaço vivido:
+`,
+          alternativa_a: "Flexibilização de parâmetros ambientais.",
+          alternativa_b: "Consolidação de identidades regionais.",
+          alternativa_c: "Fragilização de vínculos afetivos.",
+          alternativa_d: "Supressão de práticas exploratórias.",
+          alternativa_e: "Recuperação de tradições ancestrais.",
           resposta_correta: "C",
           ano: 2024,
-          disciplinaId: linguagens.id,
-          subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          disciplinaId: ciencias_humanas.id,
+          subdisciplinaId: geografia.id,
+          subcategoriaId: geografia_agraria.id,
         },
         //49
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `Com a proximidade do final do século XIX, amplificam-se
+as expectativas com relação ao século seguinte. Se muitas
+eram as utopias, talvez uma das mais evidentes tenha se
+concentrado nas potencialidades da nova ciência, com suas
+invenções e projetos. Não é por mera coincidência que
+a agenda do país tenha sido tomada pela introdução de
+uma série de inventos. De forma acelerada, entraram no
+Brasil a luz elétrica e, com ela, o telégrafo, o telefone,
+o cinematógrafo. Na área dos transportes, o trem a vapor é
+substituído pelo elétrico, que assiste à entrada do automóvel
+e até do aeroplano.
+COSTA, A. M.; SCHWARCZ, L. M. 1890-1914, no tempo das certezas.
+São Paulo: Cia. das Letras, 2000 (adaptado).
+No Brasil, os eventos descritos ganharam conotação
+política ao serem vinculados à`,
+          alternativa_a: "A expansão estratégica do imperialismo.",
+          alternativa_b: "ascensão gradual do mercantilismo.",
+          alternativa_c: "laicidade da educação.",
+          alternativa_d: "retomada do absolutismo.",
+          alternativa_e: "visão republicana de nação.",
           resposta_correta: "E",
           ano: 2024,
-          disciplinaId: linguagens.id,
-          subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          disciplinaId: ciencias_humanas.id,
+          subdisciplinaId: historia.id,
+          subcategoriaId: brasil_republica.id,
         },
         //50
         {
-          enunciado: ``,
-          alternativa_a: "",
-          alternativa_b: "",
-          alternativa_c: "",
-          alternativa_d: "",
-          alternativa_e: "",
+          enunciado: `O bispo Bartolomeu de Las Casas é o homem mais
+odiado da América, o anti-Cristo dos senhores, o açoite
+destas terras. Por sua culpa, o imperador promulgou
+novas leis que despojam de escravos índios os filhos dos
+conquistadores. O que será deles sem os braços que
+os sustentam nas minas e nas lavouras? As novas leis
+estão arrancando a comida de suas bocas. Las Casas é o
+homem mais amado da América. Voz dos mudos, teimoso
+defensor dos que recebem pior tratamento que o esterco
+das praças, denunciador de quem por cobiça converte
+Jesus Cristo no mais cruel dos deuses e o rei em lobo
+faminto de carne humana.
+GALEANO, E. Os nascimentos. Porto Alegre:
+L&PM, 2011 (adaptado).
+Os diferentes pontos de vista presentes no texto expressam
+que o bispo era, ao mesmo tempo,`,
+          alternativa_a:
+            "execrado pelos reis e reverenciado pelos religiosos do local. ",
+          alternativa_b:
+            "detestado pelos colonizadores e respeitado pelos povos do lugar.",
+          alternativa_c:
+            "menosprezado pela colônia e idolatrado pelos governantes da região.",
+          alternativa_d:
+            "desrespeitado pela metrópole e adorado pelos invasores da Espanha.",
+          alternativa_e:
+            "desacatado pelos excluídos e valorizado pelos negociantes de negros.",
           resposta_correta: "B",
           ano: 2024,
-          disciplinaId: linguagens.id,
-          subdisciplinaId: portugues.id,
-          subcategoriaId: reading.id,
+          disciplinaId: ciencias_humanas.id,
+          subdisciplinaId: historia.id,
+          subcategoriaId: brasil_colonia.id,
         },
       ],
       skipDuplicates: true,
