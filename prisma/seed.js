@@ -301,7 +301,7 @@ años para notar que en mi lengua podía escribir poesía,
 porque me decían que mi lengua era tan pobre que no podía
 tener conceptos abstractos, era un reto pero yo sabía que
 sí era posible”.
-Este proceso no sólo le ayudó a vivir la poesía en
+\n\nEste proceso no sólo le ayudó a vivir la poesía en
 mixteco, sino a “ir descubriendo mi propia historia y la de mi
 pueblo”. Comentó que las lenguas habladas en el territorio
 nacional se encuentran en gran desventaja con el español.
@@ -312,8 +312,8 @@ reconocimiento de ser bilingüe, negabas que hablabas tu
 lengua, hasta le decían dialecto. Era parte del proceso fatal
 que nos llevó a no reconocernos en un país multilingüe.
 ¿Si tenemos varias lenguas por qué no aprender?”.
-Disponível em: www.fapcom.edu.br. Acesso em: 20 nov. 2021.
-Em sua escrita poética, a poetisa mexicana Celerina
+\n\nDisponível em: www.fapcom.edu.br. Acesso em: 20 nov. 2021.
+\n\nEm sua escrita poética, a poetisa mexicana Celerina
 Patricia Sánchez Santiago assume o desafio de`,
           alternativa_a:
             "Destacar a importância da literatura na formação escolar.",
@@ -330,7 +330,26 @@ Patricia Sánchez Santiago assume o desafio de`,
         },
         {
           enunciado:
-            "Nesse texto, ao utilizar a expressão 'morir muy vivos', a escritora Rosa Montero evidencia a importância de se",
+          `Morir muy vivos
+\n\nNo todo es perder, es cierto. Si te esfuerzas mucho
+y bien, porque no viene de fábrica, ganas conocimiento
+del mundo y de ti mismo, empatía, sosiego y, en suma,
+algo que podríamos denominar sabiduría. Pero creo que
+para ello hay que mantenerse alerta y no darse nunca por
+vencido. Pero también es un tiempo para saldar cuentas.
+No creo que haya que dejarse llevar por el peso de los días
+como un leño podrido al que las olas arrojan finalmente
+a la playa. Uno siempre puede intentar sacarse alguna
+de las piedras que lleva a la espalda, decir las cosas que
+nunca se atrevió a decir, cumplir en la medida de lo posible
+los deseos arrumbados, rescatar algún sueño que quedó
+en la cuneta. No rendirse, esa es la clave. Y sobre todo
+decirse: ¿y por qué no? Porque la vejez no está reñida con
+la audacia. Debemos aspirar a morir muy vivos.
+\n\nMONTERO, R. Disponível em: https://elpais.com.
+ Acesso em: 4 dez. 2017.
+\n\nNesse texto, ao utilizar a expressão “morir muy vivos”,
+a escritora Rosa Montero evidencia a importância de se`,
           alternativa_a: "Acumular sabedoria com o passar do tempo.",
           alternativa_b: "Observar o impacto dos anos sobre o corpo.",
           alternativa_c: "Rever os erros e os acertos de sua trajetória.",
@@ -344,7 +363,25 @@ Patricia Sánchez Santiago assume o desafio de`,
         },
         {
           enunciado:
-            "Nesse poema, o eu lírico representa a voz de um sobrevivente asteca que testemunha a",
+          `\n\nLos últimos días del sitio de Tenochtitlán
+\n\nY todo esto pasó con nosotros.
+\n\nNosotros lo vimos,
+\n\nnosotros lo admiramos.
+\n\nCon esta lamentosa y triste suerte
+\n\nnos vimos angustiados.
+\n\nEn los caminos yacen dardos rotos,
+\n\nlos cabellos están esparcidos.
+\n\nDestechadas están las casas,
+\n\nenrojecidos tienen sus muros.
+\n\nGusanos pululan por calles y plazas,
+\n\ny en las paredes están salpicados los sesos.
+\n\nRojas están las aguas, están como teñidas,
+\n\ny cuando la bebimos,
+\n\nes como si bebiéramos agua de salitre.
+\n\nManuscrito anónimo de Tlatelolco, 1528. Disponível em:
+www.biblioweb.tic.unam.mx. Acesso em: 13 out. 2021 (fragmento).
+\n\nNesse poema, o eu lírico representa a voz de um
+sobrevivente asteca que testemunha a`,
           alternativa_a:
             "Destruição da capital do Império Asteca pelos colonizadores espanhóis.",
           alternativa_b:
