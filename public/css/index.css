@@ -78,8 +78,10 @@ a:hover {
 h1 {
   color: #202f5a;
 }
-
-h3{
+h2 {
+  color: #202f5a;
+}
+h3 {
   color: #202f5a;
 }
 
@@ -114,7 +116,7 @@ pezao {
   justify-content: center;
 }
 
-#plataforma{
+#plataforma {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -123,7 +125,7 @@ pezao {
   text-align: center;
 }
 
-#sobre{
+#sobre {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -132,36 +134,36 @@ pezao {
   text-align: center;
 }
 
-.perguntas{
+.perguntas {
   text-align: left;
   margin-bottom: 8rem;
 }
 
-.prgta{
+.prgta {
   display: flex;
   flex-direction: row;
   max-width: 60rem;
 }
 
-.texto_prgta{
+.texto_prgta {
   padding-left: 0.5rem;
 }
 
-.img_prgta{
+.img_prgta {
   margin-top: 0.5rem;
 }
 
-.interrogacao{
+.interrogacao {
   max-width: 4rem;
   max-height: 4rem;
 }
 
-.beneficios_lista{
+.beneficios_lista {
   display: flex;
   flex-direction: row;
 }
 
-.beneficios{
+.beneficios {
   max-width: 15rem;
   padding: 3rem;
 }
@@ -216,19 +218,19 @@ pezao {
   transform: scale(1.1);
 }
 
-footer{
+footer {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1rem;
 }
-hr{
-   border: 0;
-  border-top: medium double #CCC;
+hr {
+  border: 0;
+  border-top: medium double #ccc;
   height: 1px;
   overflow: visible;
   padding: 0;
-  color: #CCC;
+  color: #ccc;
   text-align: center;
   max-width: 100%;
 }
