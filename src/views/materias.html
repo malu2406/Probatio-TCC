@@ -1,13 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Materias</h1>
-      <a href="/inicio">Voltar para tela inicial</a>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/materias.css" />
+    <title>Matérias</title>
+  </head>
+  <body>
+    <div id="container">
+      <!-- HEADER -->
+      <header>
+        <div id="header_esquerda">
+          <a href="/inicio" id="logo">PROBATIO</a>
+          <a href="/materias">Matérias</a>
+          <a href="/simulado_teste">Simulado</a>
+          <a href="/estatisticas">Estatísticas</a>
+          <a href="/flashcards">FlashCards</a>
+          <a href="/noticias">Portais de Notícia</a>
+          <a href="/pomodoro">Pomodoro</a>
+        </div>
+        <div id="header_direita">
+          <a href="/">Sair</a>
+        </div>
+      </header>
 
-</body>
+      <!-- MAIN -->
+      <main>
+        <h1>Matérias</h1>
+        <div class="materias">
+          <div class="card">
+            <a href="/quimica">
+              <img src="/images/carol.jpeg" alt="Química" />
+              <p>Química</p>
+            </a>
+          </div>
+
+          <div class="card">
+            <img src="/images/carol.jpeg" alt="Física" />
+            <p>Física</p>
+          </div>
+          <div class="card">
+            <img src="/images/carol.jpeg" alt="Matemática" />
+            <p>Matemática</p>
+          </div>
+          <div class="card">
+            <a href="/portugues">
+              <img src="/images/carol.jpeg" alt="Português" />
+              <p>Português</p>
+            </a>
+          </div>
+
+          <div class="card">
+            <img src="/images/carol.jpeg" alt="Biologia" />
+            <p>Biologia</p>
+          </div>
+          <div class="card">
+            <img src="/images/renee.jpeg" alt="Geografia" />
+            <p>Geografia</p>
+          </div>
+          <div class="card">
+            <img src="/images/renee.jpeg" alt="História" />
+            <p>História</p>
+          </div>
+          <div class="card">
+            <img src="/images/renee.jpeg" alt="Sociologia" />
+            <p>Sociologia</p>
+          </div>
+          <div class="card">
+            <img src="/images/renee.jpeg" alt="Filosofia" />
+            <p>Filosofia</p>
+          </div>
+          <div class="card">
+            <img src="/images/renee.jpeg" alt="Artes" />
+            <p>Artes</p>
+          </div>
+          <div class="card">
+            <img src="/images/ariana.jpeg" alt="Literatura" />
+            <p>Literatura</p>
+          </div>
+          <div class="card">
+            <img src="/images/ariana.jpeg" alt="Redação" />
+            <p>Redação</p>
+          </div>
+        </div>
+      </main>
+
+      <!-- FOOTER -->
+      <footer>
+        <div class="logofinal">
+          <a href="#inicio" id="logo">PROBATIO</a>
+          <a href="/inicio">Voltar para tela inicial</a>
+        </div>
+      </footer>
+    </div>
+  </body>
 </html>

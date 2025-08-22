@@ -87,6 +87,16 @@ router.get("/materias", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "materias.html"));
 });
 
+//inicio das materias
+router.get("/quimica", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "quimica.html"));
+});
+router.get("/portugues", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "portugues.html"));
+});
+
+//final de todas as materias
+
 router.get("/estatisticas", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "estatisticas.html"));
 });
