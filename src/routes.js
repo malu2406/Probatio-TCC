@@ -91,9 +91,44 @@ router.get("/materias", checkAuth, (req, res) => {
 router.get("/quimica", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "quimica.html"));
 });
-router.get("/portugues", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "portugues.html"));
+
+router.get("/materias-pasta/portugues", checkAuth, (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "views", "materias-pasta", "portugues.html")
+  );
 });
+
+router.get(
+  "/materias-pasta/portugues-pasta/tipos_generos",
+  checkAuth,
+  (req, res) => {
+    res.sendFile(
+      path.join(
+        __dirname,
+        "views",
+        "materias-pasta",
+        "portugues-pasta",
+        "tipos_generos.html"
+      )
+    );
+  }
+);
+
+router.get(
+  "/materias-pasta/portugues-pasta/tipos_generos_exercicios",
+  checkAuth,
+  (req, res) => {
+    res.sendFile(
+      path.join(
+        __dirname,
+        "views",
+        "materias-pasta",
+        "portugues-pasta",
+        "tipos_generos_exercicios.html"
+      )
+    );
+  }
+);
 
 //final de todas as materias
 
