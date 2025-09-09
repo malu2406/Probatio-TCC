@@ -167,7 +167,21 @@ pezao {
   max-width: 15rem;
   padding: 3rem;
 }
-
+.beneficios img {
+  max-width: 90px; /* diminui largura */
+  max-height: 90px; /* diminui altura */
+  margin-bottom: 1rem; /* espaçamento do texto */
+}
+.beneficios-video {
+  max-width: 15rem;
+  padding: 3rem;
+  margin: auto;
+}
+.beneficios-video img {
+  max-width: 120px; /* diminui largura */
+  max-height: 120px; /* diminui altura */
+  margin-bottom: 1rem; /* espaçamento do texto */
+}
 .texto {
   flex: 1;
   min-width: 300px;
@@ -294,5 +308,11 @@ hr {
 
   .texto {
     min-width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .beneficios img {
+    max-width: 60px;
+    max-height: 60px;
   }
 }
