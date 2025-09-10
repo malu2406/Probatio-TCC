@@ -80,9 +80,15 @@ router.post("/login", async (req, res) => {
 
 // Rotas protegidas
 router.get("/inicio", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "inicio.html"));
+  res.sendFile(path.join(__dirname, "views", "inicio.html"), {
+    user: req.session.user,
+  });
 });
-
+router.get("/api/usuario", checkAuth, (req, res) => {
+  res.json({
+    nome: req.session.user.nome,
+  });
+});
 router.get("/materias", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "materias.html"));
 });
@@ -134,6 +140,10 @@ router.get(
 
 router.get("/estatisticas", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "estatisticas.html"));
+});
+
+router.get("/teste_es", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "teste_es.html"));
 });
 
 router.get("/flashcards", checkAuth, (req, res) => {

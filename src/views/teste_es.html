@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/teste_es.css" />
+
+    <title>Estatísticas - PROBATIO</title>
+  </head>
+  <body>
+    <div id="container">
+      <header>
+        <div id="header_esquerda">
+          <a href="/inicio" id="logo">PROBATIO</a>
+          <a href="/materias">Matérias</a>
+          <a href="/simulado_teste">Simulados</a>
+          <a href="/estatisticas">Estatísticas</a>
+          <a href="/teste_es"> teste Estatísticas</a>
+          <a href="/flashcards">Flashcards</a>
+          <a href="/noticias">Portal de Noticias</a>
+          <a href="/pomodoro">Pomodoro</a>
+          <a href="/logout">Sair</a>
+          <!-- Mudei para /logout -->
+        </div>
+      </header>
+
+      <main>
+        <h1>Estatísticas</h1>
+        <h2>Estatísticas gerais</h2>
+
+        <div id="stats-content">
+          <!-- Conteúdo será preenchido via JavaScript -->
+        </div>
+      </main>
+      <div class="linha">
+        <hr />
+      </div>
+      <footer>
+        <div class="logofinal">
+          <a href="#inicio" id="logo">PROBATIO</a>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const statsContent = document.getElementById("stats-content");
+        const stats = JSON.parse(localStorage.getItem("flashcardStats")) || {
+          matematica: { total: 0, acertos: 0 },
+          linguagens: { total: 0, acertos: 0 },
+          humanas: { total: 0, acertos: 0 },
+          natureza: { total: 0, acertos: 0 },
+        };
+
+        // Calcular totais
+        const totalQuestoes =
+          stats.matematica.total +
+          stats.linguagens.total +
+          stats.humanas.total +
+          stats.natureza.total;
+
+        const totalAcertos =
+          stats.matematica.acertos +
+          stats.linguagens.acertos +
+          stats.humanas.acertos +
+          stats.natureza.acertos;
+
+        const percentualGeral =
+          totalQuestoes > 0
+            ? Math.round((totalAcertos / totalQuestoes) * 100)
+            : 0;
+
+        if (totalQuestoes === 0) {
+          // Exibir mensagem se não houver estatísticas
+          statsContent.innerHTML = `
+                    <div class="empty-stats">
+                        <p>Você ainda não respondeu nenhum flashcard.</p>
+                        <p><a href="/flashcards">Clique aqui para começar a praticar!</a></p>
+                    </div>
+                `;
+        } else {
+          // Exibir estatísticas
+          statsContent.innerHTML = `
+                    <div class="dashboard">
+                        <div class="stats-card">
+                            <h3>Desempenho nas matérias</h3>
+                            <div class="materia-stats">
+                                <div class="materia-item">
+                                    <div class="materia-name">
+                                        <span class="materia-color matematica-color"></span>
+                                        Matemática
+                                    </div>
+                                    <div class="materia-value">
+                                        ${stats.matematica.acertos}/${
+            stats.matematica.total
+          }
+                                        (${
+                                          stats.matematica.total > 0
+                                            ? Math.round(
+                                                (stats.matematica.acertos /
+                                                  stats.matematica.total) *
+                                                  100
+                                              )
+                                            : 0
+                                        }%)
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill progress-matematica" style="width: ${
+                                      stats.matematica.total > 0
+                                        ? (stats.matematica.acertos /
+                                            stats.matematica.total) *
+                                          100
+                                        : 0
+                                    }%"></div>
+                                </div>
+                                
+                                <div class="materia-item">
+                                    <div class="materia-name">
+                                        <span class="materia-color linguagens-color"></span>
+                                        Linguagens
+                                    </div>
+                                    <div class="materia-value">
+                                        ${stats.linguagens.acertos}/${
+            stats.linguagens.total
+          }
+                                        (${
+                                          stats.linguagens.total > 0
+                                            ? Math.round(
+                                                (stats.linguagens.acertos /
+                                                  stats.linguagens.total) *
+                                                  100
+                                              )
+                                            : 0
+                                        }%)
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill progress-linguagens" style="width: ${
+                                      stats.linguagens.total > 0
+                                        ? (stats.linguagens.acertos /
+                                            stats.linguagens.total) *
+                                          100
+                                        : 0
+                                    }%"></div>
+                                </div>
+                                
+                                <div class="materia-item">
+                                    <div class="materia-name">
+                                        <span class="materia-color humanas-color"></span>
+                                        Ciências Humanas
+                                    </div>
+                                    <div class="materia-value">
+                                        ${stats.humanas.acertos}/${
+            stats.humanas.total
+          }
+                                        (${
+                                          stats.humanas.total > 0
+                                            ? Math.round(
+                                                (stats.humanas.acertos /
+                                                  stats.humanas.total) *
+                                                  100
+                                              )
+                                            : 0
+                                        }%)
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill progress-humanas" style="width: ${
+                                      stats.humanas.total > 0
+                                        ? (stats.humanas.acertos /
+                                            stats.humanas.total) *
+                                          100
+                                        : 0
+                                    }%"></div>
+                                </div>
+                                
+                                <div class="materia-item">
+                                    <div class="materia-name">
+                                        <span class="materia-color natureza-color"></span>
+                                        Ciências da Natureza
+                                    </div>
+                                    <div class="materia-value">
+                                        ${stats.natureza.acertos}/${
+            stats.natureza.total
+          }
+                                        (${
+                                          stats.natureza.total > 0
+                                            ? Math.round(
+                                                (stats.natureza.acertos /
+                                                  stats.natureza.total) *
+                                                  100
+                                              )
+                                            : 0
+                                        }%)
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill progress-natureza" style="width: ${
+                                      stats.natureza.total > 0
+                                        ? (stats.natureza.acertos /
+                                            stats.natureza.total) *
+                                          100
+                                        : 0
+                                    }%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <h3>Estatísticas gerais</h3>
+                            <div class="overall-stats">
+                                <div class="stat-box">
+                                    <h4>Total de Questões</h4>
+                                    <div class="stat-value">${totalQuestoes}</div>
+                                </div>
+                                <div class="stat-box">
+                                    <h4>Total de Acertos</h4>
+                                    <div class="stat-value">${totalAcertos}</div>
+                                </div>
+                                <div class="stat-box">
+                                    <h4>Percentual Geral</h4>
+                                    <div class="stat-value">${percentualGeral}%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="chart-container" id="chart-container">
+                                <!-- Gráfico será gerado via JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="reset-btn" id="reset-stats">Zerar Estatísticas</button>
+                `;
+
+          // Gerar gráfico de barras
+          generateChart();
+
+          // Adicionar evento ao botão de zerar estatísticas
+          document
+            .getElementById("reset-stats")
+            .addEventListener("click", function () {
+              if (
+                confirm("Tem certeza que deseja zerar todas as estatísticas?")
+              ) {
+                const emptyStats = {
+                  matematica: { total: 0, acertos: 0 },
+                  linguagens: { total: 0, acertos: 0 },
+                  humanas: { total: 0, acertos: 0 },
+                  natureza: { total: 0, acertos: 0 },
+                };
+                localStorage.setItem(
+                  "flashcardStats",
+                  JSON.stringify(emptyStats)
+                );
+                alert("Estatísticas zeradas com sucesso!");
+                location.reload();
+              }
+            });
+        }
+
+        function generateChart() {
+          const chartContainer = document.getElementById("chart-container");
+          const percentuais = {
+            matematica:
+              stats.matematica.total > 0
+                ? Math.round(
+                    (stats.matematica.acertos / stats.matematica.total) * 100
+                  )
+                : 0,
+            linguagens:
+              stats.linguagens.total > 0
+                ? Math.round(
+                    (stats.linguagens.acertos / stats.linguagens.total) * 100
+                  )
+                : 0,
+            humanas:
+              stats.humanas.total > 0
+                ? Math.round(
+                    (stats.humanas.acertos / stats.humanas.total) * 100
+                  )
+                : 0,
+            natureza:
+              stats.natureza.total > 0
+                ? Math.round(
+                    (stats.natureza.acertos / stats.natureza.total) * 100
+                  )
+                : 0,
+          };
+
+          // Criar eixos Y
+          for (let i = 0; i <= 100; i += 20) {
+            const yLabel = document.createElement("div");
+            yLabel.className = "axis-y-label";
+            yLabel.style.bottom = `${i}%`;
+            yLabel.textContent = `${100 - i}%`;
+            chartContainer.appendChild(yLabel);
+          }
+
+          // Criar barras
+          const materias = [
+            {
+              tipo: "matematica",
+              nome: "Matemática",
+              percentual: percentuais.matematica,
+            },
+            {
+              tipo: "linguagens",
+              nome: "Linguagens",
+              percentual: percentuais.linguagens,
+            },
+            {
+              tipo: "humanas",
+              nome: "Humanas",
+              percentual: percentuais.humanas,
+            },
+            {
+              tipo: "natureza",
+              nome: "Natureza",
+              percentual: percentuais.natureza,
+            },
+          ];
+
+          materias.forEach((materia) => {
+            const bar = document.createElement("div");
+            bar.className = `bar bar-${materia.tipo}`;
+            bar.style.height = `${materia.percentual}%`;
+
+            const label = document.createElement("div");
+            label.className = "bar-label";
+            label.textContent = `${materia.percentual}%`;
+            bar.appendChild(label);
+
+            chartContainer.appendChild(bar);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

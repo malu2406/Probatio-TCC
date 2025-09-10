@@ -1,243 +1,136 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; style-src 'self' 'unsafe-inline';"
-    />
-    <title>Estatísticas - PROBATIO</title>
-    <style>
-      /* Estilos Gerais */
-      :root {
-        --primary: #4361ee;
-        --primary-dark: #3a56d4;
-        --secondary: #3f37c9;
-        --success: #4cc9f0;
-        --error: #f72585;
-        --light: #f8f9fa;
-        --dark: #212529;
-        --gray: #6c757d;
-        --border-radius: 8px;
-        --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      }
-
-      body {
-        background-color: #f5f7ff;
-        color: var(--dark);
-        line-height: 1.6;
-        padding: 0;
-      }
-
-      /* Header */
-      header {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 15px 10%;
-        background-color: white;
-        box-shadow: var(--box-shadow);
-      }
-
-      .nav-links {
-        display: flex;
-        gap: 50px;
-      }
-
-      header a {
-        text-decoration: none;
-        color: var(--dark);
-        font-weight: 500;
-        padding: 8px 12px;
-        border-radius: var(--border-radius);
-        transition: all 0.3s ease;
-        white-space: nowrap;
-      }
-
-      header a:hover {
-        color: var(--primary);
-        background-color: rgba(67, 97, 238, 0.1);
-      }
-
-      .logo {
-        font-weight: bold;
-        color: var(--primary);
-        font-size: 1.2rem;
-      }
-
-      /* Main Content */
-      .stats-page {
-        max-width: 1000px;
-        margin: 30px auto;
-        background-color: white;
-        border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
-        padding: 30px;
-      }
-
-      .page-title {
-        color: var(--primary);
-        font-size: 2rem;
-        text-align: center;
-        margin-bottom: 30px;
-      }
-
-      .section-title {
-        color: var(--primary);
-        font-size: 1.5rem;
-        margin: 25px 0 15px;
-        border-bottom: 2px solid var(--primary);
-        padding-bottom: 8px;
-      }
-
-      .subsection-title {
-        color: var(--dark);
-        font-size: 1.2rem;
-        margin: 20px 0 10px;
-      }
-
-      /* Lista de Estatísticas */
-      .stats-list {
-        list-style-type: none;
-        margin-left: 20px;
-      }
-
-      .stats-list li {
-        margin-bottom: 10px;
-        position: relative;
-        padding-left: 25px;
-      }
-
-      .stats-list li:before {
-        content: "•";
-        color: var(--primary);
-        font-size: 1.5rem;
-        position: absolute;
-        left: 0;
-        top: -5px;
-      }
-
-      /* Grid de Matérias */
-      .materias-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 15px;
-        margin-top: 20px;
-      }
-
-      .materia-card {
-        background-color: var(--light);
-        border-radius: var(--border-radius);
-        padding: 15px;
-        text-align: center;
-        box-shadow: var(--box-shadow);
-        transition: transform 0.3s ease;
-      }
-
-      .materia-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      /* Footer */
-      footer {
-        text-align: center;
-        padding: 20px;
-        background-color: white;
-        margin-top: 30px;
-        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-      }
-
-      /* Responsividade */
-      @media (max-width: 768px) {
-        header {
-          flex-direction: column;
-          gap: 15px;
-        }
-
-        .nav-links {
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-      }
-    </style>
-  </head>
-  <body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página Inicial - PROBATIO</title>
+    <link rel="stylesheet" href="inicio.css" />
+</head>
+<body>
+    <!-- HEADER -->
     <header>
-      <a href="/inicio" class="logo">PROBATIO</a>
-      <div class="nav-links">
-        <a href="/materias">Matérias</a>
-        <a href="/simulado">Simulados</a>
-        <a href="/estatisticas">Estatísticas</a>
-        <a href="/flashcards">FLASHCARDS</a>
-        <a href="/noticias">Portal de Notícias</a>
-        <a href="/pomodoro">Pomodoro</a>
-        <a href="/">Sair</a>
-      </div>
+        <div id="header_esquerda">
+            <a href="/inicio" id="logo">PROBATIO</a>
+            <a href="/materias">Matérias</a>
+            <a href="/simulado_teste">Simulados</a>
+            <a href="/estatisticas">Estatísticas</a>
+            <a href="/flashcards">Flashcards</a>
+            <a href="/noticias">Portais de Notícia</a>
+            <a href="/pomodoro">Pomodoro</a>
+        </div>
+        <div id="header_direita">
+            <a href="/perfil"><img src="/img/user.png" alt="Perfil" class="icon"></a>
+            <a href="/logout">Sair</a>
+        </div>
     </header>
 
-    <main class="stats-page">
-      <h1 class="page-title">ESTATÍSTICAS</h1>
+    <div id="container">
+        <main>
+            <!-- Saudação -->
+            <div class="saudacao">
+                <h1>Olá, <span id="nomeUsuario">Maria Luísa</span>! Hora de começar os estudos!</h1>
+            </div>
 
-      <section>
-        <h2 class="section-title">Estatísticas gerais</h2>
+            <!-- Métricas -->
+            <div class="metricas">
+                <div class="metrica-card">
+                    <h3>Tempo de estudo atual:</h3>
+                    <div class="metrica-valor">43h23</div>
+                </div>
+                <div class="metrica-card">
+                    <h3>Nível de desempenho:</h3>
+                    <div class="metrica-valor">Médio</div>
+                </div>
+                <div class="metrica-card">
+                    <h3>Dias para o ENEM:</h3>
+                    <div class="metrica-valor">165</div>
+                </div>
+            </div>
 
-        <ul class="stats-list">
-          <li><strong>Desempenho nos matérias</strong></li>
-          <ul class="stats-list">
-            <li><strong>Apertura</strong></li>
-            <li><strong>Brasil</strong></li>
-            <li><strong>Falta</strong></li>
-          </ul>
-          <li><strong>Tempo médio de estudo diário:</strong> 4h</li>
-          <li><strong>Exercícios respondidos:</strong> 2/8</li>
-          <li><strong>Último acesso:</strong> 1:48</li>
-        </ul>
-      </section>
+            <!-- Atividades do Dia -->
+            <h2 class="titulo-sessao">Atividades do dia</h2>
 
-      <section>
-        <h2 class="section-title">Estatísticas por matéria</h2>
-        <div class="materias-grid">
-          <div class="materia-card">Química</div>
-          <div class="materia-card">Física</div>
-          <div class="materia-card">Matemática</div>
-          <div class="materia-card">Português</div>
-          <div class="materia-card">Biologia</div>
-          <div class="materia-card">Geografia</div>
-          <div class="materia-card">História</div>
-          <div class="materia-card">Sociologia</div>
-          <div class="materia-card">Filosofia</div>
-          <div class="materia-card">Artes</div>
-          <div class="materia-card">Literatura</div>
-          <div class="materia-card">Redação</div>
-        </div>
-      </section>
-    </main>
+            <div class="atividades">
+                <!-- ESTATÍSTICAS NO LUGAR DO SIMULADO -->
+                <div class="atividade-card estatisticas">
+                    <h2>Estatísticas Gerais</h2>
+                    <ul class="stats-list">
+                        <li><strong>Tempo médio de estudo diário:</strong> 4h</li>
+                        <li><strong>Exercícios respondidos:</strong> 2/8</li>
+                        <li><strong>Último acesso:</strong> 1:48</li>
+                    </ul>
 
-    <footer>
-      <p>© 2023 PROBATIO - Todos os direitos reservados</p>
-    </footer>
+                    <h2 class="section-title">Estatísticas por matéria</h2>
+                    <div class="materias-grid">
+                        <div class="materia-card">Química</div>
+                        <div class="materia-card">Física</div>
+                        <div class="materia-card">Matemática</div>
+                        <div class="materia-card">Português</div>
+                        <div class="materia-card">Biologia</div>
+                        <div class="materia-card">Geografia</div>
+                        <div class="materia-card">História</div>
+                        <div class="materia-card">Sociologia</div>
+                        <div class="materia-card">Filosofia</div>
+                        <div class="materia-card">Artes</div>
+                        <div class="materia-card">Literatura</div>
+                        <div class="materia-card">Redação</div>
+                    </div>
+                </div>
+
+                <!-- Blocos auxiliares -->
+                <div class="atividade-card dicas">
+                    <h2>Rápido e Fácil</h2>
+                    <div class="dica-bloco">
+                        <div class="dica-item">Dê play no método mais eficaz do mundo!</div>
+                        <div class="dica-item">Dicas de Redação</div>
+                        <div class="dica-item">Resumo de Matemática Básica</div>
+                        <div class="dica-item">Fórmulas de Física</div>
+                        <div class="dica-item">Linha do Tempo História</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matérias -->
+            <h2 class="titulo-sessao">Matérias</h2>
+            <div class="materias">
+                <div class="materia-card icone">
+                    <img src="/img/quimica.png" alt="Química">
+                    <p>Química</p>
+                </div>
+                <div class="materia-card icone">
+                    <img src="/img/fisica.png" alt="Física">
+                    <p>Física</p>
+                </div>
+                <div class="materia-card icone">
+                    <img src="/img/matematica.png" alt="Matemática">
+                    <p>Matemática</p>
+                </div>
+                <div class="materia-card icone">
+                    <img src="/img/portugues.png" alt="Português">
+                    <p>Português</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="logofinal">
+                <a href="#inicio">PROBATIO</a>
+            </div>
+        </footer>
+    </div>
 
     <script>
-      // Aqui você pode adicionar a lógica para carregar os dados reais
-      document.addEventListener("DOMContentLoaded", function () {
-        // Exemplo: Carregar dados do usuário
-        // fetch('/api/estatisticas')
-        //   .then(response => response.json())
-        //   .then(data => preencherDados(data));
-      });
-
-      function preencherDados(data) {
-        // Implemente a lógica para preencher os dados reais
-      }
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("/api/usuario")
+                .then((response) => response.json())
+                .then((data) => {
+                    document.getElementById("nomeUsuario").textContent = data.nome;
+                })
+                .catch((error) => {
+                    console.error("Erro ao carregar dados do usuário:", error);
+                });
+        });
     </script>
-  </body>
+</body>
 </html>
