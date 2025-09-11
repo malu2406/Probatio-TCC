@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acessar perfil</title>
+    <link rel="stylesheet" href="/css/perfil.css" />
+</head>
+<body>
+     <header>
+      <div id="header_esquerda">
+        <a href="/inicio" id="logo">PROBATIO</a>
+        <a href="/materias">Matérias</a>
+        <a href="/simulado_teste">Simulados</a>
+        <a href="/teste_es">Estatísticas</a>
+        <a href="/flashcards">Flashcards</a>
+        <a href="/noticias">Portais de Notícia</a>
+        <a href="/pomodoro">Pomodoro</a>
+      </div>
+      <div id="header_direita">
+        <a href="/perfil"
+          ><img src="/img/user.png" alt="Perfil" class="icon"
+        /></a>
+        <a href="/logout">Sair</a>
+      </div>
+    </header>
+
+    <div class="container">
+        <main>
+            <img src="" alt="">
+             <h1><span id="nomeUsuario">Carregando...</span> </h1>
+            <div class="linha">
+                <hr />
+            </div>
+            <h1>Sobre</h1>
+            <span id="email">Carregando...</span>
+        </main>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/api/usuario")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("nomeUsuario").textContent = data.nome;
+          })
+          .catch((error) => {
+            console.error("Erro ao carregar dados do usuário:", error);
+          });
+      });
+      
+    //FALAR COM A DUDA SOBRE A FUNÇÃO PARA PEGAR O EMAIL E O NÚMERO PQ NAO TA DANDO CERTO (sim, duda, se tu ta lendo, quero falar ctg sobre isso)
+    </script>
+</body>
+</html>
