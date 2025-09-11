@@ -89,6 +89,9 @@ router.get("/api/usuario", checkAuth, (req, res) => {
     nome: req.session.user.nome,
   });
 });
+router.get("/perfil", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "perfil.html"));
+});
 router.get("/materias", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "materias.html"));
 });
@@ -156,6 +159,10 @@ router.get("/noticias", checkAuth, (req, res) => {
 
 router.get("/pomodoro", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
+});
+
+router.get("/perfil", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "perfil.html"));
 });
 
 // API
