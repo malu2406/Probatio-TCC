@@ -2,6 +2,15 @@
   font-family: "probatio";
   src: url("/fonts/GenerateChangesDemo.ttf") format("opentype");
 }
+
+@font-face {
+  font-family: "titulos";
+  src: url("/fonts/genty-sans-regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "texto";
+  src: url("/fonts/Poppins-Medium.ttf") format("opentype");
+}
 body {
   background-color: #fafbfc;
   margin: 0;

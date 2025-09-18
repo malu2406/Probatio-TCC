@@ -2,26 +2,15 @@
   font-family: "probatio";
   src: url("/fonts/GenerateChangesDemo.ttf") format("opentype");
 }
-body {
-  background-color: #fafbfc;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  padding-top: 80px; /* Espaço para o header fixo */
-}
 
-#container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  box-sizing: border-box;
+@font-face {
+  font-family: "titulos";
+  src: url("/fonts/genty-sans-regular.otf") format("opentype");
 }
 @font-face {
-  font-family: "probatio";
-  src: url("/fonts/GenerateChangesDemo.ttf") format("opentype");
+  font-family: "texto";
+  src: url("/fonts/Poppins-Medium.ttf") format("opentype");
 }
-
 body {
   background-color: #fafbfc;
   margin: 0;
@@ -81,21 +70,38 @@ a {
   flex-wrap: wrap;
   margin-left: 2rem;
   list-style: none;
+  font-family: "texto";
+}
+
+.metricas {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.metrica-valor {
+  display: flex;
+  justify-content: space-around;
+  color: #202f5a;
 }
 
 a:hover {
   color: #f6b737;
   text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
   transform: translateY(-2px);
+  font-family: "texto";
 }
 h1 {
   color: #202f5a;
+  font-family: "titulos";
 }
 h2 {
   color: #202f5a;
+  font-family: "titulos";
 }
 h3 {
   color: #202f5a;
+  font-family: "texto";
 }
 
 pezao {
@@ -176,59 +182,10 @@ pezao {
   flex-direction: row;
 }
 
-.beneficios {
-  max-width: 15rem;
-  padding: 3rem;
-}
-
 .texto {
   flex: 1;
   min-width: 300px;
   padding: 0 1rem;
-}
-
-.dragon {
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-  flex-shrink: 0;
-}
-
-#button_login,
-#button_cadastro {
-  display: inline-block;
-  padding: 12px 32px;
-  border-radius: 18px;
-  border: none;
-  background-color: #202f5a;
-  color: #ebe4e4;
-  text-decoration: none;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  white-space: nowrap;
-  margin: 0.5rem;
-}
-
-#button_login {
-  margin-left: auto;
-  display: inline-block;
-  padding: 12px 32px;
-  border-radius: 18px;
-  border: none;
-  background-color: #202f5a;
-  color: #ebe4e4;
-  text-decoration: none;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-#button_login:hover,
-#button_cadastro:hover {
-  background-color: #20305ac2;
-  transition: all 0.5s;
-  transform: scale(1.1);
 }
 
 footer {
@@ -236,16 +193,6 @@ footer {
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-}
-hr {
-  border: 0;
-  border-top: medium double #ccc;
-  height: 1px;
-  overflow: visible;
-  padding: 0;
-  color: #ccc;
-  text-align: center;
-  max-width: 100%;
 }
 
 /* Media Queries  Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries Media Queries */
@@ -278,10 +225,6 @@ hr {
     margin-left: 0;
   }
 
-  #button_login {
-    margin-top: 1rem;
-  }
-
   .page1 {
     flex-direction: column;
     text-align: center;
@@ -292,20 +235,15 @@ hr {
     text-align: center;
   }
 
-  .dragon {
-    order: 1;
-    max-width: 300px;
-  }
-}
+  @media (max-width: 480px) {
+    #button_login,
+    #button_cadastro {
+      padding: 10px 24px;
+      font-size: 14px;
+    }
 
-@media (max-width: 480px) {
-  #button_login,
-  #button_cadastro {
-    padding: 10px 24px;
-    font-size: 14px;
-  }
-
-  .texto {
-    min-width: 100%;
+    .texto {
+      min-width: 100%;
+    }
   }
 }
