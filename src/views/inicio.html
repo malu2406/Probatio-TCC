@@ -11,22 +11,28 @@
     <header>
       <div id="header_esquerda">
         <a href="/inicio" id="logo">PROBATIO</a>
-        <a href="/materias">Matérias</a>
-        <a href="/simulado_teste">Simulados</a>
-        <a href="/teste_es">Estatísticas</a>
-        <a href="/flashcards">Flashcards</a>
-        <a href="/noticias">Portais de Notícia</a>
-        <a href="/pomodoro">Pomodoro</a>
-        <a href="/perfil"
-          ><img src="/img/user.png" alt="Perfil" class="icon"
-        /></a>
-        <a href="/logout">Sair</a>
+
+        <div class="nav-principal">
+          <a href="/materias" class="nav-link">Matérias</a>
+          <a href="/teste_es" class="nav-link">Estatísticas</a>
+          <a href="/flashcards" class="nav-link">Flashcards</a>
+          <a href="/noticias" class="nav-link">Portais de Notícia</a>
+          <a href="/pomodoro" class="nav-link">Pomodoro</a>
+          <a href="" class="nav-link">Temporizador</a>
+        </div>
+
+        <div class="menu-usuario">
+          <a href="/perfil" class="nav-link">
+            <img src="/images/user.png" alt="Perfil" class="icon" />
+          </a>
+          <a href="/logout" class="nav-link">Sair</a>
+        </div>
       </div>
     </header>
 
     <div id="container">
       <main>
-        <!-- Saudação -->
+        <!-- Mensagem de Bem-Vindo -->
         <div class="saudacao">
           <h1>
             Olá, <span id="nomeUsuario">Usuario</span>! Hora de começar os
@@ -52,75 +58,55 @@
 
         <!-- Atividades do Dia -->
         <h2 class="titulo-sessao">Atividades do dia</h2>
-
-        <div class="atividades">
-          <!-- ESTATÍSTICAS NO LUGAR DO SIMULADO -->
-          <div class="atividade-card estatisticas">
-            <h2>Estatísticas Gerais</h2>
-            <ul class="stats-list">
-              <li><strong>Tempo médio de estudo diário:</strong> 4h</li>
-              <li><strong>Exercícios respondidos:</strong> 2/8</li>
-              <li><strong>Último acesso:</strong> 1:48</li>
-            </ul>
-
-            <h2 class="section-title">Estatísticas por matéria</h2>
-            <div class="materias-grid">
-              <div class="materia-card">Química</div>
-              <div class="materia-card">Física</div>
-              <div class="materia-card">Matemática</div>
-              <div class="materia-card">Português</div>
-              <div class="materia-card">Biologia</div>
-              <div class="materia-card">Geografia</div>
-              <div class="materia-card">História</div>
-              <div class="materia-card">Sociologia</div>
-              <div class="materia-card">Filosofia</div>
-              <div class="materia-card">Artes</div>
-              <div class="materia-card">Literatura</div>
-              <div class="materia-card">Redação</div>
-            </div>
-          </div>
-
-          <!-- Blocos auxiliares -->
-          <div class="atividade-card dicas">
+        <div class="box-maior">
+          <!--Botar aqui um grafico por materia, ao clicar no grafico vai abrir outra da materia escolhida-->
+          <h2>"tabela"</h2>
+        </div>
+        <div class="box-atividades">
+          <div class="box">
             <h2>Rápido e Fácil</h2>
-            <div class="dica-bloco">
-              <div class="dica-item">
-                Dê play no método mais eficaz do mundo!
-              </div>
-              <div class="dica-item">Dicas de Redação</div>
-              <div class="dica-item">Resumo de Matemática Básica</div>
-              <div class="dica-item">Fórmulas de Física</div>
-              <div class="dica-item">Linha do Tempo História</div>
-            </div>
+          </div>
+          <div class="box">
+            <h2>De play no método mais eficaz do mundo!</h2>
+          </div>
+          <div class="box">
+            <h2>Dicas de Redação</h2>
           </div>
         </div>
-
-        <!-- Matérias -->
+        <!--Materias -> click -> estatisca dela e flash cards-->
         <h2 class="titulo-sessao">Matérias</h2>
-        <div class="materias">
-          <div class="materia-card icone">
-            <img src="/img/quimica.png" alt="Química" />
-            <p>Química</p>
+        <div class="box-materias-superior">
+          <div class="box-materias">
+            <h2>Quimica</h2>
           </div>
-          <div class="materia-card icone">
-            <img src="/img/fisica.png" alt="Física" />
-            <p>Física</p>
+          <div class="box-materias">
+            <h2>Quimica</h2>
           </div>
-          <div class="materia-card icone">
-            <img src="/img/matematica.png" alt="Matemática" />
-            <p>Matemática</p>
+          <div class="box-materias">
+            <h2>Quimica</h2>
           </div>
-          <div class="materia-card icone">
-            <img src="/img/portugues.png" alt="Português" />
-            <p>Português</p>
+          <div class="box-materias">
+            <h2>Quimica</h2>
+          </div>
+          <div class="box-materias">
+            <h2>Quimica</h2>
+          </div>
+          <div class="box-materias">
+            <h2>Quimica</h2>
+          </div>
+          <div class="box-materias">
+            <h2>Quimica</h2>
           </div>
         </div>
       </main>
 
       <!-- Footer -->
+      <div class="linha">
+        <hr />
+      </div>
       <footer>
         <div class="logofinal">
-          <a href="#inicio">PROBATIO</a>
+          <a href="#inicio" id="logo">PROBATIO</a>
         </div>
       </footer>
     </div>
