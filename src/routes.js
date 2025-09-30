@@ -37,7 +37,7 @@ router.post("/cadastro", async (req, res) => {
     await prisma.user.create({
       data: {
         nome,
-        numero: parseInt(numero) || 0,
+        numero,
         email,
         senha: senhaHash,
       },
@@ -69,6 +69,7 @@ router.post("/login", async (req, res) => {
       id: usuario.id,
       email: usuario.email,
       nome: usuario.nome,
+      numero: usuario.numero,
     };
 
     res.redirect("/inicio");
@@ -86,7 +87,10 @@ router.get("/inicio", checkAuth, (req, res) => {
 });
 router.get("/api/usuario", checkAuth, (req, res) => {
   res.json({
+    id: req.session.user.id,
     nome: req.session.user.nome,
+    email: req.session.user.email,
+    numero: req.session.user.numero,
   });
 });
 router.get("/perfil", checkAuth, (req, res) => {

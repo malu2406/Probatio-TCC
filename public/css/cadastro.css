@@ -176,6 +176,7 @@ form {
   border-width: 0.5px;
   border-style: double;
   border-color: #202f5a;
+  padding-left: 2vh;
 }
 
 .input-box input:focus {

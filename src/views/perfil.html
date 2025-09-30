@@ -7,49 +7,74 @@
     <link rel="stylesheet" href="/css/perfil.css" />
   </head>
   <body>
-    <header>
-      <div id="header_esquerda">
-        <a href="/inicio" id="logo">PROBATIO</a>
-        <a href="/materias">Matérias</a>
-        <a href="/simulado_teste">Simulados</a>
-        <a href="/teste_es">Estatísticas</a>
-        <a href="/flashcards">Flashcards</a>
-        <a href="/noticias">Portais de Notícia</a>
-        <a href="/pomodoro">Pomodoro</a>
-      </div>
-      <div id="header_direita">
-        <a href="/perfil"
-          ><img src="/img/user.png" alt="Perfil" class="icon"
-        /></a>
-        <a href="/logout">Sair</a>
-      </div>
-    </header>
+    <div id="container">
 
-    <div class="container">
+      <header>
+        <div id="header_esquerda">
+          <a href="/inicio" id="logo">PROBATIO</a>
+          
+          <div class="nav-principal">
+            <a href="/materias" class="nav-link">Matérias</a>
+            <a href="/teste_es" class="nav-link">Estatísticas</a>
+            <a href="/flashcards" class="nav-link">Flashcards</a>
+            <a href="/noticias" class="nav-link">Portais de Notícia</a>
+            <a href="/pomodoro" class="nav-link">Pomodoro</a>
+            <a href="" class="nav-link">Temporizador</a>
+          </div>
+          
+          <div class="menu-usuario">
+            <a href="/perfil" class="nav-link">
+              <img src="/images/user.png" alt="Perfil" class="icon" />
+            </a>
+            <a href="/logout" class="nav-link">Sair</a>
+          </div>
+        </div>
+      </header>
+
+    
       <main>
-        <img src="" alt="" />
-        <h1><span id="nomeUsuario">Carregando...</span></h1>
+        <div class="perf">
+          <h1>
+            <span id="nome">Carregando...</span>
+            <button><i class="fa-solid fa-pen-to-square"></i></button>
+          </h1>
+        </div>
         <div class="linha">
           <hr />
         </div>
         <h1>Sobre</h1>
-        <span id="email">Carregando...</span>
+        
+        <p><h2>Email:</h2> <span id="email"></span></p>
+        <p><h2>Número:</h2> <span id="numero"></span></p>
+
+        <div class="linha">
+          <hr />
+        </div>
       </main>
+
+      <footer>
+        <div class="linha">
+          <hr />
+        </div>
+        <div class="logofinal">
+          <a href="#inicio" id="logo">PROBATIO</a>
+        </div>
+      </footer>
+      </div>
     </div>
-
+    <script src="https://kit.fontawesome.com/f04b1da4dd.js" crossorigin="anonymous"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch("/api/usuario")
-          .then((response) => response.json())
-          .then((data) => {
-            document.getElementById("nomeUsuario").textContent = data.nome;
-          })
-          .catch((error) => {
-            console.error("Erro ao carregar dados do usuário:", error);
-          });
-      });
+      async function carregarUsuario() {
+        const res = await fetch("/api/usuario");
+        const user = await res.json();
 
-      //FALAR COM A DUDA SOBRE A FUNÇÃO PARA PEGAR O EMAIL E O NÚMERO PQ NAO TA DANDO CERTO (sim, duda, se tu ta lendo, quero falar ctg sobre isso)
+        document.getElementById("nome").innerText = user.nome;
+        document.getElementById("email").innerText = user.email;
+        document.getElementById("numero").innerText = user.numero;
+        console.log(user.numero);
+      }
+
+      carregarUsuario();
     </script>
   </body>
 </html>

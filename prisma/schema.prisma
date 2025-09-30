@@ -14,7 +14,7 @@ model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   nome      String   
-  numero    Int 
+  numero    String 
   email     String   @unique
   senha     String
 }
