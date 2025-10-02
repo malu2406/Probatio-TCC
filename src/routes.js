@@ -15,6 +15,17 @@ function checkAuth(req, res, next) {
   next();
 }
 
+// Middleware para verificar se é bolsista
+function checkBolsista(req, res, next) {
+  if (req.session.user && req.session.user.tipo === "BOLSISTA") {
+    next();
+  } else {
+    res
+      .status(403)
+      .send("Acesso negado. Apenas bolsistas podem acessar esta página.");
+  }
+}
+
 // Rotas públicas
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
@@ -25,29 +36,59 @@ router.get("/cadastro", (req, res) => {
 });
 
 router.post("/cadastro", async (req, res) => {
-  const { nome, numero, email, senha } = req.body;
+  const { nome, numero, email, senha, tipo } = req.body;
+
+  console.log("Dados recebidos no cadastro:", { nome, email, tipo }); // DEBUG
 
   // Validação básica
-  if (!nome || !email || !senha) {
+  if (!nome || !email || !senha || !tipo) {
+    console.log("Campos faltando:", { nome, email, tipo }); // DEBUG
     return res.status(400).send("Preencha todos os campos obrigatórios");
+  }
+
+  // Validar tipo
+  if (!["USUARIO", "BOLSISTA"].includes(tipo)) {
+    console.log("Tipo inválido:", tipo); // DEBUG
+    return res.status(400).send("Tipo de usuário inválido");
   }
 
   try {
     const senhaHash = await bcrypt.hash(senha, 10);
-    await prisma.user.create({
+
+    // DEBUG: Log antes de criar o usuário
+    console.log("Criando usuário com tipo:", tipo);
+
+    const usuario = await prisma.user.create({
       data: {
         nome,
         numero,
         email,
         senha: senhaHash,
+        tipo: tipo, // ISSO É CRÍTICO - deve salvar o tipo
       },
     });
-    res.redirect("/login?success=1");
+
+    console.log("Usuário criado com sucesso:", usuario); // DEBUG
+
+    // Criar sessão com informações do usuário
+    req.session.user = {
+      id: usuario.id,
+      email: usuario.email,
+      nome: usuario.nome,
+      numero: usuario.numero,
+      tipo: usuario.tipo, // Salvar tipo na sessão também
+    };
+
+    res.redirect("/inicio");
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .send("Erro ao cadastrar usuário. O email já pode estar em uso.");
+    console.error("Erro detalhado no cadastro:", error);
+    if (error.code === "P2002") {
+      res
+        .status(500)
+        .send("Erro ao cadastrar usuário. O email já está em uso.");
+    } else {
+      res.status(500).send("Erro ao cadastrar usuário: " + error.message);
+    }
   }
 });
 
@@ -55,6 +96,7 @@ router.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 
+// MODIFICAÇÃO AQUI: Adicionar tipo na sessão durante o login
 router.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
@@ -70,6 +112,7 @@ router.post("/login", async (req, res) => {
       email: usuario.email,
       nome: usuario.nome,
       numero: usuario.numero,
+      tipo: usuario.tipo, // ADICIONADO: Salvar tipo na sessão
     };
 
     res.redirect("/inicio");
@@ -81,69 +124,34 @@ router.post("/login", async (req, res) => {
 
 // Rotas protegidas
 router.get("/inicio", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "inicio.html"), {
-    user: req.session.user,
-  });
+  res.sendFile(path.join(__dirname, "views", "inicio.html"));
 });
+
+// NOVA ROTA: Painel exclusivo para bolsistas
+router.get("/painel-bolsista", checkAuth, checkBolsista, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "painel-bolsista.html"));
+});
+
+// API para obter informações do usuário (incluindo tipo)
 router.get("/api/usuario", checkAuth, (req, res) => {
   res.json({
     id: req.session.user.id,
     nome: req.session.user.nome,
     email: req.session.user.email,
     numero: req.session.user.numero,
+    tipo: req.session.user.tipo, // ADICIONADO: Retornar tipo
   });
 });
+
+// Restante das rotas permanecem iguais...
 router.get("/perfil", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "perfil.html"));
 });
-router.get("/materias", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "materias.html"));
+
+router.get("/material", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "material.html"));
 });
 
-//inicio das materias
-router.get("/quimica", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "quimica.html"));
-});
-
-router.get("/materias-pasta/portugues", checkAuth, (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "views", "materias-pasta", "portugues.html")
-  );
-});
-
-router.get(
-  "/materias-pasta/portugues-pasta/tipos_generos",
-  checkAuth,
-  (req, res) => {
-    res.sendFile(
-      path.join(
-        __dirname,
-        "views",
-        "materias-pasta",
-        "portugues-pasta",
-        "tipos_generos.html"
-      )
-    );
-  }
-);
-
-router.get(
-  "/materias-pasta/portugues-pasta/tipos_generos_exercicios",
-  checkAuth,
-  (req, res) => {
-    res.sendFile(
-      path.join(
-        __dirname,
-        "views",
-        "materias-pasta",
-        "portugues-pasta",
-        "tipos_generos_exercicios.html"
-      )
-    );
-  }
-);
-
-//final de todas as materias
 
 router.get("/estatisticas", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "estatisticas.html"));
@@ -157,16 +165,164 @@ router.get("/flashcards", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "flashcards.html"));
 });
 
+// Rota para a página de material (apenas bolsistas)
+router.get("/material", checkAuth, checkBolsista, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "material.html"));
+});
+// API para listar TODOS os flashcards (para a página pública de flashcards)
+router.get("/api/todos-flashcards", checkAuth, async (req, res) => {
+  try {
+    const flashcards = await prisma.flashcard.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.json(flashcards);
+  } catch (error) {
+    console.error("Erro ao buscar flashcards:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+// API para criar flashcards
+// API para buscar um flashcard específico
+router.get("/api/flashcards/:id", checkAuth, async (req, res) => {
+  try {
+    const flashcard = await prisma.flashcard.findUnique({
+      where: { id: parseInt(req.params.id) },
+    });
+
+    if (!flashcard) {
+      return res.status(404).json({ error: "Flashcard não encontrado" });
+    }
+
+    // Verificar se o usuário é o dono do flashcard
+    if (flashcard.userId !== req.session.user.id) {
+      return res.status(403).json({ error: "Acesso negado" });
+    }
+
+    res.json(flashcard);
+  } catch (error) {
+    console.error("Erro ao buscar flashcard:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+// API para atualizar um flashcard
+router.put(
+  "/api/flashcards/:id",
+  checkAuth,
+  checkBolsista,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { materia, conteudo, pergunta, resposta } = req.body;
+
+      // Verificar se o flashcard existe e pertence ao usuário
+      const flashcardExistente = await prisma.flashcard.findUnique({
+        where: { id: parseInt(id) },
+      });
+
+      if (!flashcardExistente) {
+        return res.status(404).json({ error: "Flashcard não encontrado" });
+      }
+
+      if (flashcardExistente.userId !== req.session.user.id) {
+        return res.status(403).json({ error: "Acesso negado" });
+      }
+
+      const flashcard = await prisma.flashcard.update({
+        where: { id: parseInt(id) },
+        data: {
+          materia,
+          conteudo,
+          pergunta,
+          resposta,
+        },
+      });
+
+      res.json(flashcard);
+    } catch (error) {
+      console.error("Erro ao atualizar flashcard:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  }
+);
+
+// API para excluir um flashcard
+router.delete(
+  "/api/flashcards/:id",
+  checkAuth,
+  checkBolsista,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      // Verificar se o flashcard existe e pertence ao usuário
+      const flashcardExistente = await prisma.flashcard.findUnique({
+        where: { id: parseInt(id) },
+      });
+
+      if (!flashcardExistente) {
+        return res.status(404).json({ error: "Flashcard não encontrado" });
+      }
+
+      if (flashcardExistente.userId !== req.session.user.id) {
+        return res.status(403).json({ error: "Acesso negado" });
+      }
+
+      await prisma.flashcard.delete({
+        where: { id: parseInt(id) },
+      });
+
+      res.json({ message: "Flashcard excluído com sucesso" });
+    } catch (error) {
+      console.error("Erro ao excluir flashcard:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  }
+);
+
+router.post("/api/flashcards", checkAuth, checkBolsista, async (req, res) => {
+  try {
+    const { materia, conteudo, pergunta, resposta } = req.body;
+
+    const flashcard = await prisma.flashcard.create({
+      data: {
+        materia,
+        conteudo,
+        pergunta,
+        resposta,
+        userId: req.session.user.id,
+      },
+    });
+
+    res.json(flashcard);
+  } catch (error) {
+    console.error("Erro ao criar flashcard:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+// API para listar flashcards do usuário
+router.get("/api/flashcards", checkAuth, async (req, res) => {
+  try {
+    const flashcards = await prisma.flashcard.findMany({
+      where: { userId: req.session.user.id },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.json(flashcards);
+  } catch (error) {
+    console.error("Erro ao buscar flashcards:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
 router.get("/noticias", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "noticias.html"));
 });
 
 router.get("/pomodoro", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
-});
-
-router.get("/perfil", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "perfil.html"));
 });
 
 // API

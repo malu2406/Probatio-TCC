@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/material.css" />
+    <title>Criar Flashcard - PROBATIO</title>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div id="header_esquerda">
+        <a href="/inicio" id="logo">PROBATIO</a>
+        <a href="/material" class="nav-link bolsista-only">Material</a>
+        <a href="/teste_es" class="nav-link">Estatísticas</a>
+        <a href="/flashcards" class="nav-link">Flashcards</a>
+        <a href="/noticias" class="nav-link">Portais de Notícia</a>
+        <a href="/pomodoro" class="nav-link">Pomodoro</a>
+        <a href="" class="nav-link">Temporizador</a>
+      </div>
+
+      <div class="menu-usuario">
+        <a href="/perfil" class="nav-link">
+          <img src="/images/user.png" alt="Perfil" class="icon" />
+        </a>
+        <a href="/logout" class="nav-link">Sair</a>
+      </div>
+    </header>
+
+    <div id="container">
+      <main>
+        <h1>Criar Flashcard <span class="badge-bolsista">Bolsista</span></h1>
+
+        <div id="successMessage" class="success-message" style="display: none">
+          Flashcard criado com sucesso!
+        </div>
+
+        <div class="form-container">
+          <form id="flashcardForm">
+            <div class="form-group">
+              <label for="materia">Matéria:</label>
+              <select name="materia" id="materia" required>
+                <option value="">Selecione a matéria</option>
+                <option value="CH">Ciências Humanas</option>
+                <option value="CN">Ciências da Natureza</option>
+                <option value="LINGUAGENS">Linguagens</option>
+                <option value="MATEMATICA">Matemática</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="conteudo">Conteúdo:</label>
+              <select name="conteudo" id="conteudo" required>
+                <option value="">Selecione o conteúdo</option>
+                <option value="portugues">Português</option>
+                <option value="matematica">Matemática</option>
+                <option value="historia">História</option>
+                <option value="geografia">Geografia</option>
+                <option value="biologia">Biologia</option>
+                <option value="sociologia">Sociologia</option>
+                <option value="filosofia">Filosofia</option>
+                <option value="fisica">Física</option>
+                <option value="quimica">Química</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="pergunta">Pergunta:</label>
+              <textarea
+                name="pergunta"
+                id="pergunta"
+                placeholder="Digite a pergunta do flashcard..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="resposta">Resposta:</label>
+              <textarea
+                name="resposta"
+                id="resposta"
+                placeholder="Digite a resposta do flashcard..."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn">Criar Flashcard</button>
+          </form>
+        </div>
+
+        <div class="flashcards-list" id="flashcardsList">
+          <h2>Meus Flashcards</h2>
+          <div id="flashcardsContainer">
+            <!-- Flashcards serão carregados aqui via JavaScript -->
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Editar Flashcard</h2>
+        <form id="editFlashcardForm">
+          <input type="hidden" id="editFlashcardId" />
+          <div class="form-group">
+            <label for="editMateria">Matéria:</label>
+            <select name="materia" id="editMateria" required>
+              <option value="">Selecione a matéria</option>
+              <option value="CH">Ciências Humanas</option>
+              <option value="CN">Ciências da Natureza</option>
+              <option value="LINGUAGENS">Linguagens</option>
+              <option value="MATEMATICA">Matemática</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="editConteudo">Conteúdo:</label>
+            <select name="conteudo" id="editConteudo" required>
+              <option value="">Selecione o conteúdo</option>
+              <option value="portugues">Português</option>
+              <option value="matematica">Matemática</option>
+              <option value="historia">História</option>
+              <option value="geografia">Geografia</option>
+              <option value="biologia">Biologia</option>
+              <option value="sociologia">Sociologia</option>
+              <option value="filosofia">Filosofia</option>
+              <option value="fisica">Física</option>
+              <option value="quimica">Química</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="editPergunta">Pergunta:</label>
+            <textarea
+              name="pergunta"
+              id="editPergunta"
+              placeholder="Digite a pergunta do flashcard..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="editResposta">Resposta:</label>
+            <textarea
+              name="resposta"
+              id="editResposta"
+              placeholder="Digite a resposta do flashcard..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="modal-buttons">
+            <button type="button" class="btn-cancelar" id="cancelEdit">
+              Cancelar
+            </button>
+            <button type="submit" class="btn">Salvar Alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/api/usuario")
+          .then((response) => response.json())
+          .then((data) => {
+            // Verificar se o usuário é bolsista e mostrar o link de Matérias
+            if (data.tipo === "BOLSISTA") {
+              const linkMaterias = document.getElementById("link-materias");
+              linkMaterias.style.display = "block";
+            } else {
+              // Se não for bolsista, redirecionar ou esconder conteúdo
+              window.location.href = "/inicio";
+            }
+          })
+          .catch((error) => {
+            console.error("Erro ao carregar dados do usuário:", error);
+          });
+        const form = document.getElementById("flashcardForm");
+        const editForm = document.getElementById("editFlashcardForm");
+        const successMessage = document.getElementById("successMessage");
+        const flashcardsContainer = document.getElementById(
+          "flashcardsContainer"
+        );
+        const editModal = document.getElementById("editModal");
+        const closeModal = document.querySelector(".close");
+        const cancelEdit = document.getElementById("cancelEdit");
+
+        // Carregar flashcards existentes
+        loadFlashcards();
+
+        // Criar flashcard
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const formData = {
+            materia: document.getElementById("materia").value,
+            conteudo: document.getElementById("conteudo").value,
+            pergunta: document.getElementById("pergunta").value,
+            resposta: document.getElementById("resposta").value,
+          };
+
+          try {
+            const response = await fetch("/api/flashcards", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+              successMessage.style.display = "block";
+              form.reset();
+              loadFlashcards();
+
+              setTimeout(() => {
+                successMessage.style.display = "none";
+              }, 3000);
+            } else {
+              alert("Erro ao criar flashcard");
+            }
+          } catch (error) {
+            console.error("Erro:", error);
+            alert("Erro ao criar flashcard");
+          }
+        });
+
+        // Editar flashcard - abrir modal
+        function setupEditButton(button, flashcard) {
+          button.addEventListener("click", function () {
+            document.getElementById("editFlashcardId").value = flashcard.id;
+            document.getElementById("editMateria").value = flashcard.materia;
+            document.getElementById("editConteudo").value = flashcard.conteudo;
+            document.getElementById("editPergunta").value = flashcard.pergunta;
+            document.getElementById("editResposta").value = flashcard.resposta;
+            editModal.style.display = "block";
+          });
+        }
+
+        // Excluir flashcard
+        function setupDeleteButton(button, flashcardId) {
+          button.addEventListener("click", async function () {
+            if (confirm("Tem certeza que deseja excluir este flashcard?")) {
+              try {
+                const response = await fetch(`/api/flashcards/${flashcardId}`, {
+                  method: "DELETE",
+                });
+
+                if (response.ok) {
+                  loadFlashcards();
+                } else {
+                  alert("Erro ao excluir flashcard");
+                }
+              } catch (error) {
+                console.error("Erro:", error);
+                alert("Erro ao excluir flashcard");
+              }
+            }
+          });
+        }
+
+        // Salvar edição
+        editForm.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const flashcardId = document.getElementById("editFlashcardId").value;
+          const formData = {
+            materia: document.getElementById("editMateria").value,
+            conteudo: document.getElementById("editConteudo").value,
+            pergunta: document.getElementById("editPergunta").value,
+            resposta: document.getElementById("editResposta").value,
+          };
+
+          try {
+            const response = await fetch(`/api/flashcards/${flashcardId}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+              editModal.style.display = "none";
+              loadFlashcards();
+            } else {
+              alert("Erro ao atualizar flashcard");
+            }
+          } catch (error) {
+            console.error("Erro:", error);
+            alert("Erro ao atualizar flashcard");
+          }
+        });
+
+        // Fechar modal
+        closeModal.addEventListener("click", function () {
+          editModal.style.display = "none";
+        });
+
+        cancelEdit.addEventListener("click", function () {
+          editModal.style.display = "none";
+        });
+
+        // Fechar modal ao clicar fora
+        window.addEventListener("click", function (event) {
+          if (event.target === editModal) {
+            editModal.style.display = "none";
+          }
+        });
+
+        // Carregar flashcards
+        async function loadFlashcards() {
+          try {
+            const response = await fetch("/api/flashcards");
+            const flashcards = await response.json();
+
+            flashcardsContainer.innerHTML = "";
+
+            if (flashcards.length === 0) {
+              flashcardsContainer.innerHTML =
+                "<p>Nenhum flashcard criado ainda.</p>";
+              return;
+            }
+
+            flashcards.forEach((flashcard) => {
+              const flashcardElement = document.createElement("div");
+              flashcardElement.className = "flashcard-item";
+
+              const materiaNames = {
+                CH: "Ciências Humanas",
+                CN: "Ciências da Natureza",
+                LINGUAGENS: "Linguagens",
+                MATEMATICA: "Matemática",
+              };
+
+              flashcardElement.innerHTML = `
+                <div class="flashcard-materia">${
+                  materiaNames[flashcard.materia] || flashcard.materia
+                }</div>
+                <div class="flashcard-conteudo">Conteúdo: ${
+                  flashcard.conteudo
+                }</div>
+                <div class="flashcard-pergunta"><strong>P:</strong> ${
+                  flashcard.pergunta
+                }</div>
+                <div class="flashcard-resposta"><strong>R:</strong> ${
+                  flashcard.resposta
+                }</div>
+                <div class="flashcard-actions">
+                  <button class="btn-editar" data-id="${
+                    flashcard.id
+                  }">Editar</button>
+                  <button class="btn-excluir" data-id="${
+                    flashcard.id
+                  }">Excluir</button>
+                </div>
+              `;
+
+              flashcardsContainer.appendChild(flashcardElement);
+
+              // Configurar eventos dos botões
+              const editButton = flashcardElement.querySelector(".btn-editar");
+              const deleteButton =
+                flashcardElement.querySelector(".btn-excluir");
+
+              setupEditButton(editButton, flashcard);
+              setupDeleteButton(deleteButton, flashcard.id);
+            });
+          } catch (error) {
+            console.error("Erro ao carregar flashcards:", error);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

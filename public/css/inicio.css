@@ -29,7 +29,9 @@ body {
   box-sizing: border-box;
 }
 
-/* HEADER CORRIGIDO */
+
+/*INICIO DO HEADER*/
+
 header {
   position: fixed;
   top: 0;
@@ -122,6 +124,7 @@ header:hover {
   transform: translateY(-2px);
 }
 
+/*FIM HEADER*/
 /* RESTANTE DO CSS PERMANECE */
 h1 {
   color: #202f5a;
@@ -200,6 +203,204 @@ hr {
   color: #ccc;
   text-align: center;
   max-width: 100%;
+}
+
+.grafico-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.grafico-titulo {
+  font-family: "titulos";
+  color: #202f5a;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.chart-container-inicio {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 25px;
+  padding: 0 20px;
+}
+
+.eixo-y {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.axis-y-label {
+  font-family: "texto";
+  font-size: 11px;
+  color: #202f5a;
+  text-align: right;
+  padding-right: 8px;
+}
+
+.barras-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 25px;
+  height: 100%;
+  width: calc(100% - 45px);
+  margin-left: 45px;
+}
+
+.barra-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.barra {
+  width: 32px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+  border-radius: 6px 6px 0 0;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.barra:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.barra-valor {
+  font-family: "texto";
+  font-size: 12px;
+  color: #202f5a;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.barra-rotulo {
+  font-family: "texto";
+  font-size: 11px;
+  color: #202f5a;
+  margin-top: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* CORES DAS BARRAS - Mantendo as cores originais do gráfico */
+.barra-matematica {
+  background-color: #0a1749;
+  border-top: 3px solid #1a2a6c;
+}
+.barra-linguagens {
+  background-color: #778bdc;
+  border-top: 3px solid #8fa3f2;
+}
+.barra-humanas {
+  background-color: #0423a1;
+  border-top: 3px solid #1a3ac8;
+}
+.barra-natureza {
+  background-color: #4d69d5;
+  border-top: 3px solid #6b85f0;
+}
+
+.sem-dados {
+  text-align: center;
+  padding: 30px 20px;
+  color: #202f5a;
+  font-family: "texto";
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sem-dados p {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.sem-dados a {
+  color: #1a2a6c;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: 2px solid #1a2a6c;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.sem-dados a:hover {
+  background-color: #1a2a6c;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* LINHAS DO GRÁFICO DE FUNDO */
+.linhas-guia {
+  position: absolute;
+  top: 0;
+  left: 45px;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.linha-guia {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgba(32, 47, 90, 0.2);
+}
+
+/* Estilo para link de bolsista - adaptado ao seu CSS */
+.nav-link.bolsista-only {
+  background: linear-gradient(45deg, #1a2a6c, #4d69d5);
+  color: white !important;
+  border-radius: 20px;
+  padding: 8px 16px;
+  margin: 0 5px;
+  transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+.nav-link.bolsista-only:hover {
+  background: linear-gradient(45deg, #4d69d5, #1a2a6c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 42, 108, 0.4);
+  color: white !important;
+  text-shadow: none;
+}
+
+/* Indicador de bolsista na saudação */
+.badge-bolsista {
+  background: linear-gradient(45deg, #1a2a6c, #4d69d5);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.7em;
+  margin-left: 10px;
+  font-family: "texto";
+  vertical-align: middle;
 }
 
 /* MEDIA QUERIES PARA RESPONSIVIDADE */

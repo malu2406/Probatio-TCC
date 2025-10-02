@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,55 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TipoUsuario {
+  ADMIN
+  BOLSISTA
+  USUARIO
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
   nome      String   
   numero    String 
-  email     String   @unique
+  email     String      @unique
   senha     String
+  tipo      TipoUsuario @default(USUARIO)
+  flashcards Flashcard[]  // ADICIONE ESTA LINHA - relação com Flashcard
 }
 
-model Disciplina {
-  id             Int             @id @default(autoincrement())
-  nome           String          @unique
-  subdisciplinas Subdisciplina[]
-  questoes       Questao[]
-}
-
-model Subdisciplina {
-  id            Int           @id @default(autoincrement())
-  nome          String
-  disciplinaId  Int
-  disciplina    Disciplina    @relation(fields: [disciplinaId], references: [id])
-  subcategorias Subcategoria[]
-  questoes      Questao[]
-}
-
-model Subcategoria {
-  id               Int          @id @default(autoincrement())
-  nome             String
-  subdisciplinaId  Int
-  subdisciplina    Subdisciplina @relation(fields: [subdisciplinaId], references: [id])
-  questoes         Questao[]
-}
-
-model Questao {
-  id               Int           @id @default(autoincrement())
-  createdAt        DateTime      @default(now())
-  enunciado        String        @db.LongText
-  imagem           String?
-  alternativa_a    String
-  alternativa_b    String
-  alternativa_c    String
-  alternativa_d    String
-  alternativa_e    String
-  resposta_correta String
-  ano              Int
-  disciplinaId     Int
-  disciplina       Disciplina    @relation(fields: [disciplinaId], references: [id])
-  subdisciplinaId  Int?
-  subdisciplina    Subdisciplina? @relation(fields: [subdisciplinaId], references: [id])
-  subcategoriaId   Int?
-  subcategoria     Subcategoria?  @relation(fields: [subcategoriaId], references: [id])
+model Flashcard {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  materia   String   // CH, CN, LINGUAGENS, MATEMATICA
+  conteudo  String   // portugues, matematica, historia, etc.
+  pergunta  String
+  resposta  String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("flashcards")
 }

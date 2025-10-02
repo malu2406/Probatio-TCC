@@ -13,7 +13,14 @@
         <a href="/inicio" id="logo">PROBATIO</a>
 
         <div class="nav-principal">
-          <a href="/materias" class="nav-link">Matérias</a>
+          <!-- Link de Matérias - será mostrado apenas para bolsistas -->
+          <a
+            href="/material"
+            class="nav-link bolsista-only"
+            id="link-materias"
+            style="display: none"
+            >Material</a
+          >
           <a href="/teste_es" class="nav-link">Estatísticas</a>
           <a href="/flashcards" class="nav-link">Flashcards</a>
           <a href="/noticias" class="nav-link">Portais de Notícia</a>
@@ -59,9 +66,14 @@
         <!-- Atividades do Dia -->
         <h2 class="titulo-sessao">Atividades do dia</h2>
         <div class="box-maior">
-          <!--Botar aqui um grafico por materia, ao clicar no grafico vai abrir outra da materia escolhida-->
-          <h2>"tabela"</h2>
+          <div class="grafico-wrapper">
+            <div class="grafico-titulo">Desempenho por Matéria</div>
+            <div class="chart-container-inicio" id="chart-container-inicio">
+              <!-- Gráfico será gerado aqui -->
+            </div>
+          </div>
         </div>
+
         <div class="box-atividades">
           <div class="box">
             <h2>Rápido e Fácil</h2>
@@ -73,29 +85,30 @@
             <h2>Dicas de Redação</h2>
           </div>
         </div>
-        <!--Materias -> click -> estatisca dela e flash cards-->
+
+        <!-- Matérias -->
         <h2 class="titulo-sessao">Matérias</h2>
         <div class="box-materias-superior">
           <div class="box-materias">
-            <h2>Quimica</h2>
+            <h2>Química</h2>
           </div>
           <div class="box-materias">
-            <h2>Quimica</h2>
+            <h2>Física</h2>
           </div>
           <div class="box-materias">
-            <h2>Quimica</h2>
+            <h2>Biologia</h2>
           </div>
           <div class="box-materias">
-            <h2>Quimica</h2>
+            <h2>Matemática</h2>
           </div>
           <div class="box-materias">
-            <h2>Quimica</h2>
+            <h2>Português</h2>
           </div>
           <div class="box-materias">
-            <h2>Quimica</h2>
+            <h2>História</h2>
           </div>
           <div class="box-materias">
-            <h2>Quimica</h2>
+            <h2>Geografia</h2>
           </div>
         </div>
       </main>
@@ -113,15 +126,162 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // Carregar dados do usuário
         fetch("/api/usuario")
           .then((response) => response.json())
           .then((data) => {
             document.getElementById("nomeUsuario").textContent = data.nome;
+
+            // Verificar se o usuário é bolsista e mostrar o link de Matérias
+            if (data.tipo === "BOLSISTA") {
+              const linkMaterias = document.getElementById("link-materias");
+              linkMaterias.style.display = "block";
+
+              // Adicionar indicador visual no título
+              const saudacao = document.querySelector(".saudacao h1");
+              const badge = document.createElement("span");
+              badge.className = "badge-bolsista";
+              badge.textContent = "Bolsista";
+              saudacao.appendChild(badge);
+            }
           })
           .catch((error) => {
             console.error("Erro ao carregar dados do usuário:", error);
           });
+
+        // Gerar gráfico na página inicial
+        generateChartInicio();
       });
+
+      function generateChartInicio() {
+        const chartContainer = document.getElementById(
+          "chart-container-inicio"
+        );
+        const stats = JSON.parse(localStorage.getItem("flashcardStats")) || {
+          matematica: { total: 0, acertos: 0 },
+          linguagens: { total: 0, acertos: 0 },
+          humanas: { total: 0, acertos: 0 },
+          natureza: { total: 0, acertos: 0 },
+        };
+
+        // Calcular percentuais
+        const percentuais = {
+          matematica:
+            stats.matematica.total > 0
+              ? Math.round(
+                  (stats.matematica.acertos / stats.matematica.total) * 100
+                )
+              : 0,
+          linguagens:
+            stats.linguagens.total > 0
+              ? Math.round(
+                  (stats.linguagens.acertos / stats.linguagens.total) * 100
+                )
+              : 0,
+          humanas:
+            stats.humanas.total > 0
+              ? Math.round((stats.humanas.acertos / stats.humanas.total) * 100)
+              : 0,
+          natureza:
+            stats.natureza.total > 0
+              ? Math.round(
+                  (stats.natureza.acertos / stats.natureza.total) * 100
+                )
+              : 0,
+        };
+
+        // Verificar se há dados
+        const totalQuestoes =
+          stats.matematica.total +
+          stats.linguagens.total +
+          stats.humanas.total +
+          stats.natureza.total;
+
+        if (totalQuestoes === 0) {
+          chartContainer.innerHTML = `
+            <div class="sem-dados">
+              <p>Você ainda não respondeu nenhum flashcard.</p>
+              <p><a href="/flashcards">Começar a praticar agora!</a></p>
+            </div>
+          `;
+          return;
+        }
+
+        // Limpar container
+        chartContainer.innerHTML = "";
+
+        // Criar linhas guia de fundo
+        const linhasGuia = document.createElement("div");
+        linhasGuia.className = "linhas-guia";
+        for (let i = 0; i <= 100; i += 25) {
+          const linha = document.createElement("div");
+          linha.className = "linha-guia";
+          linha.style.bottom = `${i}%`;
+          linhasGuia.appendChild(linha);
+        }
+        chartContainer.appendChild(linhasGuia);
+
+        // Criar eixo Y
+        const eixoY = document.createElement("div");
+        eixoY.className = "eixo-y";
+        for (let i = 100; i >= 0; i -= 25) {
+          const yLabel = document.createElement("div");
+          yLabel.className = "axis-y-label";
+          yLabel.textContent = `${i}%`;
+          eixoY.appendChild(yLabel);
+        }
+
+        // Criar container das barras
+        const barrasContainer = document.createElement("div");
+        barrasContainer.className = "barras-container";
+
+        // Criar barras
+        const materias = [
+          {
+            tipo: "matematica",
+            nome: "Matemática",
+            percentual: percentuais.matematica,
+          },
+          {
+            tipo: "linguagens",
+            nome: "Linguagens",
+            percentual: percentuais.linguagens,
+          },
+          { tipo: "humanas", nome: "Humanas", percentual: percentuais.humanas },
+          {
+            tipo: "natureza",
+            nome: "Natureza",
+            percentual: percentuais.natureza,
+          },
+        ];
+
+        materias.forEach((materia) => {
+          const barraItem = document.createElement("div");
+          barraItem.className = "barra-item";
+
+          const barraValor = document.createElement("div");
+          barraValor.className = "barra-valor";
+          barraValor.textContent = `${materia.percentual}%`;
+
+          const barra = document.createElement("div");
+          barra.className = `barra barra-${materia.tipo}`;
+          barra.style.height = `${materia.percentual}%`;
+          barra.title = `${materia.nome}: ${materia.percentual}% de acerto`;
+
+          const barraRotulo = document.createElement("div");
+          barraRotulo.className = "barra-rotulo";
+          barraRotulo.textContent = materia.nome;
+
+          barraItem.appendChild(barraValor);
+          barraItem.appendChild(barra);
+          barraItem.appendChild(barraRotulo);
+
+          barrasContainer.appendChild(barraItem);
+        });
+
+        chartContainer.appendChild(eixoY);
+        chartContainer.appendChild(barrasContainer);
+      }
     </script>
   </body>
 </html>

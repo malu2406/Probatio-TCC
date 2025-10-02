@@ -5,16 +5,15 @@
     <title>Cadastro</title>
     <link rel="stylesheet" href="/css/cadastro.css" />
   </head>
-
   <body>
     <div class="container">
       <div class="form-image">
-        <img src="/images/dragon-remove.png" />
+        <img src="/images/dragon-remove.png" alt="Dragão" />
       </div>
       <div class="form">
         <form action="/cadastro" method="POST">
           <div class="form-header">
-            <div claszs="title">
+            <div class="title">
               <h1>Cadastro de Usuário</h1>
             </div>
           </div>
@@ -37,7 +36,6 @@
                 name="numero"
                 id="numero"
                 placeholder="(xx) xxxx-xxxx"
-                required
               />
             </div>
             <div class="input-box">
@@ -50,6 +48,15 @@
                 required
               />
             </div>
+            <!-- Adicione este código dentro da div .input-group antes do botão -->
+            <div class="input-box">
+              <label for="tipo">Tipo de Usuário:</label>
+              <select name="tipo" id="tipo" required>
+                <option value="">Selecione seu tipo</option>
+                <option value="USUARIO">Usuário Comum</option>
+                <option value="BOLSISTA">Bolsista</option>
+              </select>
+            </div>
             <div class="input-box">
               <label for="senha">Senha:</label>
               <input
@@ -61,7 +68,7 @@
               />
             </div>
             <div class="input-box">
-              <label for="senha">Confirme a senha:</label>
+              <label for="confirmesenha">Confirme a senha:</label>
               <input
                 type="password"
                 name="confirmesenha"
@@ -82,5 +89,27 @@
         </form>
       </div>
     </div>
+
+    <script>
+      // Validação de senha no frontend
+      document.querySelector("form").addEventListener("submit", function (e) {
+        const senha = document.getElementById("senha").value;
+        const confirmeSenha = document.getElementById("confirmesenha").value;
+        const tipo = document.getElementById("tipo").value;
+
+        if (senha !== confirmeSenha) {
+          e.preventDefault();
+          alert("As senhas não coincidem!");
+          return false;
+        }
+
+        if (!tipo) {
+          e.preventDefault();
+          alert("Por favor, selecione um tipo de usuário!");
+          return false;
+        }
+        return true;
+      });
+    </script>
   </body>
 </html>
