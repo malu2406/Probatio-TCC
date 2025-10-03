@@ -152,7 +152,6 @@ header:hover {
   vertical-align: middle;
 }
 
-
 #container {
   width: 100%;
   max-width: 1200px;
@@ -164,6 +163,8 @@ header:hover {
 h1 {
   color: #202f5a;
   font-family: "titulos";
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 
 h2 {
@@ -176,15 +177,12 @@ h3 {
   font-family: "texto";
 }
 
-
-
 .titulo-sessao {
   margin-top: 10vh;
 }
 
-
 .form-container {
-  background-color: #f8f9fa;
+  background-color: #99b1c929;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);

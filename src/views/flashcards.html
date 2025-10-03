@@ -84,7 +84,21 @@
         // Carregar flashcards do banco de dados
         loadFlashcardsFromDB();
 
-        // ... o resto do seu código JavaScript existente (filtros, estatísticas, etc.)
+        // Configurar filtros
+        const filtroBtns = document.querySelectorAll(".filtro-btn");
+        filtroBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            // Remove a classe ativo de todos os botões
+            filtroBtns.forEach((b) => b.classList.remove("ativo"));
+            // Adiciona a classe ativo ao botão clicado
+            btn.classList.add("ativo");
+            const materia = btn.getAttribute("data-materia");
+            filterFlashcards(materia);
+          });
+        });
+
+        // Inicializar estatísticas
+        updateStatsDisplay();
 
         async function loadFlashcardsFromDB() {
           try {
@@ -136,20 +150,20 @@
 
           div.setAttribute("data-materia", materiaClass);
           div.innerHTML = `
-        <span class="materia-tag ${materiaClass}">${
+            <span class="materia-tag ${materiaClass}">${
             materiaNames[flashcard.materia] || flashcard.materia
           }</span>
-        <div class="conteudo-tag">${flashcard.conteudo}</div>
-        <div class="pergunta">${flashcard.pergunta}</div>
-        <div class="resposta">${flashcard.resposta}</div>
-        <div class="controles">
-          <button class="btn mostrar-resposta">Mostrar Resposta</button>
-          <div class="feedback-buttons" style="display: none">
-            <button class="btn acertou">Acertou</button>
-            <button class="btn errou">Errou</button>
-          </div>
-        </div>
-      `;
+            <div class="conteudo-tag">${flashcard.conteudo}</div>
+            <div class="pergunta">${flashcard.pergunta}</div>
+            <div class="resposta">${flashcard.resposta}</div>
+            <div class="controles">
+              <button class="btn mostrar-resposta">Mostrar Resposta</button>
+              <div class="feedback-buttons" style="display: none">
+                <button class="btn acertou">Acertou</button>
+                <button class="btn errou">Errou</button>
+              </div>
+            </div>
+          `;
 
           return div;
         }
@@ -193,7 +207,20 @@
           });
         }
 
-        // Função para registrar resposta (mantenha a existente)
+        function filterFlashcards(materia) {
+          const flashcards = document.querySelectorAll(".flashcard");
+          flashcards.forEach((card) => {
+            if (
+              materia === "todas" ||
+              card.getAttribute("data-materia") === materia
+            ) {
+              card.style.display = "flex";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        }
+
         function registerAnswer(materia, acertou) {
           let stats = JSON.parse(localStorage.getItem("flashcardStats")) || {
             matematica: { total: 0, acertos: 0 },
@@ -211,13 +238,26 @@
           updateStatsDisplay();
         }
 
-        // Funções de estatísticas (mantenha as existentes)
-        function loadStats() {
-          // ... seu código existente
-        }
-
         function updateStatsDisplay() {
-          // ... seu código existente
+          const stats = JSON.parse(localStorage.getItem("flashcardStats")) || {
+            matematica: { total: 0, acertos: 0 },
+            linguagens: { total: 0, acertos: 0 },
+            humanas: { total: 0, acertos: 0 },
+            natureza: { total: 0, acertos: 0 },
+          };
+
+          document.getElementById(
+            "stat-matematica"
+          ).textContent = `${stats.matematica.acertos}/${stats.matematica.total}`;
+          document.getElementById(
+            "stat-linguagens"
+          ).textContent = `${stats.linguagens.acertos}/${stats.linguagens.total}`;
+          document.getElementById(
+            "stat-humanas"
+          ).textContent = `${stats.humanas.acertos}/${stats.humanas.total}`;
+          document.getElementById(
+            "stat-natureza"
+          ).textContent = `${stats.natureza.acertos}/${stats.natureza.total}`;
         }
       });
     </script>
