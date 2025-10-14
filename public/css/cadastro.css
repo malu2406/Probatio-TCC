@@ -23,6 +23,7 @@ body {
 
 h1 {
   color: #202f5a;
+  font-family: titulos;
 }
 
 .link a {
@@ -40,16 +41,14 @@ h1 {
   background-color: rgba(246, 183, 55, 0.1);
   transform: translateY(-2px);
 }
-x a {
-  color: #202f5a;
-  text-decoration: none;
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-weight: 500;
+
+.links {
+  display: flex;
 }
+
 .container {
-  width: 80%;
-  height: 80%;
+  width: 83%;
+  height: 83%;
   display: flex;
   border-radius: 30px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0.212);
@@ -83,9 +82,7 @@ form {
   place-items: center;
 }
 .form-header {
-  margin-bottom: 3rem;
   display: flex;
-
   justify-content: space-between;
 }
 .login-button {
@@ -124,7 +121,7 @@ form {
 .continue-button {
   display: flex;
   justify-content: flex-end;
-  width: 100%;
+  width: 108%;
 }
 
 .continue-button button {
@@ -154,7 +151,7 @@ form {
 }
 
 .input-group {
-  width: 100%;
+  width: 108%;
   max-width: 400px;
   justify-items: center;
 }
@@ -162,6 +159,8 @@ form {
 .input-box {
   margin-bottom: 1.5rem;
   position: relative;
+  width: 100%;
+  max-width: 400px;
 }
 
 .input-box label {
@@ -169,38 +168,90 @@ form {
   margin-left: 2vh;
 }
 
-.input-box input {
-  width: 40vh;
-  height: 5vh;
+/* Regra conjunta para input e select */
+.input-box input,
+.input-box select {
+  width: 100%;
+  height: 50px;
   border-radius: 20px;
-  border-width: 0.5px;
-  border-style: double;
-  border-color: #202f5a;
-  padding-left: 2vh;
+  border: 1px solid #202f5a;
+  padding: 0 20px;
+  font-family: "texto", sans-serif;
+  font-size: 15px;
+  color: #202f5a;
+  box-sizing: border-box;
+  background-color: #fff;
 }
 
-.input-box input:focus {
+/* Estilos específicos para o select */
+.input-box select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23202f5a'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 16px;
+  cursor: pointer;
+  padding-right: 40px; /* Espaço para a seta */
+}
+
+/* Estilos para os estados de focus e hover */
+.input-box input:focus,
+.input-box select:focus {
   outline: none;
   border-color: #f6b737;
   box-shadow: 0 0 0 3px rgba(246, 183, 55, 0.2);
   background-color: #fff;
 }
 
-.input-box input:hover {
+.input-box input:hover,
+.input-box select:hover {
   border-color: #c1c9d6;
   background-color: #f1f3f7;
 }
 
+/* Estilos do placeholder para input */
 .input-box input::placeholder {
-  padding-left: 2vh;
   color: #8a94a6;
   font-size: 15px;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
-  opacity: 1;
 }
 
 .input-box input:focus::placeholder {
   color: transparent;
   transform: translateX(10px);
+}
+
+/* Estilos para as options do select */
+.input-box select option {
+  background-color: #fff;
+  color: #202f5a;
+  padding: 12px 16px;
+  font-family: "texto", sans-serif;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.input-box select option[value=""] {
+  color: #8a94a6;
+  font-style: italic;
+}
+
+.input-box select option:checked {
+  background-color: #202f5a;
+  color: #fff;
+}
+
+.input-box select option:hover {
+  background-color: #f6b737;
+  color: #fff;
+}
+
+.input-box select optgroup {
+  background-color: #f8f9fa;
+  color: #202f5a;
+  font-weight: bold;
+  font-family: "titulos", sans-serif;
 }
