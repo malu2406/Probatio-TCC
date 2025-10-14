@@ -48,15 +48,6 @@
                 required
               />
             </div>
-            <!-- Adicione este código dentro da div .input-group antes do botão -->
-            <div class="input-box">
-              <label for="tipo">Tipo de Usuário:</label>
-              <select name="tipo" id="tipo" required>
-                <option value="">Selecione seu tipo</option>
-                <option value="USUARIO">Usuário Comum</option>
-                <option value="BOLSISTA">Bolsista</option>
-              </select>
-            </div>
             <div class="input-box">
               <label for="senha">Senha:</label>
               <input
@@ -77,14 +68,26 @@
                 required
               />
             </div>
+            <div class="input-box">
+              <label for="tipo">Tipo de Usuário:</label>
+              <select name="tipo" id="tipo" required>
+                <option value="">Selecione seu tipo</option>
+                <option value="USUARIO">Usuário Comum</option>
+                <option value="BOLSISTA">Bolsista</option>
+              </select>
+            </div>
           </div>
 
           <div class="continue-button">
             <button type="submit">Cadastrar</button>
           </div>
-
-          <div class="link">
-            <a href="/">Voltar para tela inicial</a>
+          <div class="links">
+            <div class="link">
+              <a href="/login">Já possui conta?</a>
+            </div>
+            <div class="link">
+              <a href="/">Voltar para tela inicial</a>
+            </div>
           </div>
         </form>
       </div>
