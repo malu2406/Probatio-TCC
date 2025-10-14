@@ -36,7 +36,7 @@ router.get("/cadastro", (req, res) => {
 });
 
 router.post("/cadastro", async (req, res) => {
-  const { nome, numero, email, senha, tipo } = req.body;
+  const { nome, nickname, email, senha, tipo } = req.body;
 
   console.log("Dados recebidos no cadastro:", { nome, email, tipo }); // DEBUG
 
@@ -61,7 +61,7 @@ router.post("/cadastro", async (req, res) => {
     const usuario = await prisma.user.create({
       data: {
         nome,
-        numero,
+        nickname,
         email,
         senha: senhaHash,
         tipo: tipo, // ISSO É CRÍTICO - deve salvar o tipo
@@ -75,7 +75,7 @@ router.post("/cadastro", async (req, res) => {
       id: usuario.id,
       email: usuario.email,
       nome: usuario.nome,
-      numero: usuario.numero,
+      nickname: usuario.nickname,
       tipo: usuario.tipo, // Salvar tipo na sessão também
     };
 
@@ -111,7 +111,7 @@ router.post("/login", async (req, res) => {
       id: usuario.id,
       email: usuario.email,
       nome: usuario.nome,
-      numero: usuario.numero,
+      nickname: usuario.nickname,
       tipo: usuario.tipo, // ADICIONADO: Salvar tipo na sessão
     };
 
@@ -138,7 +138,7 @@ router.get("/api/usuario", checkAuth, (req, res) => {
     id: req.session.user.id,
     nome: req.session.user.nome,
     email: req.session.user.email,
-    numero: req.session.user.numero,
+    nickname: req.session.user.nickname,
     tipo: req.session.user.tipo, // ADICIONADO: Retornar tipo
   });
 });

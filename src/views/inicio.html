@@ -75,41 +75,23 @@
         </div>
 
         <div class="box-atividades">
-          <div class="box">
-            <h2>Rápido e Fácil</h2>
-          </div>
-          <div class="box">
-            <h2>De play no método mais eficaz do mundo!</h2>
-          </div>
-          <div class="box">
-            <h2>Dicas de Redação</h2>
-          </div>
-        </div>
+          <a href="/flashcards" class="box-link">
+            <div class="box">
+              <h2>Rápido e Fácil</h2>
+            </div>
+          </a>
 
-        <!-- Matérias -->
-        <h2 class="titulo-sessao">Matérias</h2>
-        <div class="box-materias-superior">
-          <div class="box-materias">
-            <h2>Química</h2>
-          </div>
-          <div class="box-materias">
-            <h2>Física</h2>
-          </div>
-          <div class="box-materias">
-            <h2>Biologia</h2>
-          </div>
-          <div class="box-materias">
-            <h2>Matemática</h2>
-          </div>
-          <div class="box-materias">
-            <h2>Português</h2>
-          </div>
-          <div class="box-materias">
-            <h2>História</h2>
-          </div>
-          <div class="box-materias">
-            <h2>Geografia</h2>
-          </div>
+          <a href="/pomodoro" class="box-link">
+            <div class="box">
+              <h2>De play no método mais eficaz do mundo!</h2>
+            </div>
+          </a>
+
+          <a href="/noticias" class="box-link">
+            <div class="box">
+              <h2>Dicas de Redação</h2>
+            </div>
+          </a>
         </div>
       </main>
 
@@ -130,7 +112,7 @@
         fetch("/api/usuario")
           .then((response) => response.json())
           .then((data) => {
-            document.getElementById("nomeUsuario").textContent = data.nome;
+            document.getElementById("nomeUsuario").textContent = data.nickname;
 
             // Verificar se o usuário é bolsista e mostrar o link de Matérias
             if (data.tipo === "BOLSISTA") {

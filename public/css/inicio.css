@@ -18,7 +18,7 @@ body {
   padding: 0;
   font-family: Arial, sans-serif;
   padding-top: 80px;
-  min-height: 100vh; /* Isso faz com que o body ocupe pelo menos a altura total da tela */
+  min-height: 100vh;
 }
 
 #container {
@@ -29,9 +29,7 @@ body {
   box-sizing: border-box;
 }
 
-
 /*INICIO DO HEADER*/
-
 header {
   position: fixed;
   top: 0;
@@ -49,7 +47,6 @@ header {
     transform 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
-/* CONTAINER DO HEADER ALINHADO */
 #header_esquerda {
   width: 100%;
   max-width: 1200px;
@@ -57,60 +54,54 @@ header {
   align-items: center;
   padding: 0 20px;
   box-sizing: border-box;
-  gap: 20px; /* Espaço entre os itens */
+  gap: 20px;
 }
 
-/* LOGO */
 #logo {
   font-family: "probatio";
   font-size: clamp(16px, 3vh, 24px);
-  margin-right: 40px; /* Mais espaço após o logo */
+  margin-right: 40px;
   white-space: nowrap;
-  flex-shrink: 0; /* Impede que o logo diminua */
+  flex-shrink: 0;
   text-decoration: none;
   color: #202f5a;
 }
 
-/* NAVEGAÇÃO PRINCIPAL */
 .nav-principal {
   display: flex;
   align-items: center;
-  gap: 15px; /* Espaço entre os links */
-  flex-wrap: wrap; /* Permite quebra de linha se necessário */
-  flex: 1; /* Ocupa o espaço disponível */
+  gap: 15px;
+  flex-wrap: wrap;
+  flex: 1;
   justify-content: flex-start;
 }
 
-/* LINKS DE NAVEGAÇÃO */
 .nav-link {
   text-decoration: none;
   color: #202f5a;
-  font-size: 14px; /* Tamanho menor para caber */
+  font-size: 14px;
   font-family: "texto";
   padding: 8px 12px;
   white-space: nowrap;
   transition: color 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6),
     transform 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6),
     text-shadow 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
-  flex-shrink: 0; /* Impede que os links diminuam */
+  flex-shrink: 0;
 }
 
-/* MENU DO USUÀRIO (Perfil e Sair) */
 .menu-usuario {
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-left: auto; /* Joga para a direita */
+  margin-left: auto;
   flex-shrink: 0;
 }
 
-/* ÍCONE DO PERFIL */
 .icon {
   width: 24px;
   height: 24px;
 }
 
-/* HOVER EFFECTS */
 #logo:hover,
 .nav-link:hover {
   color: #f6b737;
@@ -123,9 +114,8 @@ header:hover {
   box-shadow: -2px 2px 20px rgba(142, 142, 142, 0.53);
   transform: translateY(-2px);
 }
-
 /*FIM HEADER*/
-/* RESTANTE DO CSS PERMANECE */
+
 h1 {
   color: #202f5a;
   font-family: "titulos";
@@ -152,13 +142,14 @@ h3 {
 }
 
 .titulo-sessao {
-  margin-top: 10vh;
+  margin-top: 5vh;
 }
+
 .box-maior {
-  min-height: 150px; /* Altura mínima */
-  padding: 20px; /* Espaço interno */
+  min-height: 150px;
+  padding: 20px;
   box-sizing: border-box;
-  margin: 0 auto; /* Centraliza o box maior */
+  margin: 0 auto;
   margin-bottom: 2vh;
   background-color: #ffd889;
   border-radius: 37px;
@@ -169,24 +160,52 @@ h3 {
   width: auto;
   height: 30vh;
 }
+
 .box-atividades {
   display: flex;
-  justify-content: center; /* Centraliza os boxes horizontalmente */
+  justify-content: center;
   flex-wrap: nowrap;
-  width: 100%; /* Ocupa toda a largura do container pai */
+  width: 100%;
   flex-direction: row;
-  gap: 20px; /* Adiciona espaço entre os boxes */
+  gap: 20px;
 }
+
+/* --- ESTILOS PARA OS CARDS DE ATIVIDADES (MODIFICADO) --- */
+
+.box-link {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
 .box {
   background-color: #b7c7f2;
   border-radius: 37px;
   display: flex;
-  justify-content: center; /* Centraliza o conteúdo horizontalmente dentro do box */
-  align-items: center; /* Centraliza o conteúdo verticalmente dentro do box */
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  width: 100%; /* Defina uma largura fixa para os boxes */
-  height: 35vh; /* Defina uma altura fixa para os boxes */
+  width: 100%;
+  height: 35vh;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
+
+.box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(32, 47, 90, 0.2);
+}
+
+.box h2 {
+  text-align: center;
+  padding: 0 20px;
+  font-size: 1.2rem;
+  color: #202f5a;
+  font-family: "titulos";
+}
+
+/* -------------------------------------------------------- */
 
 footer {
   display: flex;
@@ -235,15 +254,7 @@ hr {
 }
 
 .eixo-y {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 35px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 10px 0;
+  display: none;
 }
 
 .axis-y-label {
@@ -260,10 +271,9 @@ hr {
   justify-content: center;
   gap: 25px;
   height: 100%;
-  width: calc(100% - 45px);
-  margin-left: 45px;
+  width: 100%; /* Alterado de calc(100% - 45px) */
+  margin-left: 0; /* Alterado de 45px */
 }
-
 .barra-item {
   display: flex;
   flex-direction: column;
@@ -305,7 +315,6 @@ hr {
   font-weight: 500;
 }
 
-/* CORES DAS BARRAS - Mantendo as cores originais do gráfico */
 .barra-matematica {
   background-color: #0a1749;
   border-top: 3px solid #1a2a6c;
@@ -356,14 +365,8 @@ hr {
   transform: translateY(-2px);
 }
 
-/* LINHAS DO GRÁFICO DE FUNDO */
 .linhas-guia {
-  position: absolute;
-  top: 0;
-  left: 45px;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
+  display: none;
 }
 
 .linha-guia {
@@ -373,7 +376,10 @@ hr {
   border-top: 1px dashed rgba(32, 47, 90, 0.2);
 }
 
-/* Estilo para link de bolsista - adaptado ao seu CSS */
+.linha {
+  margin-top: 6vh;
+}
+
 .nav-link.bolsista-only {
   background: linear-gradient(45deg, #1a2a6c, #4d69d5);
   color: white !important;
@@ -391,7 +397,6 @@ hr {
   text-shadow: none;
 }
 
-/* Indicador de bolsista na saudação */
 .badge-bolsista {
   background: linear-gradient(45deg, #1a2a6c, #4d69d5);
   color: white;
