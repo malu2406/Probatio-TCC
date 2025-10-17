@@ -177,6 +177,23 @@ button:hover i  {
   color: #f6b737;
 }
 
+.nav-link.bolsista-only {
+  background: linear-gradient(45deg, #1a2a6c, #4d69d5);
+  color: white !important;
+  border-radius: 20px;
+  padding: 8px 16px;
+  margin: 0 5px;
+  transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+.nav-link.bolsista-only:hover {
+  background: linear-gradient(45deg, #4d69d5, #1a2a6c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 42, 108, 0.4);
+  color: white !important;
+  text-shadow: none;
+}
+
 .perf{
   display: flex;
   flex-direction: row;

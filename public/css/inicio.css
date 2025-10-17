@@ -408,6 +408,11 @@ hr {
   vertical-align: middle;
 }
 
+.imagenzinhas {
+  font-size: 80px !important;
+  color: #1a2a6c;
+}
+
 /* MEDIA QUERIES PARA RESPONSIVIDADE */
 @media (max-width: 1200px) {
   .nav-link {

@@ -3,26 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Portais de Notícias</title>
+    <link rel="stylesheet" href="/css/noticias.css" />
 </head>
-<body>
-    <header>
-        <div id="header_esquerda">
-          <a href="/inicio" id="logo">PROBATIO</a>
-          <a href="/material">Matérias</a>
-          <a href="/simulado_teste">Simulado</a>
-          <a href="/teste_es">Estatísticas</a>
-          <a href="/flashcards">FlashCards</a>
-          <a href="/noticias">Portais de Notícia</a>
-          <a href="/pomodoro">Pomodoro</a>
-        </div>
-        <div id="header_direita">
-          <a href="/perfil"><img src="/img/user.png" alt="Perfil" class="icon"/></a>
-          <a href="/">Sair</a>
-        </div>
-      </header>
+  <body>
+    <div id="container">
+    
+        <header>
+          <div id="header_esquerda">
+            <a href="/inicio" id="logo">PROBATIO</a>
+      
+            <div class="nav-principal">
+              <a href="/material" class="nav-link">Matérias</a>
+              <a href="/teste_es" class="nav-link">Estatísticas</a>
+              <a href="/flashcards" class="nav-link">Flashcards</a>
+              <a href="/noticias" class="nav-link">Portais de Notícia</a>
+              <a href="/pomodoro" class="nav-link">Pomodoro</a>
+              <a href="" class="nav-link">Temporizador</a>
+            </div>
+      
+            <div class="menu-usuario">
+              <a href="/perfil" class="nav-link">
+                <img src="/images/user.png" alt="Perfil" class="icon" />
+              </a>
+              <a href="/logout" class="nav-link">Sair</a>
+            </div>
+          </div>
+        </header>
+      
+      
+        <main>
+          <div class="portais">
+            <h1>
+              Portais de Notícias
+            </h1>
 
-    <h1>Portal de Noticias</h1>
+            <div class="portais_dois">
+              <div class="portais_dois_um">
+                <div class="portais_caixas">
+                  <h3>G1</h3>
+                  <a href="https://g1.globo.com/"><img id="noticia_imagem" src="images/g1.png" alt="G1 Logo"></a>
+                </div>
+                <div class="portais_caixas">
+                  <h3>CNN Brasil</h3>
+                  <a href="https://www.cnnbrasil.com.br/"><img id="noticia_imagem"  src="images/cnn.png" alt="CNN Logo"></a>
+                </div>
+                <div class="portais_caixas">
+                  <h3>Gazeta do Povo</h3>
+                  <a href="https://www.gazetadopovo.com.br/"><img id="noticia_imagem"  src="images/gdp.png" alt="Gazeta do Povo Logo"></a>
+                </div>
+                <div class="portais_caixas">
+                  <h3>BBC News Brasil</h3>
+                  <a href="https://www.bbc.com/portuguese"><img id="noticia_imagem"  src="images/bbc.jpeg" alt="BBC Logo"></a>
+                </div>
+              </div>
+              <div class="portais_dois_um">
+                <div class="portais_caixas">
+                  <h3>GZH</h3>
+                  <a href="https://gauchazh.clicrbs.com.br/"><img id="noticia_imagem" src="images/gzh.png" alt="GZH Logo"></a>
+                </div>
+                <div class="portais_caixas">
+                  <h3>O Globo</h3>
+                  <a href="https://oglobo.globo.com/"><img id="noticia_imagem"  src="images/oglobo.png" alt="O Globo Logo"></a>
+                </div>
+                <div class="portais_caixas">
+                  <h3>Folha de S.Paulo</h3>
+                  <a href="https://www.folha.uol.com.br/"><img id="noticia_imagem"  src="images/folhadesp.png" alt="Folha de São Paulo Logo"></a>
+                </div>
+                <div class="portais_caixas">
+                  <h3>UOL</h3>
+                  <a href="https://www.uol.com.br/"><img id="noticia_imagem"  src="images/uol.png" alt="UOL Logo"></a>
+                </div>
+              </div>
+            </div>
 
-</body>
+          </div>
+        </main>
+      
+        <footer>
+          <div class="linha">
+            <hr />
+          </div>
+          <div class="logofinal">
+            <a href="#inicio" id="logo">PROBATIO</a>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </body>
 </html>
