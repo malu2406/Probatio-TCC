@@ -3,7 +3,6 @@
   src: url("/fonts/GenerateChangesDemo.ttf") format("opentype");
 }
 
-
 @font-face {
   font-family: "titulos";
   src: url("/fonts/genty-sans-regular.otf") format("opentype");
@@ -86,12 +85,17 @@ a:hover {
 }
 h1 {
   color: #202f5a;
+  font-family: titulos;
+  font-size: 40px;
 }
 h2 {
-  color: #202f5a;
+  color: #f6b737;
+  font-family: texto;
+  font-size: 20px;
 }
-h3 {
+p {
   color: #202f5a;
+  font-family: texto;
 }
 
 pezao {
