@@ -1,38 +1,67 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 enum TipoUsuario {
-  ADMIN
-  BOLSISTA
-  USUARIO
+  ADMIN
+  BOLSISTA
+  USUARIO
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
-  createdAt DateTime    @default(now())
-  nome      String   
-  nickname  String 
-  email     String      @unique
-  senha     String
-  tipo      TipoUsuario @default(USUARIO)
-  flashcards Flashcard[]  // ADICIONE ESTA LINHA - relação com Flashcard
+  id           Int           @id @default(autoincrement())
+  createdAt    DateTime      @default(now())
+  nome         String
+  nickname     String
+  email        String        @unique
+  senha        String
+  tipo         TipoUsuario   @default(USUARIO)
+  flashcards   Flashcard[]
+  estatisticas Estatisticas[]
+  estatisticasDisciplina EstatisticasDisciplina[]
 }
 
 model Flashcard {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  materia   String   
-  conteudo  String  
-  pergunta  String
-  resposta  String
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@map("flashcards")
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  materia   String
+  conteudo  String
+  pergunta  String
+  resposta  String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("flashcards")
+}
+
+model Estatisticas {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  materia   String
+  total     Int      @default(0)
+  acertos   Int      @default(0)
+  
+  @@unique([userId, materia])
+  @@map("estatisticas")
+}
+
+model EstatisticasDisciplina {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  materia   String
+  disciplina String
+  total     Int      @default(0)
+  acertos   Int      @default(0)
+  
+  @@unique([userId, materia, disciplina])
+  @@map("estatisticas_disciplina")
 }

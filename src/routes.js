@@ -152,11 +152,6 @@ router.get("/material", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "material.html"));
 });
 
-
-router.get("/estatisticas", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "estatisticas.html"));
-});
-
 router.get("/teste_es", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "teste_es.html"));
 });
@@ -373,4 +368,110 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+//estatisticas
+router.get("/api/estatisticas", checkAuth, async (req, res) => {
+  try {
+    const estatisticas = await prisma.estatisticas.findMany({
+      where: { userId: req.session.user.id },
+    });
+
+    // Formatar no formato esperado pelo frontend
+    const stats = {
+      matematica: { total: 0, acertos: 0 },
+      linguagens: { total: 0, acertos: 0 },
+      humanas: { total: 0, acertos: 0 },
+      natureza: { total: 0, acertos: 0 },
+    };
+
+    estatisticas.forEach((estat) => {
+      if (stats.hasOwnProperty(estat.materia)) {
+        stats[estat.materia].total = estat.total;
+        stats[estat.materia].acertos = estat.acertos;
+      }
+    });
+
+    res.json(stats);
+  } catch (error) {
+    console.error("Erro ao buscar estatísticas:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+// API para atualizar estatísticas
+router.post("/api/estatisticas", checkAuth, async (req, res) => {
+  const { materia, acertou } = req.body;
+
+  if (!materia || acertou === undefined) {
+    return res.status(400).json({ error: "Dados incompletos" });
+  }
+
+  try {
+    // Usar upsert para criar ou atualizar as estatísticas
+    const estatistica = await prisma.estatisticas.upsert({
+      where: {
+        userId_materia: {
+          userId: req.session.user.id,
+          materia: materia,
+        },
+      },
+      update: {
+        total: { increment: 1 },
+        acertos: { increment: acertou ? 1 : 0 },
+      },
+      create: {
+        userId: req.session.user.id,
+        materia: materia,
+        total: 1,
+        acertos: acertou ? 1 : 0,
+      },
+    });
+
+    res.json(estatistica);
+  } catch (error) {
+    console.error("Erro ao atualizar estatísticas:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+// API para resetar estatísticas
+router.delete("/api/estatisticas", checkAuth, async (req, res) => {
+  try {
+    await prisma.estatisticas.deleteMany({
+      where: { userId: req.session.user.id },
+    });
+
+    res.json({ message: "Estatísticas zeradas com sucesso" });
+  } catch (error) {
+    console.error("Erro ao zerar estatísticas:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+
+// API para obter estatísticas das disciplinas do usuário
+router.get("/api/estatisticas-disciplinas", checkAuth, async (req, res) => {
+  try {
+    const estatisticas = await prisma.estatisticasDisciplina.findMany({
+      where: { userId: req.session.user.id },
+    });
+
+    // Formatar no formato esperado pelo frontend
+    const stats = {};
+
+    estatisticas.forEach(estat => {
+      if (!stats[estat.materia]) {
+        stats[estat.materia] = {};
+      }
+      stats[estat.materia][estat.disciplina] = {
+        total: estat.total,
+        acertos: estat.acertos
+      };
+    });
+
+    res.json(stats);
+  } catch (error) {
+    console.error("Erro ao buscar estatísticas das disciplinas:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
 module.exports = router;

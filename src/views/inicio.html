@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Página Inicial - PROBATIO</title>
     <link rel="stylesheet" href="/css/inicio.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <!-- HEADER -->
@@ -56,7 +59,7 @@
           </div>
           <div class="metrica-card">
             <h3>Nível de desempenho:</h3>
-            <div class="metrica-valor">Médio</div>
+            <div class="metrica-valor" id="nivel-desempenho">Médio</div>
           </div>
           <div class="metrica-card">
             <h3>Dias para o ENEM:</h3>
@@ -67,10 +70,21 @@
         <!-- Atividades do Dia -->
         <h2 class="titulo-sessao">Atividades do dia</h2>
         <div class="box-maior">
-          <div class="grafico-wrapper">
-            <div class="grafico-titulo">Desempenho por Matéria</div>
-            <div class="chart-container-inicio" id="chart-container-inicio">
-              <!-- Gráfico será gerado aqui -->
+          <div class="graficos-container">
+            <!-- Gráfico de Barras -->
+            <div class="grafico-wrapper">
+              <div class="grafico-titulo">Desempenho por Matéria</div>
+              <div class="chart-container-inicio" id="chart-container-inicio">
+                <!-- Gráfico de barras será gerado aqui -->
+              </div>
+            </div>
+
+            <!-- Gráfico de Pizza Interativo -->
+            <div class="grafico-wrapper">
+              <div class="grafico-titulo">Distribuição por Disciplina</div>
+              <div class="pizza-container" id="pizza-container">
+                <!-- Gráfico de pizza será gerado aqui -->
+              </div>
             </div>
           </div>
         </div>
@@ -79,9 +93,7 @@
           <a href="/flashcards" class="box-link">
             <div class="box">
               <h2>Rápido e Fácil</h2>
-              <span class="material-symbols-outlined imagenzinhas">
-                bolt
-              </span>
+              <span class="material-symbols-outlined imagenzinhas"> bolt </span>
             </div>
           </a>
 
@@ -117,6 +129,11 @@
     </div>
 
     <script>
+      // Variáveis globais para os gráficos
+      let currentPizzaView = "materias";
+      let currentMateria = null;
+      let estatisticasDisciplinas = {};
+
       document.addEventListener("DOMContentLoaded", function () {
         // Carregar dados do usuário
         fetch("/api/usuario")
@@ -124,12 +141,11 @@
           .then((data) => {
             document.getElementById("nomeUsuario").textContent = data.nickname;
 
-            // Verificar se o usuário é bolsista e mostrar o link de Matérias
+            // Verificar se o usuário é bolsista
             if (data.tipo === "BOLSISTA") {
               const linkMaterias = document.getElementById("link-materias");
               linkMaterias.style.display = "block";
 
-              // Adicionar indicador visual no título
               const saudacao = document.querySelector(".saudacao h1");
               const badge = document.createElement("span");
               badge.className = "badge-bolsista";
@@ -141,20 +157,84 @@
             console.error("Erro ao carregar dados do usuário:", error);
           });
 
-        // Gerar gráfico na página inicial
-        generateChartInicio();
+        // Carregar estatísticas
+        loadEstatisticasInicio();
       });
 
-      function generateChartInicio() {
+      async function loadEstatisticasInicio() {
+        try {
+          // Carregar estatísticas das matérias
+          const response = await fetch("/api/estatisticas");
+          const stats = await response.json();
+
+          // Carregar estatísticas das disciplinas
+          const responseDisc = await fetch("/api/estatisticas-disciplinas");
+          estatisticasDisciplinas = await responseDisc.json();
+
+          generateChartInicio(stats);
+          updateNivelDesempenho(stats);
+          generatePizzaChart("materias", null, stats);
+        } catch (error) {
+          console.error("Erro ao carregar estatísticas:", error);
+          // Em caso de erro, exibir gráficos vazios
+          const emptyStats = {
+            matematica: { total: 0, acertos: 0 },
+            linguagens: { total: 0, acertos: 0 },
+            humanas: { total: 0, acertos: 0 },
+            natureza: { total: 0, acertos: 0 },
+          };
+          generateChartInicio(emptyStats);
+          generatePizzaChart("materias", null, emptyStats);
+        }
+      }
+
+      function updateNivelDesempenho(stats) {
+        const totalQuestoes =
+          stats.matematica.total +
+          stats.linguagens.total +
+          stats.humanas.total +
+          stats.natureza.total;
+
+        const totalAcertos =
+          stats.matematica.acertos +
+          stats.linguagens.acertos +
+          stats.humanas.acertos +
+          stats.natureza.acertos;
+
+        let nivel = "Iniciante";
+        let cor = "#ff6b6b";
+
+        if (totalQuestoes > 0) {
+          const percentual = (totalAcertos / totalQuestoes) * 100;
+
+          if (percentual >= 80) {
+            nivel = "Excelente";
+            cor = "#2ecc71";
+          } else if (percentual >= 60) {
+            nivel = "Bom";
+            cor = "#3498db";
+          } else if (percentual >= 40) {
+            nivel = "Médio";
+            cor = "#f39c12";
+          } else if (percentual >= 20) {
+            nivel = "Básico";
+            cor = "#e67e22";
+          } else {
+            nivel = "Iniciante";
+            cor = "#ff6b6b";
+          }
+        }
+
+        const nivelElement = document.getElementById("nivel-desempenho");
+        nivelElement.textContent = nivel;
+        nivelElement.style.color = cor;
+        nivelElement.style.fontWeight = "bold";
+      }
+
+      function generateChartInicio(stats) {
         const chartContainer = document.getElementById(
           "chart-container-inicio"
         );
-        const stats = JSON.parse(localStorage.getItem("flashcardStats")) || {
-          matematica: { total: 0, acertos: 0 },
-          linguagens: { total: 0, acertos: 0 },
-          humanas: { total: 0, acertos: 0 },
-          natureza: { total: 0, acertos: 0 },
-        };
 
         // Calcular percentuais
         const percentuais = {
@@ -191,37 +271,16 @@
 
         if (totalQuestoes === 0) {
           chartContainer.innerHTML = `
-            <div class="sem-dados">
-              <p>Você ainda não respondeu nenhum flashcard.</p>
-              <p><a href="/flashcards">Começar a praticar agora!</a></p>
-            </div>
-          `;
+        <div class="sem-dados">
+          <p>Você ainda não respondeu nenhum flashcard.</p>
+          <p><a href="/flashcards">Começar a praticar agora!</a></p>
+        </div>
+      `;
           return;
         }
 
         // Limpar container
         chartContainer.innerHTML = "";
-
-        // Criar linhas guia de fundo
-        const linhasGuia = document.createElement("div");
-        linhasGuia.className = "linhas-guia";
-        for (let i = 0; i <= 100; i += 25) {
-          const linha = document.createElement("div");
-          linha.className = "linha-guia";
-          linha.style.bottom = `${i}%`;
-          linhasGuia.appendChild(linha);
-        }
-        chartContainer.appendChild(linhasGuia);
-
-        // Criar eixo Y
-        const eixoY = document.createElement("div");
-        eixoY.className = "eixo-y";
-        for (let i = 100; i >= 0; i -= 25) {
-          const yLabel = document.createElement("div");
-          yLabel.className = "axis-y-label";
-          yLabel.textContent = `${i}%`;
-          eixoY.appendChild(yLabel);
-        }
 
         // Criar container das barras
         const barrasContainer = document.createElement("div");
@@ -260,6 +319,11 @@
           barra.style.height = `${materia.percentual}%`;
           barra.title = `${materia.nome}: ${materia.percentual}% de acerto`;
 
+          // Adicionar interação de clique nas barras
+          barra.addEventListener("click", function () {
+            generatePizzaChart("disciplinas", materia.tipo);
+          });
+
           const barraRotulo = document.createElement("div");
           barraRotulo.className = "barra-rotulo";
           barraRotulo.textContent = materia.nome;
@@ -271,8 +335,339 @@
           barrasContainer.appendChild(barraItem);
         });
 
-        chartContainer.appendChild(eixoY);
         chartContainer.appendChild(barrasContainer);
+      }
+
+      // Função principal do gráfico de pizza
+      function generatePizzaChart(viewType, materia = null, stats = null) {
+        const pizzaContainer = document.getElementById("pizza-container");
+
+        if (viewType === "materias") {
+          generateMateriasPizza(pizzaContainer, stats);
+        } else if (viewType === "disciplinas" && materia) {
+          generateDisciplinasPizza(pizzaContainer, materia);
+        }
+      }
+
+      // Gerar pizza das matérias
+      function generateMateriasPizza(container, stats) {
+        const totalQuestoes =
+          stats.matematica.total +
+          stats.linguagens.total +
+          stats.humanas.total +
+          stats.natureza.total;
+
+        if (totalQuestoes === 0) {
+          container.innerHTML = `
+        <div class="sem-dados">
+          <p>Você ainda não respondeu nenhum flashcard.</p>
+          <p><a href="/flashcards">Começar a praticar agora!</a></p>
+        </div>
+      `;
+          return;
+        }
+
+        const percentuais = {
+          matematica: (stats.matematica.total / totalQuestoes) * 100,
+          linguagens: (stats.linguagens.total / totalQuestoes) * 100,
+          humanas: (stats.humanas.total / totalQuestoes) * 100,
+          natureza: (stats.natureza.total / totalQuestoes) * 100,
+        };
+
+        // Calcular ângulos para o gráfico de pizza
+        let startAngle = 0;
+        const segments = [];
+
+        const materias = [
+          { tipo: "matematica", nome: "Matemática", cor: "#0a1749" },
+          { tipo: "linguagens", nome: "Linguagens", cor: "#778bdc" },
+          { tipo: "humanas", nome: "Ciências Humanas", cor: "#0423a1" },
+          { tipo: "natureza", nome: "Ciências da Natureza", cor: "#4d69d5" },
+        ];
+
+        materias.forEach((materia) => {
+          const percentual = percentuais[materia.tipo];
+          const angle = (percentual / 100) * 360;
+
+          segments.push({
+            ...materia,
+            percentual: percentual,
+            startAngle: startAngle,
+            angle: angle,
+            total: stats[materia.tipo].total,
+            acertos: stats[materia.tipo].acertos,
+          });
+
+          startAngle += angle;
+        });
+
+        container.innerHTML = `
+      <div class="pizza-breadcrumb">
+        <div class="breadcrumb-item active">Matérias</div>
+      </div>
+      <div class="pizza-chart" id="pizza-chart">
+        ${segments
+          .map(
+            (seg) => `
+          <div class="pizza-segment" 
+               style="transform: rotate(${seg.startAngle}deg); 
+                      background: ${seg.cor};
+                      clip-path: ${createClipPath(seg.angle)};"
+               data-materia="${seg.tipo}"
+               data-percentual="${seg.percentual.toFixed(1)}"
+               data-total="${seg.total}"
+               data-acertos="${seg.acertos}">
+          </div>
+        `
+          )
+          .join("")}
+        <div class="pizza-center">
+          ${totalQuestoes}<br>total
+        </div>
+      </div>
+      <div class="pizza-legend">
+        ${segments
+          .map(
+            (seg) => `
+          <div class="legend-item" data-materia="${seg.tipo}">
+            <div class="legend-color" style="background: ${seg.cor}"></div>
+            <span>${seg.nome}</span>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+
+        // Adicionar event listeners
+        addPizzaEventListeners();
+        currentPizzaView = "materias";
+        currentMateria = null;
+      }
+
+      // Gerar pizza das disciplinas
+      function generateDisciplinasPizza(container, materia) {
+        const disciplinasData = estatisticasDisciplinas[materia];
+
+        if (!disciplinasData || Object.keys(disciplinasData).length === 0) {
+          container.innerHTML = `
+        <div class="sem-dados">
+          <p>Nenhum dado disponível para esta matéria</p>
+          <button class="btn-voltar" onclick="generatePizzaChart('materias')">← Voltar</button>
+        </div>
+      `;
+          return;
+        }
+
+        const disciplinas = Object.entries(disciplinasData);
+        const totalQuestoes = disciplinas.reduce(
+          (total, [_, data]) => total + data.total,
+          0
+        );
+
+        if (totalQuestoes === 0) {
+          container.innerHTML = `
+        <div class="sem-dados">
+          <p>Nenhum dado disponível para esta matéria</p>
+          <button class="btn-voltar" onclick="generatePizzaChart('materias')">← Voltar</button>
+        </div>
+      `;
+          return;
+        }
+
+        // Cores para as disciplinas
+        const colorSchemes = {
+          linguagens: {
+            portugues: "#5d7bd5",
+            ingles: "#6b85f0",
+            espanhol: "#7d94f5",
+          },
+          humanas: {
+            historia: "#1a3ac8",
+            geografia: "#2a4ad4",
+            sociologia: "#3a5ae0",
+            filosofia: "#4a6aec",
+          },
+          natureza: {
+            biologia: "#4d69d5",
+            fisica: "#5d79e0",
+            quimica: "#6d89eb",
+          },
+          matematica: {
+            matematica: "#0a1749",
+          },
+        };
+
+        let startAngle = 0;
+        const segments = [];
+
+        disciplinas.forEach(([disciplina, data]) => {
+          const percentual = (data.total / totalQuestoes) * 100;
+          const angle = (percentual / 100) * 360;
+          const cor = colorSchemes[materia]?.[disciplina] || "#cccccc";
+
+          segments.push({
+            disciplina: disciplina,
+            nome: mapearNomeConteudo(disciplina),
+            percentual: percentual,
+            startAngle: startAngle,
+            angle: angle,
+            cor: cor,
+            total: data.total,
+            acertos: data.acertos,
+          });
+
+          startAngle += angle;
+        });
+
+        container.innerHTML = `
+      <div class="pizza-breadcrumb">
+        <div class="breadcrumb-item" onclick="generatePizzaChart('materias')">Matérias</div>
+        <div class="breadcrumb-separator">></div>
+        <div class="breadcrumb-item active">${getMateriaName(materia)}</div>
+      </div>
+      <div class="pizza-chart" id="pizza-chart">
+        ${segments
+          .map(
+            (seg) => `
+          <div class="pizza-segment" 
+               style="transform: rotate(${seg.startAngle}deg); 
+                      background: ${seg.cor};
+                      clip-path: ${createClipPath(seg.angle)};"
+               data-disciplina="${seg.disciplina}"
+               data-percentual="${seg.percentual.toFixed(1)}"
+               data-total="${seg.total}"
+               data-acertos="${seg.acertos}">
+          </div>
+        `
+          )
+          .join("")}
+        <div class="pizza-center">
+          ${totalQuestoes}<br>total
+        </div>
+      </div>
+      <div class="pizza-legend">
+        ${segments
+          .map(
+            (seg) => `
+          <div class="legend-item">
+            <div class="legend-color" style="background: ${seg.cor}"></div>
+            <span>${seg.nome}</span>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+
+        currentPizzaView = "disciplinas";
+        currentMateria = materia;
+        addPizzaEventListeners();
+      }
+
+      // Funções auxiliares
+      function getMateriaName(materia) {
+        const names = {
+          matematica: "Matemática",
+          linguagens: "Linguagens",
+          humanas: "Ciências Humanas",
+          natureza: "Ciências da Natureza",
+        };
+        return names[materia] || materia;
+      }
+
+      function mapearNomeConteudo(value) {
+        const mapeamento = {
+          historia: "História",
+          geografia: "Geografia",
+          sociologia: "Sociologia",
+          filosofia: "Filosofia",
+          biologia: "Biologia",
+          fisica: "Física",
+          quimica: "Química",
+          portugues: "Português",
+          ingles: "Inglês",
+          espanhol: "Espanhol",
+          matematica: "Matemática",
+        };
+        return mapeamento[value] || value;
+      }
+
+      function createClipPath(angle) {
+        if (angle >= 360) return "none";
+        if (angle <= 0) return "polygon(0% 0%, 0% 0%, 0% 0%)";
+
+        const largeArc = angle > 180 ? 1 : 0;
+        const endX = 50 + 50 * Math.cos((angle * Math.PI) / 180);
+        const endY = 50 + 50 * Math.sin((angle * Math.PI) / 180);
+
+        return `path('M 50 50 L 100 50 A 50 50 0 ${largeArc} 1 ${endX} ${endY} Z')`;
+      }
+
+      function addPizzaEventListeners() {
+        const segments = document.querySelectorAll(".pizza-segment");
+        const legendItems = document.querySelectorAll(
+          ".legend-item[data-materia]"
+        );
+
+        segments.forEach((segment) => {
+          segment.addEventListener("mouseenter", showTooltip);
+          segment.addEventListener("mouseleave", hideTooltip);
+          segment.addEventListener("click", handleSegmentClick);
+        });
+
+        legendItems.forEach((item) => {
+          item.addEventListener("click", () => {
+            const materia = item.getAttribute("data-materia");
+            generatePizzaChart("disciplinas", materia);
+          });
+        });
+      }
+
+      function showTooltip(e) {
+        const segment = e.target;
+        const tooltip = document.createElement("div");
+        tooltip.className = "pizza-tooltip";
+
+        const materia = segment.getAttribute("data-materia");
+        const disciplina = segment.getAttribute("data-disciplina");
+        const percentual = segment.getAttribute("data-percentual");
+        const total = segment.getAttribute("data-total");
+        const acertos = segment.getAttribute("data-acertos");
+
+        let content = "";
+        if (materia) {
+          content = `${getMateriaName(
+            materia
+          )}<br>${percentual}% (${acertos}/${total})`;
+        } else if (disciplina) {
+          content = `${mapearNomeConteudo(
+            disciplina
+          )}<br>${percentual}% (${acertos}/${total})`;
+        }
+
+        tooltip.innerHTML = content;
+        document.body.appendChild(tooltip);
+
+        const rect = segment.getBoundingClientRect();
+        tooltip.style.left = rect.left + rect.width / 2 + "px";
+        tooltip.style.top = rect.top - 40 + "px";
+      }
+
+      function hideTooltip() {
+        const tooltip = document.querySelector(".pizza-tooltip");
+        if (tooltip) {
+          tooltip.remove();
+        }
+      }
+
+      function handleSegmentClick(e) {
+        const segment = e.target;
+        const materia = segment.getAttribute("data-materia");
+
+        if (materia && currentPizzaView === "materias") {
+          generatePizzaChart("disciplinas", materia);
+        }
       }
     </script>
   </body>

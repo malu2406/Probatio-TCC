@@ -7,23 +7,37 @@
     <title>Flashcards - PROBATIO</title>
   </head>
   <body>
-    <div id="container">
-      <header>
-        <div id="header_esquerda">
-          <a href="/inicio" id="logo">PROBATIO</a>
-          <a href="/material">Matérias</a>
-          <a href="/simulado_teste">Simulados</a>
-          <a href="/teste_es">Estatísticas</a>
-          <a href="/flashcards">Flashcards</a>
-          <a href="/noticias">Portal de Noticias</a>
-          <a href="/pomodoro">Pomodoro</a>
-          <a href="/perfil"
-            ><img src="/img/user.png" alt="Perfil" class="icon"
-          /></a>
-          <a href="/logout">Sair</a>
-        </div>
-      </header>
+    <!-- HEADER ATUALIZADO -->
+    <header>
+      <div id="header_esquerda">
+        <a href="/inicio" id="logo">PROBATIO</a>
 
+        <div class="nav-principal">
+          <!-- Link de Matérias - será mostrado apenas para bolsistas -->
+          <a
+            href="/material"
+            class="nav-link bolsista-only"
+            id="link-materias"
+            style="display: none"
+            >Material</a
+          >
+          <a href="/teste_es" class="nav-link">Estatísticas</a>
+          <a href="/flashcards" class="nav-link">Flashcards</a>
+          <a href="/noticias" class="nav-link">Portais de Notícia</a>
+          <a href="/pomodoro" class="nav-link">Pomodoro</a>
+          <a href="" class="nav-link">Temporizador</a>
+        </div>
+
+        <div class="menu-usuario">
+          <a href="/perfil" class="nav-link">
+            <img src="/images/user.png" alt="Perfil" class="icon" />
+          </a>
+          <a href="/logout" class="nav-link">Sair</a>
+        </div>
+      </div>
+    </header>
+
+    <div id="container">
       <main>
         <h1>Flashcards</h1>
 
@@ -81,6 +95,20 @@
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // CARREGAR DADOS DO USUÁRIO E VERIFICAR SE É BOLSISTA
+        fetch("/api/usuario")
+          .then((response) => response.json())
+          .then((data) => {
+            // Verificar se o usuário é bolsista e mostrar o link de Matérias
+            if (data.tipo === "BOLSISTA") {
+              const linkMaterias = document.getElementById("link-materias");
+              linkMaterias.style.display = "block";
+            }
+          })
+          .catch((error) => {
+            console.error("Erro ao carregar dados do usuário:", error);
+          });
+
         // Carregar flashcards do banco de dados
         loadFlashcardsFromDB();
 
@@ -128,6 +156,31 @@
           }
         }
 
+        function mapearNomeConteudo(value) {
+          const mapeamento = {
+            // Ciências Humanas
+            historia: "História",
+            geografia: "Geografia",
+            sociologia: "Sociologia",
+            filosofia: "Filosofia",
+
+            // Ciências da Natureza
+            biologia: "Biologia",
+            fisica: "Física",
+            quimica: "Química",
+
+            // Linguagens
+            portugues: "Português",
+            ingles: "Inglês",
+            espanhol: "Espanhol",
+
+            // Matemática
+            matematica: "Matemática",
+          };
+
+          return mapeamento[value] || value;
+        }
+
         function createFlashcardElement(flashcard) {
           const div = document.createElement("div");
           div.className = "flashcard";
@@ -150,20 +203,22 @@
 
           div.setAttribute("data-materia", materiaClass);
           div.innerHTML = `
-            <span class="materia-tag ${materiaClass}">${
+  <span class="materia-tag ${materiaClass}">${
             materiaNames[flashcard.materia] || flashcard.materia
           }</span>
-            <div class="conteudo-tag">${flashcard.conteudo}</div>
-            <div class="pergunta">${flashcard.pergunta}</div>
-            <div class="resposta">${flashcard.resposta}</div>
-            <div class="controles">
-              <button class="btn mostrar-resposta">Mostrar Resposta</button>
-              <div class="feedback-buttons" style="display: none">
-                <button class="btn acertou">Acertou</button>
-                <button class="btn errou">Errou</button>
-              </div>
-            </div>
-          `;
+           <div class="conteudo-tag">${mapearNomeConteudo(
+             flashcard.conteudo
+           )}</div>
+  <div class="pergunta">${flashcard.pergunta}</div>
+  <div class="resposta">${flashcard.resposta}</div>
+  <div class="controles">
+    <button class="btn mostrar-resposta">Mostrar Resposta</button>
+    <div class="feedback-buttons" style="display: none">
+      <button class="btn acertou">Acertou</button>
+      <button class="btn errou">Errou</button>
+    </div>
+  </div>
+`;
 
           return div;
         }
@@ -221,43 +276,43 @@
           });
         }
 
-        function registerAnswer(materia, acertou) {
-          let stats = JSON.parse(localStorage.getItem("flashcardStats")) || {
-            matematica: { total: 0, acertos: 0 },
-            linguagens: { total: 0, acertos: 0 },
-            humanas: { total: 0, acertos: 0 },
-            natureza: { total: 0, acertos: 0 },
-          };
+        async function registerAnswer(materia, acertou) {
+          try {
+            // Salvar no banco de dados
+            await fetch("/api/estatisticas", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ materia, acertou }),
+            });
 
-          stats[materia].total += 1;
-          if (acertou) {
-            stats[materia].acertos += 1;
+            // Atualizar a exibição
+            await updateStatsDisplay();
+          } catch (error) {
+            console.error("Erro ao registrar resposta:", error);
           }
-
-          localStorage.setItem("flashcardStats", JSON.stringify(stats));
-          updateStatsDisplay();
         }
+        async function updateStatsDisplay() {
+          try {
+            const response = await fetch("/api/estatisticas");
+            const stats = await response.json();
 
-        function updateStatsDisplay() {
-          const stats = JSON.parse(localStorage.getItem("flashcardStats")) || {
-            matematica: { total: 0, acertos: 0 },
-            linguagens: { total: 0, acertos: 0 },
-            humanas: { total: 0, acertos: 0 },
-            natureza: { total: 0, acertos: 0 },
-          };
-
-          document.getElementById(
-            "stat-matematica"
-          ).textContent = `${stats.matematica.acertos}/${stats.matematica.total}`;
-          document.getElementById(
-            "stat-linguagens"
-          ).textContent = `${stats.linguagens.acertos}/${stats.linguagens.total}`;
-          document.getElementById(
-            "stat-humanas"
-          ).textContent = `${stats.humanas.acertos}/${stats.humanas.total}`;
-          document.getElementById(
-            "stat-natureza"
-          ).textContent = `${stats.natureza.acertos}/${stats.natureza.total}`;
+            document.getElementById(
+              "stat-matematica"
+            ).textContent = `${stats.matematica.acertos}/${stats.matematica.total}`;
+            document.getElementById(
+              "stat-linguagens"
+            ).textContent = `${stats.linguagens.acertos}/${stats.linguagens.total}`;
+            document.getElementById(
+              "stat-humanas"
+            ).textContent = `${stats.humanas.acertos}/${stats.humanas.total}`;
+            document.getElementById(
+              "stat-natureza"
+            ).textContent = `${stats.natureza.acertos}/${stats.natureza.total}`;
+          } catch (error) {
+            console.error("Erro ao carregar estatísticas:", error);
+          }
         }
       });
     </script>

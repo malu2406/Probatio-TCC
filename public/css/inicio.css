@@ -29,7 +29,7 @@ body {
   box-sizing: border-box;
 }
 
-/*INICIO DO HEADER*/
+/* HEADER */
 header {
   position: fixed;
   top: 0;
@@ -114,40 +114,290 @@ header:hover {
   box-shadow: -2px 2px 20px rgba(142, 142, 142, 0.53);
   transform: translateY(-2px);
 }
-/*FIM HEADER*/
 
-h1 {
-  color: #202f5a;
-  font-family: "titulos";
-}
-h2 {
-  color: #202f5a;
-  font-family: "titulos";
-}
-h3 {
-  color: #202f5a;
-  font-family: "texto";
-}
-
+/* CORREÇÃO DO GRÁFICO DE BARRAS */
 .metricas {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-around;
+  margin: 20px 0;
+}
+
+.metrica-card {
+  text-align: center;
+  padding: 15px;
 }
 
 .metrica-valor {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #202f5a;
+  margin-top: 10px;
+}
+
+/* CONTAINER DOS GRÁFICOS CORRIGIDO */
+.graficos-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  width: 100%;
+  min-height: 400px;
+  align-items: stretch;
+}
+
+/* GRÁFICO DE BARRAS CORRIGIDO */
+.grafico-wrapper {
+  width: 100%;
+  height: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+.grafico-titulo {
+  font-family: "titulos";
+  color: #202f5a;
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.chart-container-inicio {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.barras-container {
+  display: flex;
+  align-items: flex-end;
   justify-content: space-around;
+  height: 100%;
+  width: 100%;
+  gap: 15px;
+}
+
+.barra-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  flex: 1;
+  max-width: 80px;
+}
+
+.barra {
+  width: 45px;
+  border-radius: 6px 6px 0 0;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 10px;
+}
+
+.barra:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+  filter: brightness(1.1);
+}
+
+.barra-valor {
+  font-family: "texto";
+  font-size: 14px;
+  color: #202f5a;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.barra-rotulo {
+  font-family: "texto";
+  font-size: 12px;
+  color: #202f5a;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* CORES DAS BARRAS CORRIGIDAS */
+.barra-matematica {
+  background: linear-gradient(to top, #0a1749, #1a2a6c);
+  border-top: 3px solid #2a3a8c;
+}
+
+.barra-linguagens {
+  background: linear-gradient(to top, #778bdc, #8fa3f2);
+  border-top: 3px solid #a7bbff;
+}
+
+.barra-humanas {
+  background: linear-gradient(to top, #0423a1, #1a3ac8);
+  border-top: 3px solid #2a4ad8;
+}
+
+.barra-natureza {
+  background: linear-gradient(to top, #4d69d5, #6b85f0);
+  border-top: 3px solid #8ba5ff;
+}
+
+/* GRÁFICO DE PIZZA CORRIGIDO */
+.pizza-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+  position: relative;
+}
+
+.pizza-chart {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  background: conic-gradient(
+    #0a1749 0% 25%,
+    #778bdc 25% 50%,
+    #0423a1 50% 75%,
+    #4d69d5 75% 100%
+  );
+}
+.pizza-segment {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 50% 100%);
+  transform-origin: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.pizza-segment:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+}
+
+.pizza-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "texto";
+  font-size: 12px;
+  color: #202f5a;
+  font-weight: bold;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.pizza-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 15px;
+  max-width: 100%;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "texto";
+  font-size: 12px;
+  color: #202f5a;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.legend-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* RESTANTE DO CSS PERMANECE IGUAL */
+.titulo-sessao {
+  margin-top: 5vh;
+  font-family: "titulos";
+  color: #202f5a;
+  text-align: center;
+}
+
+/* BREADCRUMB */
+.pizza-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 15px;
+  font-family: "texto";
+  font-size: 12px;
   color: #202f5a;
 }
 
-.titulo-sessao {
-  margin-top: 5vh;
+.breadcrumb-item {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.breadcrumb-item:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.breadcrumb-item.active {
+  font-weight: bold;
+  color: #1a2a6c;
+}
+
+.breadcrumb-separator {
+  color: #999;
+}
+
+/* BOTÃO VOLTAR */
+.btn-voltar {
+  padding: 8px 16px;
+  background-color: #1a2a6c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "texto";
+  font-size: 12px;
+  transition: background-color 0.3s;
+  margin-bottom: 15px;
+}
+
+.btn-voltar:hover {
+  background-color: #0d1b4d;
 }
 
 .box-maior {
   min-height: 150px;
-  padding: 20px;
+  padding: 30px 20px;
   box-sizing: border-box;
   margin: 0 auto;
   margin-bottom: 2vh;
@@ -158,7 +408,7 @@ h3 {
   align-items: center;
   flex-direction: column;
   width: auto;
-  height: 30vh;
+  height: auto;
 }
 
 .box-atividades {
@@ -168,9 +418,8 @@ h3 {
   width: 100%;
   flex-direction: row;
   gap: 20px;
+  margin: 30px 0;
 }
-
-/* --- ESTILOS PARA OS CARDS DE ATIVIDADES (MODIFICADO) --- */
 
 .box-link {
   text-decoration: none;
@@ -205,136 +454,9 @@ h3 {
   font-family: "titulos";
 }
 
-/* -------------------------------------------------------- */
-
-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-}
-hr {
-  border: 0;
-  border-top: medium double #ccc;
-  height: 1px;
-  overflow: visible;
-  padding: 0;
-  color: #ccc;
-  text-align: center;
-  max-width: 100%;
-}
-
-.grafico-wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-}
-
-.grafico-titulo {
-  font-family: "titulos";
-  color: #202f5a;
-  font-size: 1.4rem;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.chart-container-inicio {
-  position: relative;
-  width: 100%;
-  height: 180px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 25px;
-  padding: 0 20px;
-}
-
-.eixo-y {
-  display: none;
-}
-
-.axis-y-label {
-  font-family: "texto";
-  font-size: 11px;
-  color: #202f5a;
-  text-align: right;
-  padding-right: 8px;
-}
-
-.barras-container {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 25px;
-  height: 100%;
-  width: 100%; /* Alterado de calc(100% - 45px) */
-  margin-left: 0; /* Alterado de 45px */
-}
-.barra-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  justify-content: flex-end;
-}
-
-.barra {
-  width: 32px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
-  border-radius: 6px 6px 0 0;
-  transition: all 0.3s ease;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.barra:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.barra-valor {
-  font-family: "texto";
-  font-size: 12px;
-  color: #202f5a;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.barra-rotulo {
-  font-family: "texto";
-  font-size: 11px;
-  color: #202f5a;
-  margin-top: 8px;
-  text-align: center;
-  font-weight: 500;
-}
-
-.barra-matematica {
-  background-color: #0a1749;
-  border-top: 3px solid #1a2a6c;
-}
-.barra-linguagens {
-  background-color: #778bdc;
-  border-top: 3px solid #8fa3f2;
-}
-.barra-humanas {
-  background-color: #0423a1;
-  border-top: 3px solid #1a3ac8;
-}
-.barra-natureza {
-  background-color: #4d69d5;
-  border-top: 3px solid #6b85f0;
-}
-
 .sem-dados {
   text-align: center;
-  padding: 30px 20px;
+  padding: 40px 20px;
   color: #202f5a;
   font-family: "texto";
   height: 100%;
@@ -346,14 +468,14 @@ hr {
 
 .sem-dados p {
   margin-bottom: 15px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .sem-dados a {
   color: #1a2a6c;
   text-decoration: none;
   font-weight: bold;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: 2px solid #1a2a6c;
   border-radius: 20px;
   transition: all 0.3s ease;
@@ -365,103 +487,56 @@ hr {
   transform: translateY(-2px);
 }
 
-.linhas-guia {
-  display: none;
-}
-
-.linha-guia {
-  position: absolute;
-  left: 0;
-  right: 0;
-  border-top: 1px dashed rgba(32, 47, 90, 0.2);
-}
-
-.linha {
-  margin-top: 6vh;
-}
-
-.nav-link.bolsista-only {
-  background: linear-gradient(45deg, #1a2a6c, #4d69d5);
-  color: white !important;
-  border-radius: 20px;
-  padding: 8px 16px;
-  margin: 0 5px;
-  transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
-}
-
-.nav-link.bolsista-only:hover {
-  background: linear-gradient(45deg, #4d69d5, #1a2a6c);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(26, 42, 108, 0.4);
-  color: white !important;
-  text-shadow: none;
-}
-
-.badge-bolsista {
-  background: linear-gradient(45deg, #1a2a6c, #4d69d5);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 15px;
-  font-size: 0.7em;
-  margin-left: 10px;
-  font-family: "texto";
-  vertical-align: middle;
-}
-
-.imagenzinhas {
-  font-size: 80px !important;
-  color: #1a2a6c;
-}
-
-/* MEDIA QUERIES PARA RESPONSIVIDADE */
-@media (max-width: 1200px) {
-  .nav-link {
-    font-size: 13px;
-    padding: 6px 10px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .nav-link {
-    font-size: 12px;
-    padding: 5px 8px;
-    gap: 10px;
-  }
-
-  #logo {
-    margin-right: 20px;
-  }
-}
-
-@media (max-width: 900px) {
-  #header_esquerda {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .nav-principal {
-    order: 3;
-    width: 100%;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .menu-usuario {
-    margin-left: 0;
-  }
-}
-
+/* RESPONSIVIDADE CORRIGIDA */
 @media (max-width: 768px) {
-  header {
-    padding: 0.5rem 0;
+  .graficos-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
-  body {
-    padding-top: 120px;
+  .chart-container-inicio {
+    height: 200px;
   }
 
-  .nav-link {
-    font-size: 11px;
-    padding: 4px 6px;
+  .barra {
+    width: 35px;
+  }
+
+  .pizza-chart {
+    width: 180px;
+    height: 180px;
+  }
+
+  .pizza-center {
+    width: 60px;
+    height: 60px;
+    font-size: 12px;
+  }
+
+  .box-atividades {
+    flex-direction: column;
+  }
+
+  .box {
+    height: 25vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .barras-container {
+    gap: 8px;
+  }
+
+  .barra {
+    width: 28px;
+  }
+
+  .barra-rotulo {
+    font-size: 10px;
+  }
+
+  .pizza-chart {
+    width: 150px;
+    height: 150px;
   }
 }
