@@ -1,0 +1,235 @@
+@font-face {
+    font-family: "probatio";
+    src: url("/fonts/GenerateChangesDemo.ttf") format("opentype");
+}
+
+@font-face {
+    font-family: "titulos";
+    src: url("/fonts/genty-sans-regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "texto";
+    src: url("/fonts/Poppins-Medium.ttf") format("opentype");
+}
+
+body {
+    background-color: #fafbfc;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    padding-top: 80px;
+    min-height: 100vh;
+    /* Isso faz com que o body ocupe pelo menos a altura total da tela */
+}
+
+#container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffffa3;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    box-sizing: border-box;
+    transition: background-color 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+        box-shadow 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+        transform 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+#header_esquerda {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    gap: 20px;
+    /* Espaço entre os itens */
+}
+
+#logo {
+    font-family: "probatio";
+    font-size: clamp(16px, 3vh, 24px);
+    margin-right: 40px;
+    /* Mais espaço após o logo */
+    white-space: nowrap;
+    flex-shrink: 0;
+    /* Impede que o logo diminua */
+    text-decoration: none;
+    color: #202f5a;
+}
+
+.nav-principal {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* Espaço entre os links */
+    flex-wrap: wrap;
+    /* Permite quebra de linha se necessário */
+    flex: 1;
+    /* Ocupa o espaço disponível */
+    justify-content: flex-start;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #202f5a;
+    font-size: 14px;
+    /* Tamanho menor para caber */
+    font-family: "texto";
+    padding: 8px 12px;
+    white-space: nowrap;
+    transition: color 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+        transform 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+        text-shadow 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    flex-shrink: 0;
+    /* Impede que os links diminuam */
+}
+
+.menu-usuario {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: auto;
+    /* Joga para a direita */
+    flex-shrink: 0;
+}
+
+/* ÍCONE DO PERFIL */
+.icon {
+    width: 24px;
+    height: 24px;
+}
+
+#logo:hover,
+.nav-link:hover {
+    color: #f6b737;
+    transform: translateY(-2px);
+    text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
+}
+
+header:hover {
+    background-color: #ffffff;
+    box-shadow: -2px 2px 20px rgba(142, 142, 142, 0.53);
+    transform: translateY(-2px);
+}
+
+h1 {
+    color: #202f5a;
+    font-family: "titulos";
+}
+
+h2 {
+    color: #202f5a;
+    font-family: "titulos";
+}
+
+h3 {
+    color: #202f5a;
+    font-family: "texto";
+}
+
+a:hover {
+    color: #f6b737;
+    text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
+    transform: translateY(-2px);
+}
+
+.cronometrofora{
+    background-color: #ffd889;
+    width: 800px;
+    height: 400px;
+    border-radius: 20px;
+    margin: 70px auto;
+}
+
+pezao {
+    color: #202f5a;
+}
+
+.pezinho {
+    color: #f6b737;
+}
+
+.page1 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 0;
+    justify-content: center;
+}
+
+
+.fa-pen-to-square {
+    color: #FFD43B;
+    transition: all .5s;
+}
+
+/*button {
+    all: unset;
+    cursor: pointer;
+}*/
+
+button:hover i {
+    color: #f6b737;
+}
+
+.nav-link.bolsista-only {
+    background: linear-gradient(45deg, #1a2a6c, #4d69d5);
+    color: white !important;
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin: 0 5px;
+    transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+.nav-link.bolsista-only:hover {
+    background: linear-gradient(45deg, #4d69d5, #1a2a6c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 42, 108, 0.4);
+    color: white !important;
+    text-shadow: none;
+}
+
+.perf {
+    display: flex;
+    flex-direction: row;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    padding: 1rem;
+    bottom: 10px;
+    left: 0;
+}
+
+footer .logofinal {
+    left: 50%;
+    right: 50%;
+}
+
+.linha {
+    width: 100%;
+    max-width: 1200px;
+}
+
+* {
+    box-sizing: border-box;
+}
