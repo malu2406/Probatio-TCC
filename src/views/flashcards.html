@@ -93,13 +93,14 @@
         </div>
       </footer>
     </div>
+    // NO ARQUIVO flashcards.html - SUBSTITUA o script inteiro por este:
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         // CARREGAR DADOS DO USUÁRIO E VERIFICAR SE É BOLSISTA
         fetch("/api/usuario")
           .then((response) => response.json())
           .then((data) => {
-            // Verificar se o usuário é bolsista e mostrar o link de Matérias
             if (data.tipo === "BOLSISTA") {
               const linkMaterias = document.getElementById("link-materias");
               linkMaterias.style.display = "block";
@@ -116,9 +117,7 @@
         const filtroBtns = document.querySelectorAll(".filtro-btn");
         filtroBtns.forEach((btn) => {
           btn.addEventListener("click", () => {
-            // Remove a classe ativo de todos os botões
             filtroBtns.forEach((b) => b.classList.remove("ativo"));
-            // Adiciona a classe ativo ao botão clicado
             btn.classList.add("ativo");
             const materia = btn.getAttribute("data-materia");
             filterFlashcards(materia);
@@ -202,23 +201,25 @@
           };
 
           div.setAttribute("data-materia", materiaClass);
+          div.setAttribute("data-conteudo", flashcard.conteudo); // ADICIONADO: salvar o conteúdo original
+
           div.innerHTML = `
-  <span class="materia-tag ${materiaClass}">${
+        <span class="materia-tag ${materiaClass}">${
             materiaNames[flashcard.materia] || flashcard.materia
           }</span>
-           <div class="conteudo-tag">${mapearNomeConteudo(
-             flashcard.conteudo
-           )}</div>
-  <div class="pergunta">${flashcard.pergunta}</div>
-  <div class="resposta">${flashcard.resposta}</div>
-  <div class="controles">
-    <button class="btn mostrar-resposta">Mostrar Resposta</button>
-    <div class="feedback-buttons" style="display: none">
-      <button class="btn acertou">Acertou</button>
-      <button class="btn errou">Errou</button>
-    </div>
-  </div>
-`;
+        <div class="conteudo-tag">${mapearNomeConteudo(
+          flashcard.conteudo
+        )}</div>
+        <div class="pergunta">${flashcard.pergunta}</div>
+        <div class="resposta">${flashcard.resposta}</div>
+        <div class="controles">
+          <button class="btn mostrar-resposta">Mostrar Resposta</button>
+          <div class="feedback-buttons" style="display: none">
+            <button class="btn acertou">Acertou</button>
+            <button class="btn errou">Errou</button>
+          </div>
+        </div>
+      `;
 
           return div;
         }
@@ -239,7 +240,7 @@
             });
           });
 
-          // Botões de acerto/erro
+          // Botões de acerto/erro - CORRIGIDO: agora envia disciplina
           const acertouButtons = document.querySelectorAll(".acertou");
           const errouButtons = document.querySelectorAll(".errou");
 
@@ -247,7 +248,10 @@
             button.addEventListener("click", (e) => {
               const card = e.target.closest(".flashcard");
               const materia = card.getAttribute("data-materia");
-              registerAnswer(materia, true);
+              const conteudo = card.getAttribute("data-conteudo"); // PEGA O CONTEÚDO ORIGINAL
+
+              console.log("📝 Registrando acerto:", { materia, conteudo }); // DEBUG
+              registerAnswer(materia, conteudo, true);
               card.style.display = "none";
             });
           });
@@ -256,7 +260,10 @@
             button.addEventListener("click", (e) => {
               const card = e.target.closest(".flashcard");
               const materia = card.getAttribute("data-materia");
-              registerAnswer(materia, false);
+              const conteudo = card.getAttribute("data-conteudo"); // PEGA O CONTEÚDO ORIGINAL
+
+              console.log("📝 Registrando erro:", { materia, conteudo }); // DEBUG
+              registerAnswer(materia, conteudo, false);
               card.style.display = "none";
             });
           });
@@ -276,23 +283,49 @@
           });
         }
 
-        async function registerAnswer(materia, acertou) {
+        // CORREÇÃO PRINCIPAL: função registerAnswer atualizada para enviar disciplina
+        async function registerAnswer(materiaFrontend, conteudo, acertou) {
           try {
-            // Salvar no banco de dados
-            await fetch("/api/estatisticas", {
+            // Mapear do frontend para o backend
+            const materiaMapToBackend = {
+              matematica: "matematica",
+              linguagens: "linguagens",
+              humanas: "humanas",
+              natureza: "natureza",
+            };
+
+            const materiaBackend =
+              materiaMapToBackend[materiaFrontend] || materiaFrontend;
+
+            console.log("🚀 Enviando estatística para API:", {
+              materia: materiaBackend,
+              disciplina: conteudo,
+              acertou: acertou,
+            });
+
+            // Salvar no banco de dados - ENVIANDO DISCIPLINA
+            const response = await fetch("/api/estatisticas", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ materia, acertou }),
+              body: JSON.stringify({
+                materia: materiaBackend,
+                disciplina: conteudo, // AGORA ENVIANDO A DISCIPLINA
+                acertou: acertou,
+              }),
             });
+
+            const result = await response.json();
+            console.log("✅ Resposta da API:", result);
 
             // Atualizar a exibição
             await updateStatsDisplay();
           } catch (error) {
-            console.error("Erro ao registrar resposta:", error);
+            console.error("❌ Erro ao registrar resposta:", error);
           }
         }
+
         async function updateStatsDisplay() {
           try {
             const response = await fetch("/api/estatisticas");
