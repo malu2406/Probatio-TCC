@@ -36,7 +36,6 @@
         </div>
       </div>
     </header>
-
     <div id="container">
       <main>
         <h1>Estatísticas de Desempenho</h1>
@@ -46,15 +45,32 @@
           ← Voltar para visão geral
         </button>
 
-        <div class="grafico-wrapper">
-          <div class="grafico-titulo" id="grafico-titulo">
-            Desempenho por Matéria
+        <!-- Nova seção para gráfico e métricas lado a lado -->
+        <div class="dashboard-container">
+          <div class="grafico-wrapper">
+            <div class="grafico-titulo" id="grafico-titulo">
+              Desempenho por Matéria
+            </div>
+            <div class="chart-container" id="chart-container">
+              <!-- Gráfico será gerado aqui -->
+            </div>
           </div>
-          <div class="chart-container" id="chart-container">
-            <!-- Gráfico será gerado aqui -->
+          <!-- Métricas gerais -->
+          <div class="metricas-gerais">
+            <div class="metrica-card">
+              <h3>Total de Questões</h3>
+              <div class="metrica-valor" id="total-questoes">0</div>
+            </div>
+            <div class="metrica-card">
+              <h3>Taxa de Acerto Geral</h3>
+              <div class="metrica-valor" id="taxa-acerto">0%</div>
+            </div>
+            <div class="metrica-card">
+              <h3>Nível de Desempenho</h3>
+              <div class="metrica-valor" id="nivel-desempenho">Iniciante</div>
+            </div>
           </div>
         </div>
-
         <!-- Legenda interativa -->
         <div class="legenda-estatisticas">
           <div class="legenda-item" data-materia="matematica">
@@ -74,23 +90,6 @@
             <span>Natureza</span>
           </div>
         </div>
-
-        <!-- Métricas gerais -->
-        <div class="metricas-gerais">
-          <div class="metrica-card">
-            <h3>Total de Questões</h3>
-            <div class="metrica-valor" id="total-questoes">0</div>
-          </div>
-          <div class="metrica-card">
-            <h3>Taxa de Acerto Geral</h3>
-            <div class="metrica-valor" id="taxa-acerto">0%</div>
-          </div>
-          <div class="metrica-card">
-            <h3>Nível de Desempenho</h3>
-            <div class="metrica-valor" id="nivel-desempenho">Iniciante</div>
-          </div>
-        </div>
-
         <!-- Botão para resetar estatísticas -->
         <div class="acoes-estatisticas">
           <button id="btn-resetar" class="btn-resetar">

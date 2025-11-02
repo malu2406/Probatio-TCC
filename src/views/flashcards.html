@@ -93,11 +93,9 @@
         </div>
       </footer>
     </div>
-    // NO ARQUIVO flashcards.html - SUBSTITUA o script inteiro por este:
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // CARREGAR DADOS DO USUÁRIO E VERIFICAR SE É BOLSISTA
         fetch("/api/usuario")
           .then((response) => response.json())
           .then((data) => {
@@ -110,10 +108,8 @@
             console.error("Erro ao carregar dados do usuário:", error);
           });
 
-        // Carregar flashcards do banco de dados
         loadFlashcardsFromDB();
 
-        // Configurar filtros
         const filtroBtns = document.querySelectorAll(".filtro-btn");
         filtroBtns.forEach((btn) => {
           btn.addEventListener("click", () => {
@@ -124,7 +120,6 @@
           });
         });
 
-        // Inicializar estatísticas
         updateStatsDisplay();
 
         async function loadFlashcardsFromDB() {
@@ -146,7 +141,6 @@
               container.appendChild(flashcardElement);
             });
 
-            // Re-aplicar os event listeners após carregar os flashcards
             reapplyEventListeners();
           } catch (error) {
             console.error("Erro ao carregar flashcards:", error);
@@ -157,7 +151,6 @@
 
         function mapearNomeConteudo(value) {
           const mapeamento = {
-            // Ciências Humanas
             historia: "História",
             geografia: "Geografia",
             sociologia: "Sociologia",

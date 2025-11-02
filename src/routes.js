@@ -378,10 +378,11 @@ router.get("/api/estatisticas", checkAuth, async (req, res) => {
 });
 
 // CORREÇÃO: Atualizar estatísticas (GERAL e por DISCIPLINA)
+// CORREÇÃO: Atualizar estatísticas (GERAL e por DISCIPLINA)
 router.post("/api/estatisticas", checkAuth, async (req, res) => {
   const { materia, disciplina, acertou } = req.body;
 
-  console.log("📊 Recebendo estatística:", { materia, disciplina, acertou }); // DEBUG
+  console.log("📊 Recebendo estatística:", { materia, disciplina, acertou });
 
   if (!materia || acertou === undefined) {
     return res.status(400).json({ error: "Dados incompletos" });
@@ -411,32 +412,38 @@ router.post("/api/estatisticas", checkAuth, async (req, res) => {
     console.log("✅ Estatística geral atualizada:", estatisticaGeral);
 
     // 2. Se foi fornecida uma disciplina específica, atualizar também a estatística da disciplina
-    if (disciplina) {
-      const estatisticaDisciplina = await prisma.estatisticasDisciplina.upsert({
-        where: {
-          userId_materia_disciplina: {
-            userId: req.session.user.id,
-            materia: materia,
-            disciplina: disciplina,
-          },
-        },
-        update: {
-          total: { increment: 1 },
-          acertos: { increment: acertou ? 1 : 0 },
-        },
-        create: {
-          userId: req.session.user.id,
-          materia: materia,
-          disciplina: disciplina,
-          total: 1,
-          acertos: acertou ? 1 : 0,
-        },
-      });
+    if (disciplina && disciplina !== "undefined") {
+      try {
+        const estatisticaDisciplina =
+          await prisma.estatisticasDisciplina.upsert({
+            where: {
+              userId_materia_disciplina: {
+                userId: req.session.user.id,
+                materia: materia,
+                disciplina: disciplina,
+              },
+            },
+            update: {
+              total: { increment: 1 },
+              acertos: { increment: acertou ? 1 : 0 },
+            },
+            create: {
+              userId: req.session.user.id,
+              materia: materia,
+              disciplina: disciplina,
+              total: 1,
+              acertos: acertou ? 1 : 0,
+            },
+          });
 
-      console.log(
-        "✅ Estatística de disciplina atualizada:",
-        estatisticaDisciplina
-      );
+        console.log(
+          "✅ Estatística de disciplina atualizada:",
+          estatisticaDisciplina
+        );
+      } catch (error) {
+        console.error("❌ Erro ao atualizar estatística de disciplina:", error);
+        // Não interrompe o processo se houver erro na disciplina, apenas loga
+      }
     }
 
     res.json({
@@ -448,7 +455,6 @@ router.post("/api/estatisticas", checkAuth, async (req, res) => {
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 });
-
 // CORREÇÃO: Resetar estatísticas (GERAL e por DISCIPLINA)
 router.delete("/api/estatisticas", checkAuth, async (req, res) => {
   try {
