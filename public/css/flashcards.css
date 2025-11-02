@@ -226,6 +226,22 @@ h3 {
   font-weight: bold;
   font-family: "texto";
 }
+.flashcard.respondida-acerto {
+  border-left: 4px solid #4CAF50;
+  background-color: #f8fff8;
+}
+
+.flashcard.respondida-erro {
+  border-left: 4px solid #F44336;
+  background-color: #fff8f8;
+}
+
+/* Ajuste para o posicionamento dos elementos no card */
+.flashcard {
+  position: relative;
+  padding-top: 50px; /* Espaço para os badges */
+}
+
 
 .matematica {
   background-color: #0a1749;
@@ -294,6 +310,18 @@ h3 {
   font-family: "texto";
 }
 
+@media (max-width: 768px) {
+  .filtros-status {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .filtro-status-btn {
+    width: 200px;
+    text-align: center;
+  }
+}
+
 .mostrar-resposta {
   background-color: #1a2a6c;
   color: white;
@@ -358,6 +386,58 @@ h3 {
   font-weight: bold;
   color: #333;
   font-family: "texto";
+}
+
+/* NOVO: Filtros por status */
+.filtros-status {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.filtro-status-btn {
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+  font-family: "texto";
+  font-size: 0.9rem;
+}
+
+.filtro-status-btn:hover {
+  background-color: #ddd;
+  transform: translateY(-2px);
+}
+
+.filtro-status-btn.ativo {
+  background-color: #1a2a6c;
+  color: white;
+}
+
+.status-indicator {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  font-family: "texto";
+}
+
+.status-indicator.acerto {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status-indicator.erro {
+  background-color: #F44336;
+  color: white;
 }
 
 /* FOOTER */

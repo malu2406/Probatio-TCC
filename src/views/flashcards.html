@@ -41,6 +41,7 @@
       <main>
         <h1>Flashcards</h1>
 
+        <!-- Filtros por matéria -->
         <div class="filtros">
           <button class="filtro-btn ativo" data-materia="todas">Todas</button>
           <button class="filtro-btn" data-materia="matematica">
@@ -57,9 +58,29 @@
           </button>
         </div>
 
+        <!-- NOVO: Filtros por status -->
+        <div class="filtros-status">
+          <button class="filtro-status-btn ativo" data-status="todas">
+            Todas as Questões
+          </button>
+          <button class="filtro-status-btn" data-status="nao-respondidas">
+            Não Respondidas
+          </button>
+          <button class="filtro-status-btn" data-status="respondidas">
+            Já Respondidas
+          </button>
+          <button class="filtro-status-btn" data-status="acertadas">
+            Acertadas
+          </button>
+          <button class="filtro-status-btn" data-status="erradas">
+            Erradas
+          </button>
+        </div>
+
         <div class="flashcard-container" id="flashcardsContainer">
           <!-- Flashcards serão carregados dinamicamente via JavaScript -->
         </div>
+
         <div class="estatisticas">
           <h2>Seu Desempenho</h2>
           <div class="stats-grid">
@@ -96,20 +117,33 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        let todasQuestoes = [];
+        let historicoRespostas = {};
+        let userId = null; // Variável para armazenar o ID do usuário
+
+        // Primeiro carregamos o usuário para obter o ID
         fetch("/api/usuario")
           .then((response) => response.json())
           .then((data) => {
+            userId = data.id; // Armazenamos o ID do usuário
             if (data.tipo === "BOLSISTA") {
               const linkMaterias = document.getElementById("link-materias");
               linkMaterias.style.display = "block";
             }
+
+            // Agora carregamos os dados específicos deste usuário
+            Promise.all([
+              loadFlashcardsFromDB(),
+              loadHistoricoRespostas(),
+            ]).then(() => {
+              exibirFlashcards();
+            });
           })
           .catch((error) => {
             console.error("Erro ao carregar dados do usuário:", error);
           });
 
-        loadFlashcardsFromDB();
-
+        // Filtros por matéria
         const filtroBtns = document.querySelectorAll(".filtro-btn");
         filtroBtns.forEach((btn) => {
           btn.addEventListener("click", () => {
@@ -120,33 +154,76 @@
           });
         });
 
+        // Filtros por status
+        const filtroStatusBtns =
+          document.querySelectorAll(".filtro-status-btn");
+        filtroStatusBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            filtroStatusBtns.forEach((b) => b.classList.remove("ativo"));
+            btn.classList.add("ativo");
+            const status = btn.getAttribute("data-status");
+            filterByStatus(status);
+          });
+        });
+
         updateStatsDisplay();
 
         async function loadFlashcardsFromDB() {
           try {
             const response = await fetch("/api/todos-flashcards");
-            const flashcards = await response.json();
-
-            const container = document.getElementById("flashcardsContainer");
-            container.innerHTML = "";
-
-            if (flashcards.length === 0) {
-              container.innerHTML =
-                '<div class="no-flashcards">Nenhum flashcard disponível no momento.</div>';
-              return;
-            }
-
-            flashcards.forEach((flashcard) => {
-              const flashcardElement = createFlashcardElement(flashcard);
-              container.appendChild(flashcardElement);
-            });
-
-            reapplyEventListeners();
+            todasQuestoes = await response.json();
           } catch (error) {
             console.error("Erro ao carregar flashcards:", error);
-            document.getElementById("flashcardsContainer").innerHTML =
-              '<div class="error-message">Erro ao carregar flashcards.</div>';
           }
+        }
+
+        async function loadHistoricoRespostas() {
+          try {
+            if (!userId) return;
+
+            // CORREÇÃO: Usar o ID do usuário para criar uma chave única
+            const chaveUsuario = `historicoRespostas_${userId}`;
+            const dadosSalvos = localStorage.getItem(chaveUsuario);
+
+            if (dadosSalvos) {
+              historicoRespostas = JSON.parse(dadosSalvos);
+            } else {
+              historicoRespostas = {};
+            }
+
+            console.log(
+              "📊 Histórico carregado para usuário:",
+              userId,
+              historicoRespostas
+            );
+          } catch (error) {
+            console.error("Erro ao carregar histórico:", error);
+            historicoRespostas = {};
+          }
+        }
+
+        function salvarResposta(flashcardId, acertou) {
+          if (!userId) return;
+
+          historicoRespostas[flashcardId] = {
+            acertou: acertou,
+            data: new Date().toISOString(),
+            userId: userId, // Adicionamos o ID do usuário no registro também
+          };
+
+          // CORREÇÃO: Salvar com chave específica do usuário
+          const chaveUsuario = `historicoRespostas_${userId}`;
+          localStorage.setItem(
+            chaveUsuario,
+            JSON.stringify(historicoRespostas)
+          );
+
+          console.log(
+            "💾 Resposta salva para usuário:",
+            userId,
+            flashcardId,
+            acertou
+          );
         }
 
         function mapearNomeConteudo(value) {
@@ -155,22 +232,33 @@
             geografia: "Geografia",
             sociologia: "Sociologia",
             filosofia: "Filosofia",
-
-            // Ciências da Natureza
             biologia: "Biologia",
             fisica: "Física",
             quimica: "Química",
-
-            // Linguagens
             portugues: "Português",
             ingles: "Inglês",
             espanhol: "Espanhol",
-
-            // Matemática
             matematica: "Matemática",
           };
-
           return mapeamento[value] || value;
+        }
+
+        function exibirFlashcards() {
+          const container = document.getElementById("flashcardsContainer");
+          container.innerHTML = "";
+
+          if (todasQuestoes.length === 0) {
+            container.innerHTML =
+              '<div class="no-flashcards">Nenhum flashcard disponível no momento.</div>';
+            return;
+          }
+
+          todasQuestoes.forEach((flashcard) => {
+            const flashcardElement = createFlashcardElement(flashcard);
+            container.appendChild(flashcardElement);
+          });
+
+          reapplyEventListeners();
         }
 
         function createFlashcardElement(flashcard) {
@@ -194,12 +282,31 @@
           };
 
           div.setAttribute("data-materia", materiaClass);
-          div.setAttribute("data-conteudo", flashcard.conteudo); // ADICIONADO: salvar o conteúdo original
+          div.setAttribute("data-conteudo", flashcard.conteudo);
+          div.setAttribute("data-id", flashcard.id);
+
+          // Verificar se já foi respondida POR ESTE USUÁRIO
+          const resposta = historicoRespostas[flashcard.id];
+          const jaRespondida = !!resposta && resposta.userId === userId;
+          const acertou = resposta ? resposta.acertou : false;
+
+          if (jaRespondida) {
+            div.classList.add(
+              acertou ? "respondida-acerto" : "respondida-erro"
+            );
+          }
 
           div.innerHTML = `
         <span class="materia-tag ${materiaClass}">${
             materiaNames[flashcard.materia] || flashcard.materia
           }</span>
+        ${
+          jaRespondida
+            ? `<div class="status-indicator ${acertou ? "acerto" : "erro"}">${
+                acertou ? "✓ Acertou" : "✗ Errou"
+              }</div>`
+            : ""
+        }
         <div class="conteudo-tag">${mapearNomeConteudo(
           flashcard.conteudo
         )}</div>
@@ -233,7 +340,7 @@
             });
           });
 
-          // Botões de acerto/erro - CORRIGIDO: agora envia disciplina
+          // Botões de acerto/erro
           const acertouButtons = document.querySelectorAll(".acertou");
           const errouButtons = document.querySelectorAll(".errou");
 
@@ -241,10 +348,18 @@
             button.addEventListener("click", (e) => {
               const card = e.target.closest(".flashcard");
               const materia = card.getAttribute("data-materia");
-              const conteudo = card.getAttribute("data-conteudo"); // PEGA O CONTEÚDO ORIGINAL
+              const conteudo = card.getAttribute("data-conteudo");
+              const flashcardId = card.getAttribute("data-id");
 
-              console.log("📝 Registrando acerto:", { materia, conteudo }); // DEBUG
+              console.log("📝 Registrando acerto:", {
+                userId,
+                materia,
+                conteudo,
+                flashcardId,
+              });
               registerAnswer(materia, conteudo, true);
+              salvarResposta(flashcardId, true);
+              card.classList.add("respondida-acerto");
               card.style.display = "none";
             });
           });
@@ -253,10 +368,18 @@
             button.addEventListener("click", (e) => {
               const card = e.target.closest(".flashcard");
               const materia = card.getAttribute("data-materia");
-              const conteudo = card.getAttribute("data-conteudo"); // PEGA O CONTEÚDO ORIGINAL
+              const conteudo = card.getAttribute("data-conteudo");
+              const flashcardId = card.getAttribute("data-id");
 
-              console.log("📝 Registrando erro:", { materia, conteudo }); // DEBUG
+              console.log("📝 Registrando erro:", {
+                userId,
+                materia,
+                conteudo,
+                flashcardId,
+              });
               registerAnswer(materia, conteudo, false);
+              salvarResposta(flashcardId, false);
+              card.classList.add("respondida-erro");
               card.style.display = "none";
             });
           });
@@ -276,10 +399,41 @@
           });
         }
 
-        // CORREÇÃO PRINCIPAL: função registerAnswer atualizada para enviar disciplina
+        function filterByStatus(status) {
+          const flashcards = document.querySelectorAll(".flashcard");
+          flashcards.forEach((card) => {
+            const cardId = card.getAttribute("data-id");
+            const resposta = historicoRespostas[cardId];
+
+            // CORREÇÃO: Verificar se a resposta pertence a este usuário
+            const respostaDesteUsuario = resposta && resposta.userId === userId;
+
+            let mostrar = false;
+
+            switch (status) {
+              case "todas":
+                mostrar = true;
+                break;
+              case "nao-respondidas":
+                mostrar = !respostaDesteUsuario;
+                break;
+              case "respondidas":
+                mostrar = respostaDesteUsuario;
+                break;
+              case "acertadas":
+                mostrar = respostaDesteUsuario && resposta.acertou;
+                break;
+              case "erradas":
+                mostrar = respostaDesteUsuario && !resposta.acertou;
+                break;
+            }
+
+            card.style.display = mostrar ? "flex" : "none";
+          });
+        }
+
         async function registerAnswer(materiaFrontend, conteudo, acertou) {
           try {
-            // Mapear do frontend para o backend
             const materiaMapToBackend = {
               matematica: "matematica",
               linguagens: "linguagens",
@@ -296,7 +450,6 @@
               acertou: acertou,
             });
 
-            // Salvar no banco de dados - ENVIANDO DISCIPLINA
             const response = await fetch("/api/estatisticas", {
               method: "POST",
               headers: {
@@ -304,15 +457,13 @@
               },
               body: JSON.stringify({
                 materia: materiaBackend,
-                disciplina: conteudo, // AGORA ENVIANDO A DISCIPLINA
+                disciplina: conteudo,
                 acertou: acertou,
               }),
             });
 
             const result = await response.json();
             console.log("✅ Resposta da API:", result);
-
-            // Atualizar a exibição
             await updateStatsDisplay();
           } catch (error) {
             console.error("❌ Erro ao registrar resposta:", error);
