@@ -6,9 +6,6 @@
     <title>Pomodoro 🍅</title>
     <link rel="stylesheet" href="/css/pomodoro.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <script src="../javascript/pomodorojs/utils.js"></script>
-    <script src="../javascript/pomodorojs/tasks.js" defer></script>
-    <script src="../javascript/pomodorojs/counter.js" defer></script>
   </head>
   <body>
     <div id="container">
@@ -66,7 +63,21 @@
             </div>
 
             <div>
-              <button id="start" class="start" type="button">Começar</button>
+              <button 
+                id="start" 
+                onclick="startTimer(selectedTimer)" 
+                class="start" 
+                type="button">
+                Começar
+            </button>
+
+            <button 
+              id="reset" 
+              onclick="resetTimer()"
+              class="reset" 
+              type="button">
+              Reiniciar
+            </button>
             </div>
           </section>
 
@@ -89,11 +100,19 @@
               <ol id="tasks"></ol>
             </div>
           </section>
-
-          <span class="material-symbols-outlined">
-            settings
-          </span>
         </section>
+
+        <template id="task-template">
+          <li class="task">
+            <div class="task-container">
+              <span class="task-text"></span>
+
+              <button id="delete-button">
+                <img src="images/latadelixo.png" alt="Ícone da lata de lixo">
+              </button>
+            </div>
+          </li>
+        </template>
       </main>
       
       <footer>
@@ -106,5 +125,8 @@
       </footer>
       
     </div>
+        <script src="/javascript/pomodorojs/utils.js" defer type="application/javascript"></script>
+        <script src="/javascript/pomodorojs/tasks.js" defer type="application/javascript"></script>
+        <script src="/javascript/pomodorojs/counter.js" defer type="application/javascript"></script>
   </body>
 </html>

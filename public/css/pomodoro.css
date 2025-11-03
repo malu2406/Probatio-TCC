@@ -147,12 +147,46 @@ a:hover {
     transform: translateY(-2px);
 }
 
-.cronometrofora{
+.cronometrofora {
     background-color: #ffd889;
-    width: 800px;
-    height: 400px;
+    width: 1000px;
+    height: 500px;
     border-radius: 20px;
     margin: 70px auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* Centraliza horizontalmente */
+    margin: auto;
+    gap: 80px;
+    /* Espaço entre as seções */
+}
+
+/* Se quiser mais controle sobre cada seção, adicione: */
+.cronometro-timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    /* Espaço entre os elementos internos */
+}
+
+.tasks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    /* Espaço entre os elementos internos */
+}
+
+/* Para o divider (linha divisória) */
+.divider {
+    width: 2px;
+    height: 300px;
+    background-color: #1a2a6c;
+    opacity: 0.3;
+    margin: 0 20px;
 }
 
 pezao {
@@ -208,6 +242,82 @@ button:hover i {
     display: flex;
     flex-direction: row;
 }
+
+.tasks-list ol::-webkit-scrolbar {
+    visibility: hidden;
+}
+
+.tasks-list .task-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+}
+
+.tasks-list .task-container:not(:last-child) {
+    border: 1px solid #1a2a6c;
+}
+
+.tasks-list .task-container button {
+   border: none;
+   background: transparent;
+   cursor: pointer;
+}
+
+.modality {
+    color: #1a2a6c;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: 2px solid #1a2a6c;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background-color: #ffd889;
+    cursor: pointer;
+}
+
+.start, .reset {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: 2px solid #1a2a6c;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background-color: #1a2a6c;
+    cursor: pointer;
+}
+
+.modality:hover {
+    background-color: #1a2a6c;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.start:hover {
+    background-color: #1a2a6c;
+    color: white;
+    transform: translateY(-2px);
+}
+
+#add-task {
+    color: white;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 8px 16px;
+        border: 2px solid #1a2a6c;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        background-color: #1a2a6c;
+        cursor: pointer;
+}
+
+#counter{
+    font-family: titulos;
+    font-size: 80px;
+    color: #1a2a6c;
+}
+
 
 footer {
     display: flex;
