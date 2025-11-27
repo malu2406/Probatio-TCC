@@ -1,132 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pomodoro 🍅</title>
-    <link rel="stylesheet" href="/css/pomodoro.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="container">
-      <header>
-        <div id="header_esquerda">
-          <a href="/inicio" id="logo">PROBATIO</a>
-          
-          <div class="nav-principal">
-            <a href="/material" class="nav-link bolsista-only" id="link-materias" style="display: none">Material</a>
-            <a href="/teste_es" class="nav-link">Estatísticas</a>
-            <a href="/flashcards" class="nav-link">Flashcards</a>
-            <a href="/noticias" class="nav-link">Portais de Notícia</a>
-            <a href="/pomodoro" class="nav-link">Pomodoro</a>
-            <a href="" class="nav-link">Temporizador</a>
-          </div>
-          
-          <div class="menu-usuario">
-            <a href="/perfil" class="nav-link">
-              <img src="/images/user.png" alt="Perfil" class="icon" />
-            </a>
-            <a href="/logout" class="nav-link">Sair</a>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomodoro 🍅</title>
+  <link rel="stylesheet" href="/css/pomodoro.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <div id="header_esquerda">
+        <a href="/inicio" id="logo">PROBATIO</a>
+
+        <div class="nav-principal">
+          <a href="/material" class="nav-link bolsista-only" id="link-materias" style="display: none">Material</a>
+          <a href="/teste_es" class="nav-link">Estatísticas</a>
+          <a href="/flashcards" class="nav-link">Flashcards</a>
+          <a href="/noticias" class="nav-link">Portais de Notícia</a>
+          <a href="/pomodoro" class="nav-link">Pomodoro</a>
+          <a href="" class="nav-link">Temporizador</a>
         </div>
-      </header>
-      
-      <main>
-        <div><h1>Cronômetro Pomodoro</h1></div>
-        <section class="cronometrofora">
-          <section class="cronometro-timer">
-            <div>
-              <button 
-                id="pomodoro" 
-                class="modality active-button" 
-                type="button">
-                Pomodoro
-              </button>
 
-              <button 
-                id="short-break" 
-                class="modality" 
-                type="button">
-                Intervalo Curto
-              </button>
+        <div class="menu-usuario">
+          <a href="/perfil" class="nav-link">
+            <img src="/images/user.png" alt="Perfil" class="icon" />
+          </a>
+          <a href="/logout" class="nav-link">Sair</a>
+        </div>
+      </div>
+    </header>
 
-              <button 
-                id="long-break" 
-                class="modality" 
-                type="button">
-                Intervalo Longo
-              </button>
-            </div>
-
-            <div>
-              <p id="counter">25:00</p>
-            </div>
-
-            <div>
-              <button 
-                id="start" 
-                onclick="startTimer(selectedTimer)" 
-                class="start" 
-                type="button">
-                Começar
+    <main>
+      <div>
+        <h1>Cronômetro Pomodoro</h1>
+      </div>
+      <section class="cronometrofora">
+        <section class="cronometro-timer">
+          <div>
+            <button id="pomodoro" class="modality active-button" type="button">
+              Pomodoro
             </button>
 
-            <button 
-              id="reset" 
-              onclick="resetTimer()"
-              class="reset" 
-              type="button">
+            <button id="short-break" class="modality" type="button">
+              Intervalo Curto
+            </button>
+
+            <button id="long-break" class="modality" type="button">
+              Intervalo Longo
+            </button>
+          </div>
+
+          <div>
+            <p id="counter">25:00</p>
+          </div>
+
+          <div>
+            <button id="start" onclick="startTimer(selectedTimer)" class="start" type="button">
+              Começar
+            </button>
+
+            <button id="reset" onclick="resetTimer()" class="reset" type="button">
               Reiniciar
             </button>
-            </div>
-          </section>
-
-          <div class="divider"></div>
-
-          <section class="tasks">
-            <div>
-              <h1>Tarefas</h1>
-              <form>
-                <input 
-                id="new-task"
-                type="text"
-                name="Nova Tarefa"
-                placeholder="Adicione uma nova tarefa">
-                <button id="add-task" type="button">+</button>
-              </form>
-            </div>
-
-            <div class="tasks-list">
-              <ol id="tasks"></ol>
-            </div>
-          </section>
+          </div>
         </section>
 
-        <template id="task-template">
-          <li class="task">
-            <div class="task-container">
-              <span class="task-text"></span>
+        <div class="divider"></div>
 
-              <button id="delete-button">
-                <img src="images/latadelixo.png" alt="Ícone da lata de lixo">
-              </button>
-            </div>
-          </li>
-        </template>
-      </main>
-      
-      <footer>
-        <div class="linha">
-          <hr />
-        </div>
-        <div class="logofinal">
-          <a href="#inicio" id="logo">PROBATIO</a>
-        </div>
-      </footer>
-      
-    </div>
-        <script src="/javascript/pomodorojs/utils.js" defer type="application/javascript"></script>
-        <script src="/javascript/pomodorojs/tasks.js" defer type="application/javascript"></script>
-        <script src="/javascript/pomodorojs/counter.js" defer type="application/javascript"></script>
-  </body>
+        <section class="tasks">
+          <div>
+            <h1>Tarefas</h1>
+            <form>
+              <input id="new-task" type="text" name="Nova Tarefa" placeholder="Adicione uma nova tarefa">
+              <button id="add-task" type="button">+</button>
+            </form>
+          </div>
+
+          <div class="tasks-list">
+            <ol id="tasks"></ol>
+          </div>
+        </section>
+      </section>
+
+      <template id="task-template">
+        <li class="task">
+          <div class="task-container">
+            <span class="task-text"></span>
+
+            <button id="delete-button">
+              <img src="images/latadelixo.png" alt="Ícone da lata de lixo">
+            </button>
+          </div>
+        </li>
+      </template>
+    </main>
+
+    <footer>
+      <div class="linha">
+        <hr />
+      </div>
+      <div class="logofinal">
+        <a href="#inicio" id="logo">PROBATIO</a>
+      </div>
+    </footer>
+
+  </div>
+  <script src="/javascript/pomodorojs/utils.js" defer type="application/javascript"></script>
+  <script src="/javascript/pomodorojs/tasks.js" defer type="application/javascript"></script>
+  <script src="/javascript/pomodorojs/counter.js" defer type="application/javascript"></script>
+</body>
+
 </html>
