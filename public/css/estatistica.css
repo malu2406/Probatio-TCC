@@ -73,7 +73,6 @@ header:hover {
   transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
-
 .nav-link.bolsista-only:hover {
   background: linear-gradient(45deg, #4d69d5, #1a2a6c);
   transform: translateY(-2px);
@@ -98,7 +97,6 @@ header:hover {
   text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
   transform: translateY(-2px);
 }
-
 
 .nav-principal {
   display: flex;

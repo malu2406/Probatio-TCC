@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estatísticas - PROBATIO</title>
+    <link rel="stylesheet" href="/css/estatistica.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div id="header_esquerda">
+        <a href="/inicio" id="logo">PROBATIO</a>
+        <div class="nav-principal">
+          <a
+            href="/material"
+            class="nav-link bolsista-only"
+            id="link-materias"
+            style="display: none"
+            >Material</a
+          >
+          <a href="/estatistica" class="nav-link">Estatísticas</a>
+          <a href="/flashcards" class="nav-link">Flashcards</a>
+          <a href="/noticias" class="nav-link">Portais de Notícia</a>
+          <a href="/pomodoro" class="nav-link">Pomodoro</a>
+          <a href="" class="nav-link">Temporizador</a>
+        </div>
+        <div class="menu-usuario">
+          <a href="/perfil" class="nav-link">
+            <img src="/images/user.png" alt="Perfil" class="icon" />
+          </a>
+          <a href="/logout" class="nav-link">Sair</a>
+        </div>
+      </div>
+    </header>
+    <div id="container">
+      <main>
+        <h1>Estatísticas de Desempenho</h1>
+        <button id="btn-voltar-geral" class="btn-voltar" style="display: none">
+          ← Voltar para visão geral
+        </button>
+        <div class="dashboard-container">
+          <div class="grafico-wrapper">
+            <div class="grafico-titulo" id="grafico-titulo">
+              Desempenho por Matéria
+            </div>
+            <div class="chart-container" id="chart-container">
+              <!-- Gráfico será gerado aqui -->
+            </div>
+          </div>
+          <!-- Métricas gerais -->
+          <div class="metricas-gerais">
+            <div class="metrica-card">
+              <h3>Total de Questões</h3>
+              <div class="metrica-valor" id="total-questoes">0</div>
+            </div>
+            <div class="metrica-card">
+              <h3>Taxa de Acerto Geral</h3>
+              <div class="metrica-valor" id="taxa-acerto">0%</div>
+            </div>
+            <div class="metrica-card">
+              <h3>Nível de Desempenho</h3>
+              <div class="metrica-valor" id="nivel-desempenho">Iniciante</div>
+            </div>
+          </div>
+        </div>
+        <!-- Legenda interativa -->
+        <div class="legenda-estatisticas">
+          <div class="legenda-item" data-materia="matematica">
+            <div class="legenda-cor" style="background-color: #0a1749"></div>
+            <span>Matemática</span>
+          </div>
+          <div class="legenda-item" data-materia="linguagens">
+            <div class="legenda-cor" style="background-color: #778bdc"></div>
+            <span>Linguagens</span>
+          </div>
+          <div class="legenda-item" data-materia="humanas">
+            <div class="legenda-cor" style="background-color: #0423a1"></div>
+            <span>Humanas</span>
+          </div>
+          <div class="legenda-item" data-materia="natureza">
+            <div class="legenda-cor" style="background-color: #4d69d5"></div>
+            <span>Natureza</span>
+          </div>
+        </div>
+        <div class="acoes-estatisticas">
+          <button id="btn-resetar" class="btn-resetar">
+            Zerar Estatísticas
+          </button>
+        </div>
+      </main>
+    </div>
+    <script src="/javascript/estatistica.js"></script>
+  </body>
+</html>

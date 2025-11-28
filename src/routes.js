@@ -7,7 +7,8 @@ const session = require("express-session");
 
 const prisma = new PrismaClient();
 
-// Middleware de autenticação
+// --- Funções Middleware de Autenticação e Autorização ---
+
 function checkAuth(req, res, next) {
   if (!req.session.user) {
     return res.redirect("/login");
@@ -15,7 +16,6 @@ function checkAuth(req, res, next) {
   next();
 }
 
-// Middleware para verificar se é bolsista
 function checkBolsista(req, res, next) {
   if (req.session.user && req.session.user.tipo === "BOLSISTA") {
     next();
@@ -26,9 +26,7 @@ function checkBolsista(req, res, next) {
   }
 }
 
-// ==========================================
-// ROTAS PÚBLICAS
-// ==========================================
+// --- Rotas de Páginas Estáticas e Visualizações (GET) ---
 
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
@@ -38,18 +36,58 @@ router.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "cadastro.html"));
 });
 
+router.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "login.html"));
+});
+
+router.get("/inicio", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "inicio.html"));
+});
+
+router.get("/perfil", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "perfil.html"));
+});
+
+router.get("/material", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "material.html"));
+});
+
+router.get("/estatistica", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "estatistica.html"));
+});
+
+router.get("/noticias", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "noticias.html"));
+});
+
+router.get("/simulado_teste", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "simulado_teste.html"));
+});
+
+router.get("/painel-bolsista", checkAuth, checkBolsista, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "painel-bolsista.html"));
+});
+
+router.get("/pomodoro", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
+});
+
+router.get("/flashcards", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "flashcards.html"));
+});
+
+// --- Rotas de Autenticação (Login/Cadastro/Logout) ---
+
 router.post("/cadastro", async (req, res) => {
   const { nome, nickname, email, senha, tipo } = req.body;
 
   console.log("Dados recebidos no cadastro:", { nome, email, tipo });
 
-  // Validação básica
   if (!nome || !email || !senha || !tipo) {
     console.log("Campos faltando:", { nome, email, tipo });
     return res.status(400).send("Preencha todos os campos obrigatórios");
   }
 
-  // Validar tipo
   if (!["USUARIO", "BOLSISTA"].includes(tipo)) {
     console.log("Tipo inválido:", tipo);
     return res.status(400).send("Tipo de usuário inválido");
@@ -91,10 +129,6 @@ router.post("/cadastro", async (req, res) => {
   }
 });
 
-router.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "login.html"));
-});
-
 router.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
@@ -125,50 +159,7 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-// ==========================================
-// ROTAS PROTEGIDAS (PÁGINAS)
-// ==========================================
-
-router.get("/inicio", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "inicio.html"));
-});
-
-router.get("/perfil", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "perfil.html"));
-});
-
-router.get("/material", checkAuth, checkBolsista, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "material.html"));
-});
-
-router.get("/teste_es", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "teste_es.html"));
-});
-
-router.get("/flashcards", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "flashcards.html"));
-});
-
-router.get("/noticias", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "noticias.html"));
-});
-
-router.get("/pomodoro", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
-});
-
-router.get("/simulado_teste", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "simulado_teste.html"));
-});
-
-router.get("/painel-bolsista", checkAuth, checkBolsista, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "painel-bolsista.html"));
-});
-
-// ==========================================
-// ROTAS DA API - AUTENTICAÇÃO
-// ==========================================
-
+// Rota para buscar dados do usuário logado
 router.get("/api/usuario", checkAuth, (req, res) => {
   res.json({
     id: req.session.user.id,
@@ -179,17 +170,79 @@ router.get("/api/usuario", checkAuth, (req, res) => {
   });
 });
 
-// ==========================================
-// ROTAS DA API - FLASHCARDS
-// ==========================================
+// --- Rotas de Tasks (Tarefas) ---
 
+router.get("/tasks", checkAuth, async (req, res) => {
+  try {
+    const tasks = await prisma.task.findMany({
+      where: { userId: req.session.user.id },
+      orderBy: { id: "asc" },
+    });
+    res.json(tasks);
+  } catch (error) {
+    console.error("Erro ao buscar tarefas:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+router.post("/tasks", checkAuth, async (req, res) => {
+  try {
+    const { text } = req.body;
+
+    if (!text)
+      return res.status(400).json({ error: "Texto da tarefa obrigatório" });
+
+    const newTask = await prisma.task.create({
+      data: {
+        text: text,
+        userId: req.session.user.id,
+      },
+    });
+    res.json(newTask);
+  } catch (error) {
+    console.error("Erro ao criar tarefa:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+router.delete("/tasks/:id", checkAuth, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    const task = await prisma.task.findUnique({
+      where: { id: id },
+    });
+
+    if (!task) {
+      return res.status(404).json({ error: "Tarefa não encontrada" });
+    }
+
+    if (task.userId !== req.session.user.id) {
+      return res
+        .status(403)
+        .json({ error: "Você não tem permissão para deletar esta tarefa" });
+    }
+
+    await prisma.task.delete({
+      where: { id: id },
+    });
+
+    res.json({ message: "Tarefa deletada com sucesso" });
+  } catch (error) {
+    console.error("Erro ao deletar tarefa:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+// --- Rotas de Flashcards ---
+
+// Buscar apenas flashcards do usuário logado
 router.get("/api/flashcards", checkAuth, async (req, res) => {
   try {
     const flashcards = await prisma.flashcard.findMany({
       where: { userId: req.session.user.id },
       orderBy: { createdAt: "desc" },
     });
-
     res.json(flashcards);
   } catch (error) {
     console.error("Erro ao buscar flashcards:", error);
@@ -197,12 +250,12 @@ router.get("/api/flashcards", checkAuth, async (req, res) => {
   }
 });
 
+// Buscar todos os flashcards (acesso de visualização liberado para todos autenticados)
 router.get("/api/todos-flashcards", checkAuth, async (req, res) => {
   try {
     const flashcards = await prisma.flashcard.findMany({
       orderBy: { createdAt: "desc" },
     });
-
     res.json(flashcards);
   } catch (error) {
     console.error("Erro ao buscar flashcards:", error);
@@ -210,27 +263,7 @@ router.get("/api/todos-flashcards", checkAuth, async (req, res) => {
   }
 });
 
-router.get("/api/flashcards/:id", checkAuth, async (req, res) => {
-  try {
-    const flashcard = await prisma.flashcard.findUnique({
-      where: { id: parseInt(req.params.id) },
-    });
-
-    if (!flashcard) {
-      return res.status(404).json({ error: "Flashcard não encontrado" });
-    }
-
-    if (flashcard.userId !== req.session.user.id) {
-      return res.status(403).json({ error: "Acesso negado" });
-    }
-
-    res.json(flashcard);
-  } catch (error) {
-    console.error("Erro ao buscar flashcard:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
-  }
-});
-
+// Criar novo flashcard (apenas bolsista)
 router.post("/api/flashcards", checkAuth, checkBolsista, async (req, res) => {
   try {
     const { materia, conteudo, pergunta, resposta } = req.body;
@@ -252,6 +285,30 @@ router.post("/api/flashcards", checkAuth, checkBolsista, async (req, res) => {
   }
 });
 
+// Buscar um flashcard específico (só se for o criador)
+router.get("/api/flashcards/:id", checkAuth, async (req, res) => {
+  try {
+    const flashcard = await prisma.flashcard.findUnique({
+      where: { id: parseInt(req.params.id) },
+    });
+
+    if (!flashcard) {
+      return res.status(404).json({ error: "Flashcard não encontrado" });
+    }
+
+    // Mesmo que só retorne o flashcard do user logado na rota /api/flashcards, essa checagem garante segurança na rota /:id
+    if (flashcard.userId !== req.session.user.id) {
+      return res.status(403).json({ error: "Acesso negado" });
+    }
+
+    res.json(flashcard);
+  } catch (error) {
+    console.error("Erro ao buscar flashcard:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+// Atualizar flashcard (apenas bolsista, e se for o criador)
 router.put(
   "/api/flashcards/:id",
   checkAuth,
@@ -275,12 +332,7 @@ router.put(
 
       const flashcard = await prisma.flashcard.update({
         where: { id: parseInt(id) },
-        data: {
-          materia,
-          conteudo,
-          pergunta,
-          resposta,
-        },
+        data: { materia, conteudo, pergunta, resposta },
       });
 
       res.json(flashcard);
@@ -291,6 +343,7 @@ router.put(
   }
 );
 
+// Deletar flashcard (apenas bolsista, e se for o criador)
 router.delete(
   "/api/flashcards/:id",
   checkAuth,
@@ -311,9 +364,7 @@ router.delete(
         return res.status(403).json({ error: "Acesso negado" });
       }
 
-      await prisma.flashcard.delete({
-        where: { id: parseInt(id) },
-      });
+      await prisma.flashcard.delete({ where: { id: parseInt(id) } });
 
       res.json({ message: "Flashcard excluído com sucesso" });
     } catch (error) {
@@ -323,9 +374,7 @@ router.delete(
   }
 );
 
-// ==========================================
-// ROTAS DA API - SIMULADOS E QUESTÕES
-// ==========================================
+// --- Rotas de Questões e Disciplinas ---
 
 router.get("/api/disciplinas", async (req, res) => {
   try {
@@ -363,10 +412,9 @@ router.get("/api/subdisciplinas/:id/questoes", async (req, res) => {
   }
 });
 
-// ==========================================
-// ROTAS DA API - ESTATÍSTICAS
-// ==========================================
+// --- Rotas de Estatísticas ---
 
+// Buscar estatísticas gerais (por área)
 router.get("/api/estatisticas", checkAuth, async (req, res) => {
   try {
     const estatisticas = await prisma.estatisticas.findMany({
@@ -394,6 +442,7 @@ router.get("/api/estatisticas", checkAuth, async (req, res) => {
   }
 });
 
+// Registrar resposta de questão e atualizar estatísticas
 router.post("/api/estatisticas", checkAuth, async (req, res) => {
   const { materia, disciplina, acertou } = req.body;
 
@@ -471,6 +520,7 @@ router.post("/api/estatisticas", checkAuth, async (req, res) => {
   }
 });
 
+// Zerar estatísticas
 router.delete("/api/estatisticas", checkAuth, async (req, res) => {
   try {
     await Promise.all([
@@ -489,6 +539,7 @@ router.delete("/api/estatisticas", checkAuth, async (req, res) => {
   }
 });
 
+// Buscar estatísticas detalhadas (por disciplina)
 router.get("/api/estatisticas-disciplinas", checkAuth, async (req, res) => {
   try {
     const estatisticas = await prisma.estatisticasDisciplina.findMany({
@@ -535,10 +586,7 @@ router.get("/api/estatisticas-disciplinas", checkAuth, async (req, res) => {
   }
 });
 
-// ==========================================
-// ROTAS DE DEBUG (manutenção/testes)
-// ==========================================
-
+// Rota de Debug para ver dados brutos
 router.get("/api/debug-estatisticas", checkAuth, async (req, res) => {
   try {
     const [geral, disciplinas] = await Promise.all([
@@ -561,6 +609,7 @@ router.get("/api/debug-estatisticas", checkAuth, async (req, res) => {
   }
 });
 
+// Rota para CRIAR dados de teste (com a implementação do 2º código)
 router.post("/api/criar-dados-teste", checkAuth, async (req, res) => {
   try {
     const userId = req.session.user.id;
