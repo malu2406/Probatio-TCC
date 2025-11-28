@@ -26,7 +26,10 @@ function checkBolsista(req, res, next) {
   }
 }
 
-// Rotas públicas
+// ==========================================
+// ROTAS PÚBLICAS
+// ==========================================
+
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
@@ -117,30 +120,24 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Rotas protegidas
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+});
+
+// ==========================================
+// ROTAS PROTEGIDAS (PÁGINAS)
+// ==========================================
+
 router.get("/inicio", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "inicio.html"));
-});
-
-router.get("/painel-bolsista", checkAuth, checkBolsista, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "painel-bolsista.html"));
-});
-
-router.get("/api/usuario", checkAuth, (req, res) => {
-  res.json({
-    id: req.session.user.id,
-    nome: req.session.user.nome,
-    email: req.session.user.email,
-    nickname: req.session.user.nickname,
-    tipo: req.session.user.tipo,
-  });
 });
 
 router.get("/perfil", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "perfil.html"));
 });
 
-router.get("/material", checkAuth, (req, res) => {
+router.get("/material", checkAuth, checkBolsista, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "material.html"));
 });
 
@@ -152,8 +149,52 @@ router.get("/flashcards", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "flashcards.html"));
 });
 
-router.get("/material", checkAuth, checkBolsista, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "material.html"));
+router.get("/noticias", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "noticias.html"));
+});
+
+router.get("/pomodoro", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
+});
+
+router.get("/simulado_teste", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "simulado_teste.html"));
+});
+
+router.get("/painel-bolsista", checkAuth, checkBolsista, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "painel-bolsista.html"));
+});
+
+// ==========================================
+// ROTAS DA API - AUTENTICAÇÃO
+// ==========================================
+
+router.get("/api/usuario", checkAuth, (req, res) => {
+  res.json({
+    id: req.session.user.id,
+    nome: req.session.user.nome,
+    email: req.session.user.email,
+    nickname: req.session.user.nickname,
+    tipo: req.session.user.tipo,
+  });
+});
+
+// ==========================================
+// ROTAS DA API - FLASHCARDS
+// ==========================================
+
+router.get("/api/flashcards", checkAuth, async (req, res) => {
+  try {
+    const flashcards = await prisma.flashcard.findMany({
+      where: { userId: req.session.user.id },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.json(flashcards);
+  } catch (error) {
+    console.error("Erro ao buscar flashcards:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
 });
 
 router.get("/api/todos-flashcards", checkAuth, async (req, res) => {
@@ -186,6 +227,27 @@ router.get("/api/flashcards/:id", checkAuth, async (req, res) => {
     res.json(flashcard);
   } catch (error) {
     console.error("Erro ao buscar flashcard:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+router.post("/api/flashcards", checkAuth, checkBolsista, async (req, res) => {
+  try {
+    const { materia, conteudo, pergunta, resposta } = req.body;
+
+    const flashcard = await prisma.flashcard.create({
+      data: {
+        materia,
+        conteudo,
+        pergunta,
+        resposta,
+        userId: req.session.user.id,
+      },
+    });
+
+    res.json(flashcard);
+  } catch (error) {
+    console.error("Erro ao criar flashcard:", error);
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 });
@@ -261,48 +323,9 @@ router.delete(
   }
 );
 
-router.post("/api/flashcards", checkAuth, checkBolsista, async (req, res) => {
-  try {
-    const { materia, conteudo, pergunta, resposta } = req.body;
-
-    const flashcard = await prisma.flashcard.create({
-      data: {
-        materia,
-        conteudo,
-        pergunta,
-        resposta,
-        userId: req.session.user.id,
-      },
-    });
-
-    res.json(flashcard);
-  } catch (error) {
-    console.error("Erro ao criar flashcard:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
-  }
-});
-
-router.get("/api/flashcards", checkAuth, async (req, res) => {
-  try {
-    const flashcards = await prisma.flashcard.findMany({
-      where: { userId: req.session.user.id },
-      orderBy: { createdAt: "desc" },
-    });
-
-    res.json(flashcards);
-  } catch (error) {
-    console.error("Erro ao buscar flashcards:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
-  }
-});
-
-router.get("/noticias", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "noticias.html"));
-});
-
-router.get("/pomodoro", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
-});
+// ==========================================
+// ROTAS DA API - SIMULADOS E QUESTÕES
+// ==========================================
 
 router.get("/api/disciplinas", async (req, res) => {
   try {
@@ -340,16 +363,10 @@ router.get("/api/subdisciplinas/:id/questoes", async (req, res) => {
   }
 });
 
-router.get("/simulado_teste", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "simulado_teste.html"));
-});
+// ==========================================
+// ROTAS DA API - ESTATÍSTICAS
+// ==========================================
 
-router.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.redirect("/");
-});
-
-// CORREÇÃO: Estatísticas gerais
 router.get("/api/estatisticas", checkAuth, async (req, res) => {
   try {
     const estatisticas = await prisma.estatisticas.findMany({
@@ -377,8 +394,6 @@ router.get("/api/estatisticas", checkAuth, async (req, res) => {
   }
 });
 
-// CORREÇÃO: Atualizar estatísticas (GERAL e por DISCIPLINA)
-// CORREÇÃO: Atualizar estatísticas (GERAL e por DISCIPLINA)
 router.post("/api/estatisticas", checkAuth, async (req, res) => {
   const { materia, disciplina, acertou } = req.body;
 
@@ -455,7 +470,7 @@ router.post("/api/estatisticas", checkAuth, async (req, res) => {
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 });
-// CORREÇÃO: Resetar estatísticas (GERAL e por DISCIPLINA)
+
 router.delete("/api/estatisticas", checkAuth, async (req, res) => {
   try {
     await Promise.all([
@@ -474,7 +489,6 @@ router.delete("/api/estatisticas", checkAuth, async (req, res) => {
   }
 });
 
-// CORREÇÃO: Estatísticas por disciplinas - COM VALORES PADRÃO
 router.get("/api/estatisticas-disciplinas", checkAuth, async (req, res) => {
   try {
     const estatisticas = await prisma.estatisticasDisciplina.findMany({
@@ -521,7 +535,10 @@ router.get("/api/estatisticas-disciplinas", checkAuth, async (req, res) => {
   }
 });
 
-// Rota para debug - ver todas as estatísticas
+// ==========================================
+// ROTAS DE DEBUG (manutenção/testes)
+// ==========================================
+
 router.get("/api/debug-estatisticas", checkAuth, async (req, res) => {
   try {
     const [geral, disciplinas] = await Promise.all([
@@ -544,7 +561,6 @@ router.get("/api/debug-estatisticas", checkAuth, async (req, res) => {
   }
 });
 
-// Rota para criar dados de teste (remova depois de testar)
 router.post("/api/criar-dados-teste", checkAuth, async (req, res) => {
   try {
     const userId = req.session.user.id;
