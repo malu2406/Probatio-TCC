@@ -3,64 +3,72 @@ const taskInput = document.querySelector('#new-task');
 const addTaskButton = document.querySelector('#add-task');
 const taskTemplate = document.querySelector('#task-template');
 
+document.addEventListener('DOMContentLoaded', loadTasksFromDB);
+
 addTaskButton.addEventListener('click', (event) => {
-    const newTask = taskInput.value;
+  const newTaskText = taskInput.value;
+  if (!newTaskText) return;
 
-    addTask(newTask);
-})
+  createTaskInDB(newTaskText);
+  taskInput.value = "";
+});
 
-function renderTask(newTask){
-    const taskTemplateClone = taskTemplate.content.cloneNode(true);
-    const newTaskElement = taskTemplateClone.querySelector(".task");
-    const taskText = taskTemplateClone.querySelector(".task-text");
+function renderTask(taskData) {
+  const taskTemplateClone = taskTemplate.content.cloneNode(true);
+  const newTaskElement = taskTemplateClone.querySelector(".task");
+  const taskText = taskTemplateClone.querySelector(".task-text");
+  const deleteButton = taskTemplateClone.querySelector("#delete-button");
 
-    const deleteButton = taskTemplateClone.querySelector("#delete-button");
-    deleteButton.addEventListener("click", () => deleteTask(newTask.id));
+  newTaskElement.id = taskData.id;
+  taskText.textContent = taskData.text;
 
-    newTaskElement.id = newTask.id;
-    taskText.textContent = newTask.text;
+  deleteButton.addEventListener("click", () => deleteTask(taskData.id));
 
-    tasksOl.appendChild(taskTemplateClone);
+  tasksOl.appendChild(taskTemplateClone);
 }
 
-function saveTaskToLocalStorage(newTask) {
-    const tasks = localStorage.getItem("tasks");
-    const parsedTasks = JSON.parse(tasks) || [];
-
-    parsedTasks.push(newTask);
-
-    localStorage.setItem("tasks", JSON.stringify(parsedTasks));
-
-}
-
-function renderTasksFromLocalStorage() {
+async function loadTasksFromDB() {
+  try {
     tasksOl.innerHTML = "";
+    const response = await fetch('/tasks');
+    const tasks = await response.json();
 
-    const tasks = localStorage.getItem("tasks");
-    const parsedTasks = JSON.parse(tasks) || [];
-
-    parsedTasks.forEach((task) => renderTask(task));
+    tasks.forEach((task) => renderTask(task));
+  } catch (error) {
+    console.error("Erro ao carregar tarefas:", error);
+  }
 }
 
-document.addEventListener('DOMContentLoaded', renderTasksFromLocalStorage);
+async function createTaskInDB(text) {
+  try {
+    const response = await fetch('/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text: text })
+    });
 
-function addTask(task) {
-    const newTask = {
-        id: Math.random().toString(16).slice(2),
-        text: task
-    };
-
-    renderTask(newTask);
-    saveTaskToLocalStorage(newTask);
+    if (response.ok) {
+      const savedTask = await response.json();
+      renderTask(savedTask);
+    }
+  } catch (error) {
+    console.error("Erro ao salvar tarefa:", error);
+  }
 }
 
-function deleteTask(taskId) {
-    const taskToDelete = document.getElementById(taskId);
-    taskToDelete.remove();
+async function deleteTask(taskId) {
+  try {
+    const response = await fetch(`/tasks/${taskId}`, {
+      method: 'DELETE'
+    });
 
-    const tasks = localStorage.getItem("tasks");
-    const parsedTasks = JSON.parse(tasks) || [];
-
-    const filteredTasks = parsedTasks.filter((task) => task.id != taskId);
-    localStorage.setItem("tasks", JSON.stringify(filteredTasks));
+    if (response.ok) {
+      const taskElement = document.getElementById(taskId);
+      if (taskElement) taskElement.remove();
+    }
+  } catch (error) {
+    console.error("Erro ao deletar tarefa:", error);
+  }
 }
