@@ -57,7 +57,7 @@ function updateNivelDesempenho(stats) {
     stats.humanas.acertos +
     stats.natureza.acertos;
 
-  let nivel = "Iniciante";
+  let nivel = "Baixo";
   let cor = "#ff6b6b";
 
   if (totalQuestoes > 0) {
@@ -76,7 +76,7 @@ function updateNivelDesempenho(stats) {
       nivel = "Básico";
       cor = "#e67e22";
     } else {
-      nivel = "Iniciante";
+      nivel = "Baixo";
       cor = "#ff6b6b";
     }
   }

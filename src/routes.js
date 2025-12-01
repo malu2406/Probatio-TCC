@@ -72,6 +72,10 @@ router.get("/pomodoro", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
 });
 
+router.get("/cronometro", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "cronometro.html"));
+});
+
 router.get("/flashcards", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "flashcards.html"));
 });
