@@ -37,7 +37,13 @@
       <h1>Temporizador Pomodoro</h1>
       <div class="pomodoro-container">
         <div class="timer-container">
+
+          <!-- Botão de Configurações adicionado -->
+
           <div class="modality-container">
+            <button id="settings-btn" class="settings-btn modality" title="Configurações">
+              <span class="material-symbols-outlined">settings</span>
+            </button>
             <button id="pomodoro" class="modality" type="button">
               Pomodoro
             </button>
@@ -81,8 +87,9 @@
         <template id="task-template">
           <li class="task texto">
             <div class="task-container">
+              <input type="checkbox" class="task-checkbox" title="Marcar como concluída">
               <span class="task-text"></span>
-              <button id="delete-button">
+              <button id="delete-button" title="Excluir tarefa">
                 <img src="images/latadelixo.png" alt="Ícone da lata de lixo">
               </button>
             </div>
@@ -91,6 +98,34 @@
 
       </div>
     </main>
+
+    <div id="settings-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <div class="modal-inside">
+          <div class="modal-header titulos">
+            <h2>Configurações</h2>
+            <button id="close-modal-btn" class="close-btn">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="input-group">
+              <label for="pomodoro-time">Pomodoro (minutos)</label>
+              <input type="number" id="pomodoro-time" min="1" value="25">
+            </div>
+            <div class="input-group">
+              <label for="short-break-time">Intervalo Curto (minutos)</label>
+              <input type="number" id="short-break-time" min="1" value="5">
+            </div>
+            <div class="input-group">
+              <label for="long-break-time">Intervalo Longo (minutos)</label>
+              <input type="number" id="long-break-time" min="1" value="15">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="save-settings-btn" class="save-btn modality">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer>
       <div class="linha">
@@ -102,6 +137,8 @@
     </footer>
   </div>
   <script src="/javascript/pomodorojs/utils.js" defer type="application/javascript"></script>
+  <!-- Adicionado settings.js antes do counter para carregar configurações -->
+  <script src="/javascript/pomodorojs/settings.js" defer type="application/javascript"></script>
   <script src="/javascript/pomodorojs/tasks.js" defer type="application/javascript"></script>
   <script src="/javascript/pomodorojs/counter.js" defer type="application/javascript"></script>
 </body>

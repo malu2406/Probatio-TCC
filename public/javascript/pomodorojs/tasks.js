@@ -2,10 +2,12 @@ const tasksOl = document.querySelector('#tasks');
 const taskInput = document.querySelector('#new-task');
 const addTaskButton = document.querySelector('#add-task');
 const taskTemplate = document.querySelector('#task-template');
+const taskForm = document.querySelector('#task-form');
 
 document.addEventListener('DOMContentLoaded', loadTasksFromDB);
 
-addTaskButton.addEventListener('click', (event) => {
+taskForm.addEventListener('submit', (event) => {
+  event.preventDefault();
   const newTaskText = taskInput.value;
   if (!newTaskText) return;
 
@@ -18,9 +20,19 @@ function renderTask(taskData) {
   const newTaskElement = taskTemplateClone.querySelector(".task");
   const taskText = taskTemplateClone.querySelector(".task-text");
   const deleteButton = taskTemplateClone.querySelector("#delete-button");
+  const checkbox = taskTemplateClone.querySelector(".task-checkbox");
 
-  newTaskElement.id = taskData.id;
+  newTaskElement.id = `task-${taskData.id}`;
   taskText.textContent = taskData.text;
+
+  checkbox.checked = taskData.completed;
+  if (taskData.completed) {
+    taskText.classList.add("completed");
+  }
+
+  checkbox.addEventListener("change", () => {
+    toggleTaskCompletion(taskData.id, checkbox.checked, taskText);
+  });
 
   deleteButton.addEventListener("click", () => deleteTask(taskData.id));
 
@@ -32,7 +44,6 @@ async function loadTasksFromDB() {
     tasksOl.innerHTML = "";
     const response = await fetch('/tasks');
     const tasks = await response.json();
-
     tasks.forEach((task) => renderTask(task));
   } catch (error) {
     console.error("Erro ao carregar tarefas:", error);
@@ -65,10 +76,46 @@ async function deleteTask(taskId) {
     });
 
     if (response.ok) {
-      const taskElement = document.getElementById(taskId);
+      const taskElement = document.getElementById(`task-${taskId}`);
       if (taskElement) taskElement.remove();
     }
   } catch (error) {
     console.error("Erro ao deletar tarefa:", error);
+  }
+}
+
+async function toggleTaskCompletion(taskId, isCompleted, textElement) {
+  try {
+    if (isCompleted) {
+      textElement.classList.add("completed");
+    } else {
+      textElement.classList.remove("completed");
+    }
+
+    const response = await fetch(`/tasks/${taskId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ completed: isCompleted })
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro na atualização do servidor');
+    }
+  } catch (error) {
+    console.error("Erro ao atualizar status da tarefa:", error);
+
+    if (isCompleted) {
+      textElement.classList.remove("completed");
+      const checkbox = document.querySelector(`#task-${taskId} .task-checkbox`);
+      if (checkbox) checkbox.checked = false;
+    } else {
+      textElement.classList.add("completed");
+      const checkbox = document.querySelector(`#task-${taskId} .task-checkbox`);
+      if (checkbox) checkbox.checked = true;
+    }
+
+    alert("Não foi possível atualizar a tarefa. Tente novamente.");
   }
 }

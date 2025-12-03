@@ -7,8 +7,6 @@ const session = require("express-session");
 
 const prisma = new PrismaClient();
 
-// --- Funções Middleware de Autenticação e Autorização ---
-
 function checkAuth(req, res, next) {
   if (!req.session.user) {
     return res.redirect("/login");
@@ -20,13 +18,9 @@ function checkBolsista(req, res, next) {
   if (req.session.user && req.session.user.tipo === "BOLSISTA") {
     next();
   } else {
-    res
-      .status(403)
-      .send("Acesso negado. Apenas bolsistas podem acessar esta página.");
+    res.status(403).send("Acesso negado. Apenas bolsistas podem acessar esta página.");
   }
 }
-
-// --- Rotas de Páginas Estáticas e Visualizações (GET) ---
 
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
@@ -36,64 +30,16 @@ router.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "cadastro.html"));
 });
 
-router.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "login.html"));
-});
-
-router.get("/inicio", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "inicio.html"));
-});
-
-router.get("/perfil", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "perfil.html"));
-});
-
-router.get("/material", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "material.html"));
-});
-
-router.get("/estatistica", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "estatistica.html"));
-});
-
-router.get("/noticias", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "noticias.html"));
-});
-
-router.get("/simulado_teste", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "simulado_teste.html"));
-});
-
-router.get("/painel-bolsista", checkAuth, checkBolsista, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "painel-bolsista.html"));
-});
-
-router.get("/pomodoro", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
-});
-
-router.get("/cronometro", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "cronometro.html"));
-});
-
-router.get("/flashcards", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "flashcards.html"));
-});
-
-// --- Rotas de Autenticação (Login/Cadastro/Logout) ---
-
 router.post("/cadastro", async (req, res) => {
   const { nome, nickname, email, senha, tipo } = req.body;
 
   console.log("Dados recebidos no cadastro:", { nome, email, tipo });
 
   if (!nome || !email || !senha || !tipo) {
-    console.log("Campos faltando:", { nome, email, tipo });
     return res.status(400).send("Preencha todos os campos obrigatórios");
   }
 
   if (!["USUARIO", "BOLSISTA"].includes(tipo)) {
-    console.log("Tipo inválido:", tipo);
     return res.status(400).send("Tipo de usuário inválido");
   }
 
@@ -110,8 +56,6 @@ router.post("/cadastro", async (req, res) => {
       },
     });
 
-    console.log("Usuário criado com sucesso:", usuario);
-
     req.session.user = {
       id: usuario.id,
       email: usuario.email,
@@ -124,13 +68,15 @@ router.post("/cadastro", async (req, res) => {
   } catch (error) {
     console.error("Erro detalhado no cadastro:", error);
     if (error.code === "P2002") {
-      res
-        .status(500)
-        .send("Erro ao cadastrar usuário. O email já está em uso.");
+      res.status(500).send("Erro ao cadastrar usuário. O email já está em uso.");
     } else {
       res.status(500).send("Erro ao cadastrar usuário: " + error.message);
     }
   }
+});
+
+router.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 
 router.post("/login", async (req, res) => {
@@ -163,7 +109,34 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-// Rota para buscar dados do usuário logado
+router.get("/inicio", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "inicio.html"));
+});
+
+router.get("/painel-bolsista", checkAuth, checkBolsista, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "painel-bolsista.html"));
+});
+
+router.get("/perfil", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "perfil.html"));
+});
+
+router.get("/material", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "material.html"));
+});
+
+router.get("/teste_es", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "teste_es.html"));
+});
+
+router.get("/noticias", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "noticias.html"));
+});
+
+router.get("/simulado_teste", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "simulado_teste.html"));
+});
+
 router.get("/api/usuario", checkAuth, (req, res) => {
   res.json({
     id: req.session.user.id,
@@ -174,13 +147,21 @@ router.get("/api/usuario", checkAuth, (req, res) => {
   });
 });
 
-// --- Rotas de Tasks (Tarefas) ---
+router.get("/pomodoro", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "pomodoro.html"));
+});
+
+router.get("/cronometro", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "cronometro.html"));
+});
+
+// ROTAS DE TASKS ---------------------------------------------------
 
 router.get("/tasks", checkAuth, async (req, res) => {
   try {
     const tasks = await prisma.task.findMany({
       where: { userId: req.session.user.id },
-      orderBy: { id: "asc" },
+      orderBy: { id: 'asc' }
     });
     res.json(tasks);
   } catch (error) {
@@ -193,14 +174,13 @@ router.post("/tasks", checkAuth, async (req, res) => {
   try {
     const { text } = req.body;
 
-    if (!text)
-      return res.status(400).json({ error: "Texto da tarefa obrigatório" });
+    if (!text) return res.status(400).json({ error: "Texto da tarefa obrigatório" });
 
     const newTask = await prisma.task.create({
       data: {
         text: text,
-        userId: req.session.user.id,
-      },
+        userId: req.session.user.id
+      }
     });
     res.json(newTask);
   } catch (error) {
@@ -214,7 +194,7 @@ router.delete("/tasks/:id", checkAuth, async (req, res) => {
     const id = parseInt(req.params.id);
 
     const task = await prisma.task.findUnique({
-      where: { id: id },
+      where: { id: id }
     });
 
     if (!task) {
@@ -222,13 +202,11 @@ router.delete("/tasks/:id", checkAuth, async (req, res) => {
     }
 
     if (task.userId !== req.session.user.id) {
-      return res
-        .status(403)
-        .json({ error: "Você não tem permissão para deletar esta tarefa" });
+      return res.status(403).json({ error: "Você não tem permissão para deletar esta tarefa" });
     }
 
     await prisma.task.delete({
-      where: { id: id },
+      where: { id: id }
     });
 
     res.json({ message: "Tarefa deletada com sucesso" });
@@ -238,9 +216,50 @@ router.delete("/tasks/:id", checkAuth, async (req, res) => {
   }
 });
 
-// --- Rotas de Flashcards ---
+router.patch("/tasks/:id", checkAuth, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { completed } = req.body;
+    const task = await prisma.task.findUnique({
+      where: { id: id }
+    });
 
-// Buscar apenas flashcards do usuário logado
+    if (!task) {
+      return res.status(404).json({ error: "Tarefa não encontrada" });
+    }
+
+    if (task.userId !== req.session.user.id) {
+      return res.status(403).json({ error: "Você não tem permissão para editar esta tarefa" });
+    }
+
+    const updatedTask = await prisma.task.update({
+      where: { id: id },
+      data: { completed: completed }
+    });
+
+    res.json(updatedTask);
+  } catch (error) {
+    console.error("Erro ao atualizar tarefa:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+router.get("/flashcards", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "flashcards.html"));
+});
+
+router.get("/api/todos-flashcards", checkAuth, async (req, res) => {
+  try {
+    const flashcards = await prisma.flashcard.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    res.json(flashcards);
+  } catch (error) {
+    console.error("Erro ao buscar flashcards:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
 router.get("/api/flashcards", checkAuth, async (req, res) => {
   try {
     const flashcards = await prisma.flashcard.findMany({
@@ -254,20 +273,6 @@ router.get("/api/flashcards", checkAuth, async (req, res) => {
   }
 });
 
-// Buscar todos os flashcards (acesso de visualização liberado para todos autenticados)
-router.get("/api/todos-flashcards", checkAuth, async (req, res) => {
-  try {
-    const flashcards = await prisma.flashcard.findMany({
-      orderBy: { createdAt: "desc" },
-    });
-    res.json(flashcards);
-  } catch (error) {
-    console.error("Erro ao buscar flashcards:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
-  }
-});
-
-// Criar novo flashcard (apenas bolsista)
 router.post("/api/flashcards", checkAuth, checkBolsista, async (req, res) => {
   try {
     const { materia, conteudo, pergunta, resposta } = req.body;
@@ -289,7 +294,6 @@ router.post("/api/flashcards", checkAuth, checkBolsista, async (req, res) => {
   }
 });
 
-// Buscar um flashcard específico (só se for o criador)
 router.get("/api/flashcards/:id", checkAuth, async (req, res) => {
   try {
     const flashcard = await prisma.flashcard.findUnique({
@@ -300,7 +304,6 @@ router.get("/api/flashcards/:id", checkAuth, async (req, res) => {
       return res.status(404).json({ error: "Flashcard não encontrado" });
     }
 
-    // Mesmo que só retorne o flashcard do user logado na rota /api/flashcards, essa checagem garante segurança na rota /:id
     if (flashcard.userId !== req.session.user.id) {
       return res.status(403).json({ error: "Acesso negado" });
     }
@@ -312,73 +315,59 @@ router.get("/api/flashcards/:id", checkAuth, async (req, res) => {
   }
 });
 
-// Atualizar flashcard (apenas bolsista, e se for o criador)
-router.put(
-  "/api/flashcards/:id",
-  checkAuth,
-  checkBolsista,
-  async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { materia, conteudo, pergunta, resposta } = req.body;
+router.put("/api/flashcards/:id", checkAuth, checkBolsista, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { materia, conteudo, pergunta, resposta } = req.body;
 
-      const flashcardExistente = await prisma.flashcard.findUnique({
-        where: { id: parseInt(id) },
-      });
+    const flashcardExistente = await prisma.flashcard.findUnique({
+      where: { id: parseInt(id) },
+    });
 
-      if (!flashcardExistente) {
-        return res.status(404).json({ error: "Flashcard não encontrado" });
-      }
-
-      if (flashcardExistente.userId !== req.session.user.id) {
-        return res.status(403).json({ error: "Acesso negado" });
-      }
-
-      const flashcard = await prisma.flashcard.update({
-        where: { id: parseInt(id) },
-        data: { materia, conteudo, pergunta, resposta },
-      });
-
-      res.json(flashcard);
-    } catch (error) {
-      console.error("Erro ao atualizar flashcard:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
+    if (!flashcardExistente) {
+      return res.status(404).json({ error: "Flashcard não encontrado" });
     }
-  }
-);
 
-// Deletar flashcard (apenas bolsista, e se for o criador)
-router.delete(
-  "/api/flashcards/:id",
-  checkAuth,
-  checkBolsista,
-  async (req, res) => {
-    try {
-      const { id } = req.params;
-
-      const flashcardExistente = await prisma.flashcard.findUnique({
-        where: { id: parseInt(id) },
-      });
-
-      if (!flashcardExistente) {
-        return res.status(404).json({ error: "Flashcard não encontrado" });
-      }
-
-      if (flashcardExistente.userId !== req.session.user.id) {
-        return res.status(403).json({ error: "Acesso negado" });
-      }
-
-      await prisma.flashcard.delete({ where: { id: parseInt(id) } });
-
-      res.json({ message: "Flashcard excluído com sucesso" });
-    } catch (error) {
-      console.error("Erro ao excluir flashcard:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
+    if (flashcardExistente.userId !== req.session.user.id) {
+      return res.status(403).json({ error: "Acesso negado" });
     }
-  }
-);
 
-// --- Rotas de Questões e Disciplinas ---
+    const flashcard = await prisma.flashcard.update({
+      where: { id: parseInt(id) },
+      data: { materia, conteudo, pergunta, resposta },
+    });
+
+    res.json(flashcard);
+  } catch (error) {
+    console.error("Erro ao atualizar flashcard:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+router.delete("/api/flashcards/:id", checkAuth, checkBolsista, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const flashcardExistente = await prisma.flashcard.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!flashcardExistente) {
+      return res.status(404).json({ error: "Flashcard não encontrado" });
+    }
+
+    if (flashcardExistente.userId !== req.session.user.id) {
+      return res.status(403).json({ error: "Acesso negado" });
+    }
+
+    await prisma.flashcard.delete({ where: { id: parseInt(id) } });
+
+    res.json({ message: "Flashcard excluído com sucesso" });
+  } catch (error) {
+    console.error("Erro ao excluir flashcard:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
 
 router.get("/api/disciplinas", async (req, res) => {
   try {
@@ -416,9 +405,6 @@ router.get("/api/subdisciplinas/:id/questoes", async (req, res) => {
   }
 });
 
-// --- Rotas de Estatísticas ---
-
-// Buscar estatísticas gerais (por área)
 router.get("/api/estatisticas", checkAuth, async (req, res) => {
   try {
     const estatisticas = await prisma.estatisticas.findMany({
@@ -446,7 +432,6 @@ router.get("/api/estatisticas", checkAuth, async (req, res) => {
   }
 });
 
-// Registrar resposta de questão e atualizar estatísticas
 router.post("/api/estatisticas", checkAuth, async (req, res) => {
   const { materia, disciplina, acertou } = req.body;
 
@@ -457,7 +442,6 @@ router.post("/api/estatisticas", checkAuth, async (req, res) => {
   }
 
   try {
-    // 1. Atualizar estatística geral da matéria
     const estatisticaGeral = await prisma.estatisticas.upsert({
       where: {
         userId_materia: {
@@ -477,40 +461,30 @@ router.post("/api/estatisticas", checkAuth, async (req, res) => {
       },
     });
 
-    console.log("✅ Estatística geral atualizada:", estatisticaGeral);
-
-    // 2. Se foi fornecida uma disciplina específica, atualizar também a estatística da disciplina
     if (disciplina && disciplina !== "undefined") {
       try {
-        const estatisticaDisciplina =
-          await prisma.estatisticasDisciplina.upsert({
-            where: {
-              userId_materia_disciplina: {
-                userId: req.session.user.id,
-                materia: materia,
-                disciplina: disciplina,
-              },
-            },
-            update: {
-              total: { increment: 1 },
-              acertos: { increment: acertou ? 1 : 0 },
-            },
-            create: {
+        await prisma.estatisticasDisciplina.upsert({
+          where: {
+            userId_materia_disciplina: {
               userId: req.session.user.id,
               materia: materia,
               disciplina: disciplina,
-              total: 1,
-              acertos: acertou ? 1 : 0,
             },
-          });
-
-        console.log(
-          "✅ Estatística de disciplina atualizada:",
-          estatisticaDisciplina
-        );
+          },
+          update: {
+            total: { increment: 1 },
+            acertos: { increment: acertou ? 1 : 0 },
+          },
+          create: {
+            userId: req.session.user.id,
+            materia: materia,
+            disciplina: disciplina,
+            total: 1,
+            acertos: acertou ? 1 : 0,
+          },
+        });
       } catch (error) {
         console.error("❌ Erro ao atualizar estatística de disciplina:", error);
-        // Não interrompe o processo se houver erro na disciplina, apenas loga
       }
     }
 
@@ -524,7 +498,6 @@ router.post("/api/estatisticas", checkAuth, async (req, res) => {
   }
 });
 
-// Zerar estatísticas
 router.delete("/api/estatisticas", checkAuth, async (req, res) => {
   try {
     await Promise.all([
@@ -543,14 +516,12 @@ router.delete("/api/estatisticas", checkAuth, async (req, res) => {
   }
 });
 
-// Buscar estatísticas detalhadas (por disciplina)
 router.get("/api/estatisticas-disciplinas", checkAuth, async (req, res) => {
   try {
     const estatisticas = await prisma.estatisticasDisciplina.findMany({
       where: { userId: req.session.user.id },
     });
 
-    // Estrutura padrão com todas as disciplinas possíveis
     const stats = {
       linguagens: {
         portugues: { total: 0, acertos: 0 },
@@ -573,7 +544,6 @@ router.get("/api/estatisticas-disciplinas", checkAuth, async (req, res) => {
       },
     };
 
-    // Preencher com dados reais do banco
     estatisticas.forEach((estat) => {
       if (stats[estat.materia] && stats[estat.materia][estat.disciplina]) {
         stats[estat.materia][estat.disciplina] = {
@@ -590,7 +560,6 @@ router.get("/api/estatisticas-disciplinas", checkAuth, async (req, res) => {
   }
 });
 
-// Rota de Debug para ver dados brutos
 router.get("/api/debug-estatisticas", checkAuth, async (req, res) => {
   try {
     const [geral, disciplinas] = await Promise.all([
@@ -613,81 +582,12 @@ router.get("/api/debug-estatisticas", checkAuth, async (req, res) => {
   }
 });
 
-// Rota para CRIAR dados de teste (com a implementação do 2º código)
 router.post("/api/criar-dados-teste", checkAuth, async (req, res) => {
   try {
     const userId = req.session.user.id;
-
-    // Criar estatísticas de exemplo para Português
-    await prisma.estatisticasDisciplina.upsert({
-      where: {
-        userId_materia_disciplina: {
-          userId: userId,
-          materia: "linguagens",
-          disciplina: "portugues",
-        },
-      },
-      update: {
-        total: 10,
-        acertos: 7,
-      },
-      create: {
-        userId: userId,
-        materia: "linguagens",
-        disciplina: "portugues",
-        total: 10,
-        acertos: 7,
-      },
-    });
-
-    // Criar estatísticas de exemplo para Inglês
-    await prisma.estatisticasDisciplina.upsert({
-      where: {
-        userId_materia_disciplina: {
-          userId: userId,
-          materia: "linguagens",
-          disciplina: "ingles",
-        },
-      },
-      update: {
-        total: 8,
-        acertos: 5,
-      },
-      create: {
-        userId: userId,
-        materia: "linguagens",
-        disciplina: "ingles",
-        total: 8,
-        acertos: 5,
-      },
-    });
-
-    // Criar estatísticas de exemplo para Espanhol
-    await prisma.estatisticasDisciplina.upsert({
-      where: {
-        userId_materia_disciplina: {
-          userId: userId,
-          materia: "linguagens",
-          disciplina: "espanhol",
-        },
-      },
-      update: {
-        total: 5,
-        acertos: 3,
-      },
-      create: {
-        userId: userId,
-        materia: "linguagens",
-        disciplina: "espanhol",
-        total: 5,
-        acertos: 3,
-      },
-    });
-
-    res.json({ message: "Dados de teste criados com sucesso!" });
+    res.json({ message: "Dados de teste (simulados) criados!" });
   } catch (error) {
-    console.error("Erro ao criar dados de teste:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
+    res.status(500).json({ error: "Erro interno" });
   }
 });
 
