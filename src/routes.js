@@ -18,7 +18,9 @@ function checkBolsista(req, res, next) {
   if (req.session.user && req.session.user.tipo === "BOLSISTA") {
     next();
   } else {
-    res.status(403).send("Acesso negado. Apenas bolsistas podem acessar esta página.");
+    res
+      .status(403)
+      .send("Acesso negado. Apenas bolsistas podem acessar esta página.");
   }
 }
 
@@ -68,7 +70,9 @@ router.post("/cadastro", async (req, res) => {
   } catch (error) {
     console.error("Erro detalhado no cadastro:", error);
     if (error.code === "P2002") {
-      res.status(500).send("Erro ao cadastrar usuário. O email já está em uso.");
+      res
+        .status(500)
+        .send("Erro ao cadastrar usuário. O email já está em uso.");
     } else {
       res.status(500).send("Erro ao cadastrar usuário: " + error.message);
     }
@@ -125,8 +129,8 @@ router.get("/material", checkAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "material.html"));
 });
 
-router.get("/teste_es", checkAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "teste_es.html"));
+router.get("/estatistica", checkAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "estatistica.html"));
 });
 
 router.get("/noticias", checkAuth, (req, res) => {
@@ -161,7 +165,7 @@ router.get("/tasks", checkAuth, async (req, res) => {
   try {
     const tasks = await prisma.task.findMany({
       where: { userId: req.session.user.id },
-      orderBy: { id: 'asc' }
+      orderBy: { id: "asc" },
     });
     res.json(tasks);
   } catch (error) {
@@ -174,13 +178,14 @@ router.post("/tasks", checkAuth, async (req, res) => {
   try {
     const { text } = req.body;
 
-    if (!text) return res.status(400).json({ error: "Texto da tarefa obrigatório" });
+    if (!text)
+      return res.status(400).json({ error: "Texto da tarefa obrigatório" });
 
     const newTask = await prisma.task.create({
       data: {
         text: text,
-        userId: req.session.user.id
-      }
+        userId: req.session.user.id,
+      },
     });
     res.json(newTask);
   } catch (error) {
@@ -194,7 +199,7 @@ router.delete("/tasks/:id", checkAuth, async (req, res) => {
     const id = parseInt(req.params.id);
 
     const task = await prisma.task.findUnique({
-      where: { id: id }
+      where: { id: id },
     });
 
     if (!task) {
@@ -202,11 +207,13 @@ router.delete("/tasks/:id", checkAuth, async (req, res) => {
     }
 
     if (task.userId !== req.session.user.id) {
-      return res.status(403).json({ error: "Você não tem permissão para deletar esta tarefa" });
+      return res
+        .status(403)
+        .json({ error: "Você não tem permissão para deletar esta tarefa" });
     }
 
     await prisma.task.delete({
-      where: { id: id }
+      where: { id: id },
     });
 
     res.json({ message: "Tarefa deletada com sucesso" });
@@ -221,7 +228,7 @@ router.patch("/tasks/:id", checkAuth, async (req, res) => {
     const id = parseInt(req.params.id);
     const { completed } = req.body;
     const task = await prisma.task.findUnique({
-      where: { id: id }
+      where: { id: id },
     });
 
     if (!task) {
@@ -229,12 +236,14 @@ router.patch("/tasks/:id", checkAuth, async (req, res) => {
     }
 
     if (task.userId !== req.session.user.id) {
-      return res.status(403).json({ error: "Você não tem permissão para editar esta tarefa" });
+      return res
+        .status(403)
+        .json({ error: "Você não tem permissão para editar esta tarefa" });
     }
 
     const updatedTask = await prisma.task.update({
       where: { id: id },
-      data: { completed: completed }
+      data: { completed: completed },
     });
 
     res.json(updatedTask);
@@ -315,59 +324,69 @@ router.get("/api/flashcards/:id", checkAuth, async (req, res) => {
   }
 });
 
-router.put("/api/flashcards/:id", checkAuth, checkBolsista, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { materia, conteudo, pergunta, resposta } = req.body;
+router.put(
+  "/api/flashcards/:id",
+  checkAuth,
+  checkBolsista,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { materia, conteudo, pergunta, resposta } = req.body;
 
-    const flashcardExistente = await prisma.flashcard.findUnique({
-      where: { id: parseInt(id) },
-    });
+      const flashcardExistente = await prisma.flashcard.findUnique({
+        where: { id: parseInt(id) },
+      });
 
-    if (!flashcardExistente) {
-      return res.status(404).json({ error: "Flashcard não encontrado" });
+      if (!flashcardExistente) {
+        return res.status(404).json({ error: "Flashcard não encontrado" });
+      }
+
+      if (flashcardExistente.userId !== req.session.user.id) {
+        return res.status(403).json({ error: "Acesso negado" });
+      }
+
+      const flashcard = await prisma.flashcard.update({
+        where: { id: parseInt(id) },
+        data: { materia, conteudo, pergunta, resposta },
+      });
+
+      res.json(flashcard);
+    } catch (error) {
+      console.error("Erro ao atualizar flashcard:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
     }
-
-    if (flashcardExistente.userId !== req.session.user.id) {
-      return res.status(403).json({ error: "Acesso negado" });
-    }
-
-    const flashcard = await prisma.flashcard.update({
-      where: { id: parseInt(id) },
-      data: { materia, conteudo, pergunta, resposta },
-    });
-
-    res.json(flashcard);
-  } catch (error) {
-    console.error("Erro ao atualizar flashcard:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
   }
-});
+);
 
-router.delete("/api/flashcards/:id", checkAuth, checkBolsista, async (req, res) => {
-  try {
-    const { id } = req.params;
+router.delete(
+  "/api/flashcards/:id",
+  checkAuth,
+  checkBolsista,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
 
-    const flashcardExistente = await prisma.flashcard.findUnique({
-      where: { id: parseInt(id) },
-    });
+      const flashcardExistente = await prisma.flashcard.findUnique({
+        where: { id: parseInt(id) },
+      });
 
-    if (!flashcardExistente) {
-      return res.status(404).json({ error: "Flashcard não encontrado" });
+      if (!flashcardExistente) {
+        return res.status(404).json({ error: "Flashcard não encontrado" });
+      }
+
+      if (flashcardExistente.userId !== req.session.user.id) {
+        return res.status(403).json({ error: "Acesso negado" });
+      }
+
+      await prisma.flashcard.delete({ where: { id: parseInt(id) } });
+
+      res.json({ message: "Flashcard excluído com sucesso" });
+    } catch (error) {
+      console.error("Erro ao excluir flashcard:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
     }
-
-    if (flashcardExistente.userId !== req.session.user.id) {
-      return res.status(403).json({ error: "Acesso negado" });
-    }
-
-    await prisma.flashcard.delete({ where: { id: parseInt(id) } });
-
-    res.json({ message: "Flashcard excluído com sucesso" });
-  } catch (error) {
-    console.error("Erro ao excluir flashcard:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
   }
-});
+);
 
 router.get("/api/disciplinas", async (req, res) => {
   try {

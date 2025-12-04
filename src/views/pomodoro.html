@@ -1,146 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pomodoro 🍅</title>
+    <link rel="stylesheet" href="/css/pomodoro.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pomodoro 🍅</title>
-  <link rel="stylesheet" href="/css/pomodoro.css" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
-</head>
+  <body>
+    <div id="container">
+      <header>
+        <div id="header_esquerda">
+          <a href="/inicio" id="logo">PROBATIO</a>
 
-<body>
-  <div id="container">
-    <header>
-      <div id="header_esquerda">
-        <a href="/inicio" id="logo">PROBATIO</a>
-
-        <div class="nav-principal">
-          <a href="/material" class="nav-link bolsista-only" id="link-materias" style="display: none">Material</a>
-          <a href="/estatistica" class="nav-link">Estatísticas</a>
-          <a href="/flashcards" class="nav-link">Flashcards</a>
-          <a href="/noticias" class="nav-link">Portais de Notícia</a>
-          <a href="/pomodoro" class="nav-link">Pomodoro</a>
-          <a href="/cronometro" class="nav-link">Cronômetro</a>
-        </div>
-
-        <div class="menu-usuario">
-          <a href="/perfil" class="nav-link">
-            <img src="/images/user.png" alt="Perfil" class="icon" />
-          </a>
-          <a href="/logout" class="nav-link">Sair</a>
-        </div>
-      </div>
-    </header>
-
-    <main>
-      <h1>Temporizador Pomodoro</h1>
-      <div class="pomodoro-container">
-        <div class="timer-container">
-
-          <!-- Botão de Configurações adicionado -->
-
-          <div class="modality-container">
-            <button id="settings-btn" class="settings-btn modality" title="Configurações">
-              <span class="material-symbols-outlined">settings</span>
-            </button>
-            <button id="pomodoro" class="modality" type="button">
-              Pomodoro
-            </button>
-            <button id="short-break" class="modality" type="button">
-              Intervalo Curto
-            </button>
-            <button id="long-break" class="modality" type="button">
-              Intervalo Longo
-            </button>
+          <div class="nav-principal">
+            <a
+              href="/material"
+              class="nav-link bolsista-only"
+              id="link-materias"
+              style="display: none"
+              >Material</a
+            >
+            <a href="/estatistica" class="nav-link">Estatísticas</a>
+            <a href="/flashcards" class="nav-link">Flashcards</a>
+            <a href="/noticias" class="nav-link">Portais de Notícia</a>
+            <a href="/pomodoro" class="nav-link">Pomodoro</a>
+            <a href="/cronometro" class="nav-link">Cronômetro</a>
           </div>
 
-          <div id="counter">25:00</div>
-
-          <div class="controls-container">
-            <button id="start" class="start">
-              Começar
-            </button>
-
-            <button id="reset" class="reset">
-              Reiniciar
-            </button>
+          <div class="menu-usuario">
+            <a href="/perfil" class="nav-link">
+              <img src="/images/user.png" alt="Perfil" class="icon" />
+            </a>
+            <a href="/logout" class="nav-link">Sair</a>
           </div>
         </div>
+      </header>
 
-        <div class="tasks-container">
-          <div class="tasks-header">
-            <div class="tasks-title titulos">
-              Lista de Tarefas
-            </div>
-            <form id="task-form">
-              <input id="new-task" type="text" name="Nova Tarefa" placeholder="Adicione uma nova tarefa" />
-              <button id="add-task" type="submit">+</button>
-            </form>
-          </div>
+      <main>
+        <h1>Temporizador Pomodoro</h1>
+        <div class="pomodoro-container">
+          <div class="timer-container">
+            <!-- Botão de Configurações adicionado -->
 
-          <div class="tasks-list" id="tasks-list">
-            <ol id="tasks"></ol>
-          </div>
-        </div>
-
-        <template id="task-template">
-          <li class="task texto">
-            <div class="task-container">
-              <input type="checkbox" class="task-checkbox" title="Marcar como concluída">
-              <span class="task-text"></span>
-              <button id="delete-button" title="Excluir tarefa">
-                <img src="images/latadelixo.png" alt="Ícone da lata de lixo">
+            <div class="modality-container">
+              <button
+                id="settings-btn"
+                class="settings-btn modality"
+                title="Configurações"
+              >
+                <span class="material-symbols-outlined">settings</span>
+              </button>
+              <button id="pomodoro" class="modality" type="button">
+                Pomodoro
+              </button>
+              <button id="short-break" class="modality" type="button">
+                Intervalo Curto
+              </button>
+              <button id="long-break" class="modality" type="button">
+                Intervalo Longo
               </button>
             </div>
-          </li>
-        </template>
 
-      </div>
-    </main>
+            <div id="counter">25:00</div>
 
-    <div id="settings-modal" class="modal-overlay hidden">
-      <div class="modal-content">
-        <div class="modal-inside">
-          <div class="modal-header titulos">
-            <h2>Configurações</h2>
-            <button id="close-modal-btn" class="close-btn">&times;</button>
-          </div>
-          <div class="modal-body">
-            <div class="input-group">
-              <label for="pomodoro-time">Pomodoro (minutos)</label>
-              <input type="number" id="pomodoro-time" min="1" value="25">
-            </div>
-            <div class="input-group">
-              <label for="short-break-time">Intervalo Curto (minutos)</label>
-              <input type="number" id="short-break-time" min="1" value="5">
-            </div>
-            <div class="input-group">
-              <label for="long-break-time">Intervalo Longo (minutos)</label>
-              <input type="number" id="long-break-time" min="1" value="15">
+            <div class="controls-container">
+              <button id="start" class="start">Começar</button>
+
+              <button id="reset" class="reset">Reiniciar</button>
             </div>
           </div>
-          <div class="modal-footer">
-            <button id="save-settings-btn" class="save-btn modality">Salvar</button>
+
+          <div class="tasks-container">
+            <div class="tasks-header">
+              <div class="tasks-title titulos">Lista de Tarefas</div>
+              <form id="task-form">
+                <input
+                  id="new-task"
+                  type="text"
+                  name="Nova Tarefa"
+                  placeholder="Adicione uma nova tarefa"
+                />
+                <button id="add-task" type="submit">+</button>
+              </form>
+            </div>
+
+            <div class="tasks-list" id="tasks-list">
+              <ol id="tasks"></ol>
+            </div>
+          </div>
+
+          <template id="task-template">
+            <li class="task texto">
+              <div class="task-container">
+                <input
+                  type="checkbox"
+                  class="task-checkbox"
+                  title="Marcar como concluída"
+                />
+                <span class="task-text"></span>
+                <button id="delete-button" title="Excluir tarefa">
+                  <img
+                    src="/images/latadelixo.png"
+                    alt="Ícone da lata de lixo"
+                  />
+                </button>
+              </div>
+            </li>
+          </template>
+        </div>
+      </main>
+
+      <div id="settings-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+          <div class="modal-inside">
+            <div class="modal-header titulos">
+              <h2>Configurações</h2>
+              <button id="close-modal-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="input-group">
+                <label for="pomodoro-time">Pomodoro (minutos)</label>
+                <input type="number" id="pomodoro-time" min="1" value="25" />
+              </div>
+              <div class="input-group">
+                <label for="short-break-time">Intervalo Curto (minutos)</label>
+                <input type="number" id="short-break-time" min="1" value="5" />
+              </div>
+              <div class="input-group">
+                <label for="long-break-time">Intervalo Longo (minutos)</label>
+                <input type="number" id="long-break-time" min="1" value="15" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="save-settings-btn" class="save-btn modality">
+                Salvar
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      <footer>
+        <div class="linha">
+          <hr />
+        </div>
+        <div class="logofinal">
+          <a href="/inicio" id="logo">PROBATIO</a>
+        </div>
+      </footer>
     </div>
 
-    <footer>
-      <div class="linha">
-        <hr />
-      </div>
-      <div class="logofinal">
-        <a href="#inicio" id="logo">PROBATIO</a>
-      </div>
-    </footer>
-  </div>
-  <script src="/javascript/pomodorojs/utils.js" defer type="application/javascript"></script>
-  <!-- Adicionado settings.js antes do counter para carregar configurações -->
-  <script src="/javascript/pomodorojs/settings.js" defer type="application/javascript"></script>
-  <script src="/javascript/pomodorojs/tasks.js" defer type="application/javascript"></script>
-  <script src="/javascript/pomodorojs/counter.js" defer type="application/javascript"></script>
-</body>
+    <!-- Scripts do Pomodoro -->
+    <script
+      src="/javascript/pomodorojs/utils.js"
+      defer
+      type="application/javascript"
+    ></script>
+    <script
+      src="/javascript/pomodorojs/settings.js"
+      defer
+      type="application/javascript"
+    ></script>
+    <script
+      src="/javascript/pomodorojs/tasks.js"
+      defer
+      type="application/javascript"
+    ></script>
+    <script
+      src="/javascript/pomodorojs/counter.js"
+      defer
+      type="application/javascript"
+    ></script>
 
+    <script src="/javascript/pomodoro.js"></script>
+  </body>
 </html>

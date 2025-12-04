@@ -1,18 +1,17 @@
 const express = require("express");
 const session = require("express-session");
 const app = express();
-const routes = require("./routes");
 const path = require("path");
 
 // Configuração do express-session
 app.use(
   session({
-    secret: "sua-chave-secreta-aqui", // Troque por uma string complexa
+    secret: "sua-chave-secreta-aqui",
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: false, // Defina como true em produção com HTTPS
-      maxAge: 3600000, // 1 hora
+      secure: false,
+      maxAge: 3600000,
     },
   })
 );
@@ -20,9 +19,12 @@ app.use(
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("public")); // Isso faz com que /css/cadastro.css aponte para public/css/cadastro.css
+
+// Servir arquivos estáticos (public está na raiz do projeto)
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Rotas
+const routes = require("./routes");
 app.use(routes);
 
 const PORT = process.env.PORT || 3000;
