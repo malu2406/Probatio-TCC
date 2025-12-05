@@ -1,45 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cronômetro</title>
-    <link rel="stylesheet" href="/css/cronometro.css" />
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <div id="header_esquerda">
-          <a href="/inicio" id="logo">PROBATIO</a>
 
-          <div class="nav-principal">
-            <a
-              href="/material"
-              class="nav-link bolsista-only"
-              id="link-materias"
-              style="display: none"
-              >Material</a
-            >
-            <a href="/estatistica" class="nav-link">Estatísticas</a>
-            <a href="/flashcards" class="nav-link">Flashcards</a>
-            <a href="/noticias" class="nav-link">Portais de Notícia</a>
-            <a href="/pomodoro" class="nav-link">Pomodoro</a>
-            <a href="/cronometro" class="nav-link">Cronômetro</a>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cronômetro</title>
+  <link rel="stylesheet" href="/css/cronometro.css" />
+</head>
 
-          <div class="menu-usuario">
-            <a href="/perfil" class="nav-link">
-              <img src="/images/user.png" alt="Perfil" class="icon" />
-            </a>
-            <a href="/logout" class="nav-link">Sair</a>
+<body>
+  <div class="container">
+    <header>
+      <div id="header_esquerda">
+        <a href="/inicio" id="logo">PROBATIO</a>
+
+        <div class="nav-principal">
+          <a href="/material" class="nav-link bolsista-only" id="link-materias" style="display: none">Material</a>
+          <a href="/estatistica" class="nav-link">Estatísticas</a>
+          <a href="/flashcards" class="nav-link">Flashcards</a>
+          <a href="/noticias" class="nav-link">Portais de Notícia</a>
+          <a href="/pomodoro" class="nav-link">Pomodoro</a>
+          <a href="/cronometro" class="nav-link">Cronômetro</a>
+        </div>
+
+        <div class="menu-usuario">
+          <a href="/perfil" class="nav-link">
+            <img src="/images/user.png" alt="Perfil" class="icon" />
+          </a>
+          <a href="/logout" class="nav-link">Sair</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrapper">
+        <h1>Cronômetro</h1>
+        <div class="cronometro-container">
+          <div class="timer-container">
+
+            <div id="counter">00:00:00</div>
+
+            <div class="controls-container">
+              <button id="start" class="start">Começar</button>
+              <button id="reset" class="reset">Reiniciar</button>
+            </div>
           </div>
         </div>
-      </header>
-
-      <main>
-        <h1>Cronômetro</h1>
-      </main>
+      </div>
+    </main>
+  </div>
+  <footer>
+    <div class="linha">
+      <hr />
     </div>
-    <script src="/javascript/pomodoro.js"></script>
-  </body>
+    <div class="logofinal">
+      <a href="/inicio" id="logo">PROBATIO</a>
+    </div>
+  </footer>
+  <script src="/javascript/cronometro.js"></script>
+</body>
+
 </html>
