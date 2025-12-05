@@ -1,15 +1,15 @@
-const prisma = require('../models');
+const prisma = require("../models");
 
 const flashcardController = {
   getAllFlashcards: async (req, res) => {
     try {
       const flashcards = await prisma.flashcard.findMany({
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
       });
       res.json(flashcards);
     } catch (error) {
-      console.error('Erro ao buscar flashcards:', error);
-      res.status(500).json({ error: 'Erro interno do servidor' });
+      console.error("Erro ao buscar flashcards:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
     }
   },
 
@@ -17,12 +17,12 @@ const flashcardController = {
     try {
       const flashcards = await prisma.flashcard.findMany({
         where: { userId: req.session.user.id },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
       });
       res.json(flashcards);
     } catch (error) {
-      console.error('Erro ao buscar flashcards:', error);
-      res.status(500).json({ error: 'Erro interno do servidor' });
+      console.error("Erro ao buscar flashcards:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
     }
   },
 
@@ -30,12 +30,18 @@ const flashcardController = {
     try {
       const { materia, conteudo, pergunta, resposta } = req.body;
       const flashcard = await prisma.flashcard.create({
-        data: { materia, conteudo, pergunta, resposta, userId: req.session.user.id },
+        data: {
+          materia,
+          conteudo,
+          pergunta,
+          resposta,
+          userId: req.session.user.id,
+        },
       });
       res.json(flashcard);
     } catch (error) {
-      console.error('Erro ao criar flashcard:', error);
-      res.status(500).json({ error: 'Erro interno do servidor' });
+      console.error("Erro ao criar flashcard:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
     }
   },
 
@@ -45,15 +51,16 @@ const flashcardController = {
         where: { id: parseInt(req.params.id) },
       });
 
-      if (!flashcard) return res.status(404).json({ error: 'Flashcard não encontrado' });
+      if (!flashcard)
+        return res.status(404).json({ error: "Flashcard não encontrado" });
       if (flashcard.userId !== req.session.user.id) {
-        return res.status(403).json({ error: 'Acesso negado' });
+        return res.status(403).json({ error: "Acesso negado" });
       }
 
       res.json(flashcard);
     } catch (error) {
-      console.error('Erro ao buscar flashcard:', error);
-      res.status(500).json({ error: 'Erro interno do servidor' });
+      console.error("Erro ao buscar flashcard:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
     }
   },
 
@@ -66,9 +73,10 @@ const flashcardController = {
         where: { id: parseInt(id) },
       });
 
-      if (!flashcardExistente) return res.status(404).json({ error: 'Flashcard não encontrado' });
+      if (!flashcardExistente)
+        return res.status(404).json({ error: "Flashcard não encontrado" });
       if (flashcardExistente.userId !== req.session.user.id) {
-        return res.status(403).json({ error: 'Acesso negado' });
+        return res.status(403).json({ error: "Acesso negado" });
       }
 
       const flashcard = await prisma.flashcard.update({
@@ -77,8 +85,8 @@ const flashcardController = {
       });
       res.json(flashcard);
     } catch (error) {
-      console.error('Erro ao atualizar flashcard:', error);
-      res.status(500).json({ error: 'Erro interno do servidor' });
+      console.error("Erro ao atualizar flashcard:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
     }
   },
 
@@ -89,16 +97,17 @@ const flashcardController = {
         where: { id: parseInt(id) },
       });
 
-      if (!flashcardExistente) return res.status(404).json({ error: 'Flashcard não encontrado' });
+      if (!flashcardExistente)
+        return res.status(404).json({ error: "Flashcard não encontrado" });
       if (flashcardExistente.userId !== req.session.user.id) {
-        return res.status(403).json({ error: 'Acesso negado' });
+        return res.status(403).json({ error: "Acesso negado" });
       }
 
       await prisma.flashcard.delete({ where: { id: parseInt(id) } });
-      res.json({ message: 'Flashcard excluído com sucesso' });
+      res.json({ message: "Flashcard excluído com sucesso" });
     } catch (error) {
-      console.error('Erro ao excluir flashcard:', error);
-      res.status(500).json({ error: 'Erro interno do servidor' });
+      console.error("Erro ao excluir flashcard:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
     }
   },
 };

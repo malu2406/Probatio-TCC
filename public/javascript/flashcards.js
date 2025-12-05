@@ -1,19 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
   let todasQuestoes = [];
   let historicoRespostas = {};
-  let userId = null; // Variável para armazenar o ID do usuário
+  let userId = null;
 
-  // Primeiro carregamos o usuário para obter o ID
   fetch("/api/usuario")
     .then((response) => response.json())
     .then((data) => {
-      userId = data.id; // Armazenamos o ID do usuário
+      userId = data.id;
       if (data.tipo === "BOLSISTA") {
         const linkMaterias = document.getElementById("link-materias");
         linkMaterias.style.display = "block";
       }
-
-      // Agora carregamos os dados específicos deste usuário
       Promise.all([loadFlashcardsFromDB(), loadHistoricoRespostas()]).then(
         () => {
           exibirFlashcards();
@@ -24,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Erro ao carregar dados do usuário:", error);
     });
 
-  // Filtros por matéria
   const filtroBtns = document.querySelectorAll(".filtro-btn");
   filtroBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -35,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Filtros por status
   const filtroStatusBtns = document.querySelectorAll(".filtro-status-btn");
   filtroStatusBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -61,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       if (!userId) return;
 
-      // CORREÇÃO: Usar o ID do usuário para criar uma chave única
       const chaveUsuario = `historicoRespostas_${userId}`;
       const dadosSalvos = localStorage.getItem(chaveUsuario);
 
@@ -72,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       console.log(
-        "📊 Histórico carregado para usuário:",
+        "Histórico carregado para usuário:",
         userId,
         historicoRespostas
       );
@@ -88,19 +82,13 @@ document.addEventListener("DOMContentLoaded", function () {
     historicoRespostas[flashcardId] = {
       acertou: acertou,
       data: new Date().toISOString(),
-      userId: userId, // Adicionamos o ID do usuário no registro também
+      userId: userId,
     };
 
-    // CORREÇÃO: Salvar com chave específica do usuário
     const chaveUsuario = `historicoRespostas_${userId}`;
     localStorage.setItem(chaveUsuario, JSON.stringify(historicoRespostas));
 
-    console.log(
-      "💾 Resposta salva para usuário:",
-      userId,
-      flashcardId,
-      acertou
-    );
+    console.log(" Resposta salva para usuário:", userId, flashcardId, acertou);
   }
 
   function mapearNomeConteudo(value) {
@@ -142,7 +130,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const div = document.createElement("div");
     div.className = "flashcard";
 
-    // Mapear a matéria para o formato usado no CSS
     const materiaMap = {
       CH: "humanas",
       CN: "natureza",
@@ -162,7 +149,6 @@ document.addEventListener("DOMContentLoaded", function () {
     div.setAttribute("data-conteudo", flashcard.conteudo);
     div.setAttribute("data-id", flashcard.id);
 
-    // Verificar se já foi respondida POR ESTE USUÁRIO
     const resposta = historicoRespostas[flashcard.id];
     const jaRespondida = !!resposta && resposta.userId === userId;
     const acertou = resposta ? resposta.acertou : false;
@@ -215,7 +201,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-    // Botões de acerto/erro
     const acertouButtons = document.querySelectorAll(".acertou");
     const errouButtons = document.querySelectorAll(".errou");
 
@@ -226,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const conteudo = card.getAttribute("data-conteudo");
         const flashcardId = card.getAttribute("data-id");
 
-        console.log("📝 Registrando acerto:", {
+        console.log("Registrando acerto:", {
           userId,
           materia,
           conteudo,
@@ -246,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const conteudo = card.getAttribute("data-conteudo");
         const flashcardId = card.getAttribute("data-id");
 
-        console.log("📝 Registrando erro:", {
+        console.log(" Registrando erro:", {
           userId,
           materia,
           conteudo,
@@ -319,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const materiaBackend =
         materiaMapToBackend[materiaFrontend] || materiaFrontend;
 
-      console.log("🚀 Enviando estatística para API:", {
+      console.log(" Enviando estatística para API:", {
         materia: materiaBackend,
         disciplina: conteudo,
         acertou: acertou,
@@ -338,10 +323,10 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       const result = await response.json();
-      console.log("✅ Resposta da API:", result);
+      console.log(" Resposta da API:", result);
       await updateStatsDisplay();
     } catch (error) {
-      console.error("❌ Erro ao registrar resposta:", error);
+      console.error(" Erro ao registrar resposta:", error);
     }
   }
 

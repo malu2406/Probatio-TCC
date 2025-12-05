@@ -171,7 +171,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Salvar edição
   editForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 

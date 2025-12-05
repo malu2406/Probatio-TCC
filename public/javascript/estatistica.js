@@ -159,14 +159,11 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Limpar container
     chartContainer.innerHTML = "";
 
-    // Criar container das barras
     const barrasContainer = document.createElement("div");
     barrasContainer.className = "barras-container";
 
-    // Criar barras
     const materias = [
       {
         tipo: "matematica",
@@ -231,14 +228,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const chartContainer = document.getElementById("chart-container");
     const linguagensStats = statsDisciplinas.linguagens || {};
 
-    // Dados das disciplinas de linguagens
     const disciplinas = {
       portugues: linguagensStats.portugues || { total: 0, acertos: 0 },
       ingles: linguagensStats.ingles || { total: 0, acertos: 0 },
       espanhol: linguagensStats.espanhol || { total: 0, acertos: 0 },
     };
 
-    // Calcular percentuais
     const percentuais = {
       portugues:
         disciplinas.portugues.total > 0
@@ -273,7 +268,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const chartContainer = document.getElementById("chart-container");
     const humanasStats = statsDisciplinas.humanas || {};
 
-    // Dados das disciplinas de humanas
     const disciplinas = {
       historia: humanasStats.historia || { total: 0, acertos: 0 },
       geografia: humanasStats.geografia || { total: 0, acertos: 0 },
@@ -281,7 +275,6 @@ document.addEventListener("DOMContentLoaded", function () {
       filosofia: humanasStats.filosofia || { total: 0, acertos: 0 },
     };
 
-    // Calcular percentuais
     const percentuais = {
       historia:
         disciplinas.historia.total > 0
@@ -365,12 +358,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const chartContainer = document.getElementById("chart-container");
     const matematicaStats = statsDisciplinas.matematica || {};
 
-    // Dados da disciplina de matemática
     const disciplinas = {
       matematica: matematicaStats.matematica || { total: 0, acertos: 0 },
     };
 
-    // Calcular percentual
     const percentuais = {
       matematica:
         disciplinas.matematica.total > 0
@@ -389,21 +380,17 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   }
 
-  // Função genérica para gerar gráficos de disciplinas
   function gerarGraficoDisciplinas(
     chartContainer,
     disciplinas,
     percentuais,
     tipoMateria
   ) {
-    // Limpar container
     chartContainer.innerHTML = "";
 
-    // Criar container das barras
     const barrasContainer = document.createElement("div");
     barrasContainer.className = "barras-container";
 
-    // Mapeamento dos nomes das disciplinas
     const nomesDisciplinas = {
       portugues: "Português",
       ingles: "Inglês",
@@ -418,7 +405,6 @@ document.addEventListener("DOMContentLoaded", function () {
       matematica: "Matemática",
     };
 
-    // Criar barras para as disciplinas
     Object.keys(percentuais).forEach((disciplinaKey) => {
       const disciplinaData = {
         tipo: disciplinaKey,
@@ -478,7 +464,6 @@ document.addEventListener("DOMContentLoaded", function () {
       totalQuestoes > 0 ? Math.round((totalAcertos / totalQuestoes) * 100) : 0;
     document.getElementById("taxa-acerto").textContent = `${taxaAcerto}%`;
 
-    // Atualizar nível de desempenho
     atualizarNivelDesempenho(totalQuestoes, totalAcertos);
   }
 
