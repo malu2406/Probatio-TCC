@@ -9,7 +9,6 @@ const taskController = require('../controllers/taskController');
 const flashcardController = require('../controllers/flashcardController');
 const statisticsController = require('../controllers/statisticsController');
 const pageController = require('../controllers/pageController');
-const disciplineController = require('../controllers/disciplineController');
 
 // Import middlewares
 const { checkAuth, checkBolsista } = require('../middlewares/auth');
@@ -58,10 +57,6 @@ router.delete('/api/estatisticas', checkAuth, statisticsController.deleteStatist
 router.get('/api/estatisticas-disciplinas', checkAuth, statisticsController.getStatisticsByDiscipline);
 router.get('/api/debug-estatisticas', checkAuth, statisticsController.debugStatistics);
 
-// API - Disciplinas
-router.get('/api/disciplinas', disciplineController.getDisciplinas);
-router.get('/api/disciplinas/:id/subdisciplinas', disciplineController.getSubdisciplinas);
-router.get('/api/subdisciplinas/:id/questoes', disciplineController.getQuestoes);
 
 // Rota para criar dados de teste (se ainda necessário)
 router.post('/api/criar-dados-teste', checkAuth, (req, res) => {
