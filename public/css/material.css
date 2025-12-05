@@ -28,6 +28,7 @@ body {
   font-family: Arial, sans-serif;
   padding-top: 80px;
   min-height: 100vh;
+  transition: padding-top 0.3s ease;
 }
 
 /* ===== HEADER ===== */
@@ -118,6 +119,58 @@ header:hover {
   background-color: #ffffff;
   box-shadow: -2px 2px 20px rgba(142, 142, 142, 0.53);
   transform: translateY(-2px);
+}
+
+/* BOTÃO DO MENU SANDUÍCHE */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  z-index: 1001;
+}
+
+.menu-toggle .bar {
+  height: 3px;
+  width: 100%;
+  background-color: #202f5a;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Menu mobile aberto - animação do botão */
+.menu-toggle.active .bar:nth-child(1) {
+  transform: translateY(10.5px) rotate(45deg);
+}
+
+.menu-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+  transform: translateY(-10.5px) rotate(-45deg);
+}
+
+/* Overlay para quando o menu estiver aberto */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.menu-overlay.active {
+  display: block;
 }
 
 /* ===== ESTILOS ESPECÍFICOS PARA BOLSISTA ===== */
@@ -303,6 +356,7 @@ h3 {
   margin-bottom: 20px;
   border: 1px solid #c3e6cb;
 }
+
 /* Estilos adicionais para os botões de ação */
 .flashcard-actions {
   display: flex;
@@ -394,43 +448,9 @@ h3 {
   background-color: #5a6268;
 }
 
-/* Responsividade para a página de material */
-@media (max-width: 768px) {
-  .form-container {
-    padding: 20px;
-  }
+/* MEDIA QUERIES PARA RESPONSIVIDADE */
 
-  .flashcard-actions {
-    flex-direction: column;
-  }
-
-  .btn-editar,
-  .btn-excluir {
-    width: 100%;
-  }
-}
-@media (max-width: 768px) {
-  header {
-    padding: 0.5rem 0;
-  }
-
-  body {
-    padding-top: 120px;
-  }
-
-  .nav-link {
-    font-size: 11px;
-    padding: 4px 6px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .nav-link {
-    font-size: 13px;
-    padding: 6px 10px;
-  }
-}
-
+/* Para tablets (901px - 1024px) - Layout normal, apenas ajustes */
 @media (max-width: 1024px) {
   .nav-link {
     font-size: 12px;
@@ -442,20 +462,199 @@ h3 {
   }
 }
 
+/* Para tablets menores e celulares (até 900px) - Menu sanduíche */
 @media (max-width: 900px) {
-  #header_esquerda {
-    flex-wrap: wrap;
-    gap: 10px;
+  .menu-toggle {
+    display: flex;
   }
 
-  .nav-principal {
-    order: 3;
+  /* Esconder menu normal */
+  .nav-principal:not(.mobile-menu),
+  .menu-usuario:not(.mobile-menu) {
+    display: none;
+  }
+
+  /* Menu mobile - estado fechado */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    padding: 80px 20px 20px;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+  }
+
+  .mobile-menu.active {
+    right: 0;
+  }
+
+  /* Estilos específicos para o menu principal no mobile */
+  .nav-principal.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
     width: 100%;
-    justify-content: center;
+    padding: 12px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Estilos específicos para o menu do usuário no mobile */
+  .menu-usuario.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    top: auto;
+    bottom: 0;
+    height: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-top: 1px solid #eee;
+  }
+
+  .menu-usuario.mobile-menu .nav-link {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
     gap: 10px;
   }
 
-  .menu-usuario {
-    margin-left: 0;
+  /* Ajustar layout do header */
+  #header_esquerda {
+    justify-content: space-between;
+  }
+
+  /* Ajustar padding do body quando o menu estiver aberto */
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  /* Ajustes para o formulário em telas menores */
+  .form-container {
+    padding: 20px;
+  }
+
+  .flashcard-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .btn-editar,
+  .btn-excluir {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+/* Para celulares (até 768px) */
+@media (max-width: 768px) {
+  header {
+    padding: 0.5rem 0;
+  }
+
+  body {
+    padding-top: 70px;
+  }
+
+  .mobile-menu {
+    width: 80%;
+  }
+
+  .form-group select,
+  .form-group textarea {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .btn_c,
+  .btn {
+    width: 100%;
+    padding: 14px 20px;
+  }
+
+  .modal-content {
+    padding: 20px;
+    margin: 10% auto;
+    width: 95%;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  .modal-buttons button {
+    width: 100%;
+  }
+}
+
+/* Para celulares pequenos (até 480px) */
+@media (max-width: 480px) {
+  .mobile-menu {
+    width: 85%;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
+    font-size: 15px;
+    padding: 10px 0;
+  }
+
+  #logo {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  .form-container {
+    padding: 15px;
+  }
+
+  .flashcard-item {
+    padding: 15px;
+  }
+
+  .flashcard-actions {
+    flex-direction: column;
+  }
+
+  .btn-editar,
+  .btn-excluir {
+    width: 100%;
+  }
+}
+
+/* Para telas muito pequenas (até 360px) */
+@media (max-width: 360px) {
+  #logo {
+    font-size: 16px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .flashcard-materia,
+  .flashcard-conteudo,
+  .flashcard-pergunta,
+  .flashcard-resposta {
+    font-size: 14px;
   }
 }

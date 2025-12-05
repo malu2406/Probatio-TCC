@@ -7,6 +7,7 @@
   font-family: "titulos";
   src: url("/fonts/genty-sans-regular.otf") format("opentype");
 }
+
 @font-face {
   font-family: "texto";
   src: url("/fonts/Poppins-Medium.ttf") format("opentype");
@@ -25,6 +26,7 @@ body {
   font-family: Arial, sans-serif;
   padding-top: 80px;
   min-height: 100vh;
+  transition: padding-top 0.3s ease;
 }
 
 #container {
@@ -139,6 +141,58 @@ header:hover {
   text-shadow: none;
 }
 
+/* BOTÃO DO MENU SANDUÍCHE */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  z-index: 1001;
+}
+
+.menu-toggle .bar {
+  height: 3px;
+  width: 100%;
+  background-color: #202f5a;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Menu mobile aberto - animação do botão */
+.menu-toggle.active .bar:nth-child(1) {
+  transform: translateY(10.5px) rotate(45deg);
+}
+
+.menu-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+  transform: translateY(-10.5px) rotate(-45deg);
+}
+
+/* Overlay para quando o menu estiver aberto */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
 /* CONTEÚDO PRINCIPAL */
 main {
   padding: 30px;
@@ -160,36 +214,210 @@ h2 {
 h3 {
   color: #202f5a;
   font-family: "texto";
+  font-size: 1rem;
 }
 
-.filtros {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
+/* NOVO DESIGN PARA FILTROS - MAIS MODERNO E RESPONSIVO */
+.filtros-master-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
-  flex-wrap: wrap;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.filtro-btn {
-  padding: 10px 20px;
-  background-color: #f0f0f0;
+/* Botão toggle para mobile */
+.filtros-mobile-toggle {
+  display: none;
+  width: 100%;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #1a2a6c, #4d69d5);
+  color: white;
   border: none;
-  border-radius: 25px;
   cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s;
   font-family: "texto";
+  font-weight: bold;
+  font-size: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
 }
 
-.filtro-btn:hover {
-  background-color: #ddd;
+.filtros-mobile-toggle .material-icons {
+  font-size: 20px;
+  transition: transform 0.3s ease;
 }
 
-.filtro-btn.ativo {
-  background-color: #1a2a6c;
+.filtros-mobile-toggle .arrow {
+  transition: transform 0.3s ease;
+}
+
+.filtros-mobile-toggle.active .arrow {
+  transform: rotate(180deg);
+}
+
+.filtros-mobile-toggle:hover {
+  background: linear-gradient(135deg, #4d69d5, #1a2a6c);
+}
+
+/* Container dos filtros */
+.filtros-wrapper {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Grupos de filtros - Desktop: sempre expandidos, Mobile: recolhidos */
+.filtro-group {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.filtro-group:hover {
+  border-color: #1a2a6c;
+  box-shadow: 0 3px 10px rgba(26, 42, 108, 0.1);
+}
+
+.filtro-header {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.filtro-header:hover {
+  background: #e9ecef;
+}
+
+.filtro-header .material-icons {
+  color: #1a2a6c;
+  margin-right: 12px;
+  font-size: 20px;
+}
+
+.filtro-header h3 {
+  flex: 1;
+  margin: 0;
+  font-weight: 600;
+}
+
+.toggle-icon {
+  transition: transform 0.3s ease;
+  display: none; /* Escondido por padrão para desktop */
+}
+
+.filtro-content {
+  padding: 20px;
+  background: white;
+  display: block !important; /* Sempre visível em desktop */
+}
+
+/* Botões estilo chip */
+.filtro-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "texto";
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  border-color: #1a2a6c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(26, 42, 108, 0.15);
+}
+
+.chip .material-icons {
+  font-size: 18px;
+}
+
+.chip.ativo {
+  background: linear-gradient(135deg, #1a2a6c, #4d69d5);
+  color: white;
+  border-color: #1a2a6c;
+}
+
+.chip.ativo .material-icons {
   color: white;
 }
 
+/* Ações dos filtros - Só botão Limpar */
+.filtro-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn-limpar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "texto";
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 2px solid #e0e0e0;
+}
+
+.btn-limpar:hover {
+  background: #e9ecef;
+  color: #495057;
+  border-color: #ced4da;
+  transform: translateY(-2px);
+}
+
+/* Remover o botão Aplicar do CSS */
+.btn-aplicar {
+  display: none;
+}
+
+/* Contador de flashcards */
+.contador-flashcards {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  font-family: "texto";
+  color: #495057;
+  font-weight: 500;
+}
+
+.contador-flashcards .material-icons {
+  color: #1a2a6c;
+}
+
+/* Flashcard container atualizado */
 .flashcard-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -226,13 +454,14 @@ h3 {
   font-weight: bold;
   font-family: "texto";
 }
+
 .flashcard.respondida-acerto {
-  border-left: 4px solid #4CAF50;
+  border-left: 4px solid #4caf50;
   background-color: #f8fff8;
 }
 
 .flashcard.respondida-erro {
-  border-left: 4px solid #F44336;
+  border-left: 4px solid #f44336;
   background-color: #fff8f8;
 }
 
@@ -241,7 +470,6 @@ h3 {
   position: relative;
   padding-top: 50px; /* Espaço para os badges */
 }
-
 
 .matematica {
   background-color: #0a1749;
@@ -310,18 +538,6 @@ h3 {
   font-family: "texto";
 }
 
-@media (max-width: 768px) {
-  .filtros-status {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .filtro-status-btn {
-    width: 200px;
-    text-align: center;
-  }
-}
-
 .mostrar-resposta {
   background-color: #1a2a6c;
   color: white;
@@ -349,36 +565,76 @@ h3 {
   background-color: #d29212;
 }
 
+/* Estatísticas atualizadas */
 .estatisticas {
   background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 30px;
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 40px;
 }
 
 .estatisticas h2 {
   color: #1a2a6c;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   text-align: center;
+  font-size: 1.8rem;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
 .stat-card {
   background: white;
-  padding: 15px;
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 10px;
   text-align: center;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  color: white;
+}
+
+.stat-icon .material-icons {
+  font-size: 24px;
+}
+
+.stat-icon.matematica {
+  background: linear-gradient(135deg, #0a1749, #1a2a6c);
+}
+
+.stat-icon.linguagens {
+  background: linear-gradient(135deg, #778bdc, #9aafff);
+}
+
+.stat-icon.humanas {
+  background: linear-gradient(135deg, #0423a1, #1a3ac8);
+}
+
+.stat-icon.natureza {
+  background: linear-gradient(135deg, #4d69d5, #6b85f0);
 }
 
 .stat-card h3 {
   color: #1a2a6c;
   margin-bottom: 10px;
+  font-size: 1.1rem;
 }
 
 .stat-card p {
@@ -386,37 +642,6 @@ h3 {
   font-weight: bold;
   color: #333;
   font-family: "texto";
-}
-
-/* NOVO: Filtros por status */
-.filtros-status {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 25px;
-  flex-wrap: wrap;
-}
-
-.filtro-status-btn {
-  padding: 8px 16px;
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s;
-  font-family: "texto";
-  font-size: 0.9rem;
-}
-
-.filtro-status-btn:hover {
-  background-color: #ddd;
-  transform: translateY(-2px);
-}
-
-.filtro-status-btn.ativo {
-  background-color: #1a2a6c;
-  color: white;
 }
 
 .status-indicator {
@@ -431,12 +656,12 @@ h3 {
 }
 
 .status-indicator.acerto {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
 }
 
 .status-indicator.erro {
-  background-color: #F44336;
+  background-color: #f44336;
   color: white;
 }
 
@@ -479,80 +704,276 @@ hr {
   color: #666;
   font-family: "texto";
   grid-column: 1 / -1;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* MEDIA QUERIES */
-@media (max-width: 1200px) {
-  .nav-link {
-    font-size: 13px;
-    padding: 6px 10px;
-  }
-}
+/* MEDIA QUERIES PARA RESPONSIVIDADE */
 
+/* Para tablets (901px - 1024px) */
 @media (max-width: 1024px) {
   .nav-link {
     font-size: 12px;
     padding: 5px 8px;
-    gap: 10px;
   }
 
   #logo {
     margin-right: 20px;
   }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
+/* Para tablets menores e celulares (até 900px) */
 @media (max-width: 900px) {
-  #header_esquerda {
-    flex-wrap: wrap;
-    gap: 10px;
+  .menu-toggle {
+    display: flex;
   }
 
-  .nav-principal {
-    order: 3;
+  /* Esconder menu normal */
+  .nav-principal:not(.mobile-menu),
+  .menu-usuario:not(.mobile-menu) {
+    display: none;
+  }
+
+  /* Menu mobile - estado fechado */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    padding: 80px 20px 20px;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+  }
+
+  .mobile-menu.active {
+    right: 0;
+  }
+
+  /* Estilos específicos para o menu principal no mobile */
+  .nav-principal.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
     width: 100%;
-    justify-content: center;
+    padding: 12px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Estilos específicos para o menu do usuário no mobile */
+  .menu-usuario.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    top: auto;
+    bottom: 0;
+    height: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-top: 1px solid #eee;
+  }
+
+  .menu-usuario.mobile-menu .nav-link {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
     gap: 10px;
   }
 
-  .menu-usuario {
-    margin-left: 0;
+  /* Ajustar layout do header */
+  #header_esquerda {
+    justify-content: space-between;
+  }
+
+  /* Ajustar padding do body quando o menu estiver aberto */
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  /* Filtros responsivos - AQUI É A CHAVE */
+  .filtros-mobile-toggle {
+    display: flex;
+  }
+
+  .filtros-wrapper {
+    display: none;
+    padding: 20px;
+  }
+
+  .filtros-wrapper.active {
+    display: flex;
+  }
+
+  /* Mostrar ícone de toggle em mobile */
+  .toggle-icon {
+    display: block;
+  }
+
+  /* Em mobile, os filtros começam recolhidos */
+  .filtro-content {
+    display: none !important;
+    padding: 15px;
+  }
+
+  .filtro-group.active .filtro-content {
+    display: block !important;
+  }
+
+  .filtro-group.active .toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .chip {
+    flex: 1;
+    min-width: calc(50% - 10px);
+    justify-content: center;
   }
 
   .flashcard-container {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
+
+  .feedback-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Em mobile, centralizar botão Limpar */
+  .filtro-actions {
+    justify-content: center;
+  }
+
+  .btn-limpar {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
 }
 
+/* Para celulares (até 768px) */
 @media (max-width: 768px) {
   header {
     padding: 0.5rem 0;
   }
 
   body {
-    padding-top: 120px;
+    padding-top: 70px;
   }
 
-  .nav-link {
-    font-size: 11px;
-    padding: 4px 6px;
+  .mobile-menu {
+    width: 80%;
   }
 
   .flashcard-container {
     grid-template-columns: 1fr;
   }
 
-  .filtros {
-    flex-direction: column;
-    align-items: center;
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
-}
 
-@media (max-width: 480px) {
   main {
     padding: 15px;
   }
 
-  .stats-grid {
-    grid-template-columns: 1fr;
+  h1 {
+    font-size: 2rem;
+  }
+
+  .flashcard {
+    padding: 20px;
+  }
+
+  .pergunta {
+    font-size: 1.1rem;
+    margin: 30px 0 15px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Para celulares pequenos (até 480px) */
+@media (max-width: 480px) {
+  .mobile-menu {
+    width: 85%;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
+    font-size: 15px;
+    padding: 10px 0;
+  }
+
+  #logo {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+
+  .chip {
+    min-width: 100%;
+  }
+
+  .flashcard {
+    padding: 15px;
+  }
+
+  .contador-flashcards {
+    flex-direction: column;
+    text-align: center;
+    gap: 5px;
+  }
+
+  .btn-limpar {
+    max-width: 100%;
+  }
+}
+
+/* Para telas muito pequenas (até 360px) */
+@media (max-width: 360px) {
+  #logo {
+    font-size: 16px;
+  }
+
+  .flashcard {
+    min-height: 220px;
+    padding: 12px;
+  }
+
+  .materia-tag,
+  .status-indicator {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  .controles {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .pergunta {
+    font-size: 1rem;
+    margin: 25px 0 12px;
   }
 }

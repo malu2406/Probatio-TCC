@@ -19,6 +19,7 @@ body {
   font-family: Arial, sans-serif;
   padding-top: 80px;
   min-height: 100vh;
+  transition: padding-top 0.3s ease;
 }
 
 #container {
@@ -271,8 +272,8 @@ hr {
   justify-content: center;
   gap: 25px;
   height: 100%;
-  width: 100%; /* Alterado de calc(100% - 45px) */
-  margin-left: 0; /* Alterado de 45px */
+  width: 100%;
+  margin-left: 0;
 }
 .barra-item {
   display: flex;
@@ -413,19 +414,65 @@ hr {
   color: #1a2a6c;
 }
 
-/* MEDIA QUERIES PARA RESPONSIVIDADE */
-@media (max-width: 1200px) {
-  .nav-link {
-    font-size: 13px;
-    padding: 6px 10px;
-  }
+/* BOTÃO DO MENU SANDUÍCHE */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  z-index: 1001;
 }
 
+.menu-toggle .bar {
+  height: 3px;
+  width: 100%;
+  background-color: #202f5a;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Menu mobile aberto - animação do botão */
+.menu-toggle.active .bar:nth-child(1) {
+  transform: translateY(10.5px) rotate(45deg);
+}
+
+.menu-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+  transform: translateY(-10.5px) rotate(-45deg);
+}
+
+/* Overlay para quando o menu estiver aberto */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
+/* MEDIA QUERIES PARA RESPONSIVIDADE */
+
+/* Para tablets (901px - 1024px) - Layout normal, apenas ajustes */
 @media (max-width: 1024px) {
   .nav-link {
     font-size: 12px;
     padding: 5px 8px;
-    gap: 10px;
   }
 
   #logo {
@@ -433,35 +480,148 @@ hr {
   }
 }
 
+/* Para tablets menores e celulares (até 900px) - Menu sanduíche */
 @media (max-width: 900px) {
-  #header_esquerda {
-    flex-wrap: wrap;
-    gap: 10px;
+  .menu-toggle {
+    display: flex;
   }
 
-  .nav-principal {
-    order: 3;
+  /* Esconder menu normal */
+  .nav-principal:not(.mobile-menu),
+  .menu-usuario:not(.mobile-menu) {
+    display: none;
+  }
+
+  /* Menu mobile - estado fechado */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    padding: 80px 20px 20px;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+  }
+
+  .mobile-menu.active {
+    right: 0;
+  }
+
+  /* Estilos específicos para o menu principal no mobile */
+  .nav-principal.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
     width: 100%;
-    justify-content: center;
+    padding: 12px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Estilos específicos para o menu do usuário no mobile */
+  .menu-usuario.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    top: auto;
+    bottom: 0;
+    height: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-top: 1px solid #eee;
+  }
+
+  .menu-usuario.mobile-menu .nav-link {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
     gap: 10px;
   }
 
-  .menu-usuario {
-    margin-left: 0;
+  /* Ajustar layout do header */
+  #header_esquerda {
+    justify-content: space-between;
+  }
+
+  /* Ajustar padding do body quando o menu estiver aberto */
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  /* Ajustar boxes de atividades para coluna em telas pequenas */
+  .box-atividades {
+    flex-direction: column;
+  }
+
+  .box {
+    height: 25vh;
   }
 }
 
+/* Para celulares (até 768px) */
 @media (max-width: 768px) {
   header {
     padding: 0.5rem 0;
   }
 
   body {
-    padding-top: 120px;
+    padding-top: 70px;
   }
 
-  .nav-link {
-    font-size: 11px;
-    padding: 4px 6px;
+  .mobile-menu {
+    width: 80%;
+  }
+
+  .metricas {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .metrica-card {
+    width: 100%;
+  }
+
+  .box-maior {
+    height: 35vh;
+  }
+
+  .chart-container-inicio {
+    height: 150px;
+  }
+}
+
+/* Para celulares pequenos (até 480px) */
+@media (max-width: 480px) {
+  .mobile-menu {
+    width: 85%;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
+    font-size: 15px;
+    padding: 10px 0;
+  }
+
+  #logo {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+
+  .box h2 {
+    font-size: 1rem;
+  }
+
+  .imagenzinhas {
+    font-size: 60px !important;
   }
 }

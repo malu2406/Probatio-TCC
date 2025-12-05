@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/flashcards.css" />
     <link rel="icon" href="/images/dragon-remove.png" />
-
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <title>Flashcards</title>
   </head>
   <body>
@@ -14,7 +17,15 @@
       <div id="header_esquerda">
         <a href="/inicio" id="logo">PROBATIO</a>
 
-        <div class="nav-principal">
+        <!-- Botão do menu sanduíche (visível apenas em mobile) -->
+        <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+
+        <!-- Nav principal com a classe para controle mobile -->
+        <div class="nav-principal mobile-menu" id="main-nav">
           <!-- Link de Matérias - será mostrado apenas para bolsistas -->
           <a
             href="/material"
@@ -30,7 +41,8 @@
           <a href="/cronometro" class="nav-link">Cronômetro</a>
         </div>
 
-        <div class="menu-usuario">
+        <!-- Menu do usuário também dentro do menu mobile -->
+        <div class="menu-usuario mobile-menu" id="user-menu">
           <a href="/perfil" class="nav-link">
             <img src="/images/user.png" alt="Perfil" class="icon" />
           </a>
@@ -43,38 +55,113 @@
       <main>
         <h1>Flashcards</h1>
 
-        <div class="filtros">
-          <button class="filtro-btn ativo" data-materia="todas">Todas</button>
-          <button class="filtro-btn" data-materia="matematica">
-            Matemática
+        <!-- Container principal dos filtros -->
+        <div class="filtros-master-container">
+          <!-- Botão para abrir menu de filtros em mobile -->
+          <button class="filtros-mobile-toggle" id="filtrosMobileToggle">
+            <span class="material-icons">filter_list</span>
+            <span>Filtros</span>
+            <span class="material-icons arrow">expand_more</span>
           </button>
-          <button class="filtro-btn" data-materia="linguagens">
-            Linguagens
-          </button>
-          <button class="filtro-btn" data-materia="humanas">
-            Ciências Humanas
-          </button>
-          <button class="filtro-btn" data-materia="natureza">
-            Ciências da Natureza
-          </button>
+
+          <!-- Container dos filtros que será mostrado/ocultado -->
+          <div class="filtros-wrapper" id="filtrosWrapper">
+            <!-- Filtro de Matérias com Design Moderno -->
+            <div class="filtro-group">
+              <div class="filtro-header">
+                <span class="material-icons">school</span>
+                <h3>Matérias</h3>
+                <span class="material-icons toggle-icon">expand_more</span>
+              </div>
+              <div class="filtro-content">
+                <div class="filtro-buttons">
+                  <button class="filtro-btn chip ativo" data-materia="todas">
+                    <span class="material-icons">all_inclusive</span>
+                    Todas
+                  </button>
+                  <button class="filtro-btn chip" data-materia="matematica">
+                    <span class="material-icons">calculate</span>
+                    Matemática
+                  </button>
+                  <button class="filtro-btn chip" data-materia="linguagens">
+                    <span class="material-icons">language</span>
+                    Linguagens
+                  </button>
+                  <button class="filtro-btn chip" data-materia="humanas">
+                    <span class="material-icons">history_edu</span>
+                    Humanas
+                  </button>
+                  <button class="filtro-btn chip" data-materia="natureza">
+                    <span class="material-icons">biotech</span>
+                    Natureza
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filtro de Status com Design Moderno -->
+            <div class="filtro-group">
+              <div class="filtro-header">
+                <span class="material-icons">assessment</span>
+                <h3>Status</h3>
+                <span class="material-icons toggle-icon">expand_more</span>
+              </div>
+              <div class="filtro-content">
+                <div class="filtro-buttons">
+                  <button
+                    class="filtro-status-btn chip ativo"
+                    data-status="todas"
+                  >
+                    <span class="material-icons">list</span>
+                    Todas
+                  </button>
+                  <button
+                    class="filtro-status-btn chip"
+                    data-status="nao-respondidas"
+                  >
+                    <span class="material-icons">question_mark</span>
+                    Não Respondidas
+                  </button>
+                  <button
+                    class="filtro-status-btn chip"
+                    data-status="respondidas"
+                  >
+                    <span class="material-icons">done</span>
+                    Já Respondidas
+                  </button>
+                  <button
+                    class="filtro-status-btn chip"
+                    data-status="acertadas"
+                  >
+                    <span class="material-icons">check_circle</span>
+                    Acertadas
+                  </button>
+                  <button class="filtro-status-btn chip" data-status="erradas">
+                    <span class="material-icons">cancel</span>
+                    Erradas
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botões de ação dos filtros -->
+            <div class="filtro-actions">
+              <button class="btn-limpar" id="limparFiltros">
+                <span class="material-icons">clear_all</span>
+                Limpar Filtros
+              </button>
+              <button class="btn-aplicar" id="aplicarFiltros">
+                <span class="material-icons">check</span>
+                Aplicar
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div class="filtros-status">
-          <button class="filtro-status-btn ativo" data-status="todas">
-            Todas as Questões
-          </button>
-          <button class="filtro-status-btn" data-status="nao-respondidas">
-            Não Respondidas
-          </button>
-          <button class="filtro-status-btn" data-status="respondidas">
-            Já Respondidas
-          </button>
-          <button class="filtro-status-btn" data-status="acertadas">
-            Acertadas
-          </button>
-          <button class="filtro-status-btn" data-status="erradas">
-            Erradas
-          </button>
+        <!-- Contador de flashcards -->
+        <div class="contador-flashcards">
+          <span class="material-icons">collections_bookmark</span>
+          <span id="contadorTotal">0 flashcards encontrados</span>
         </div>
 
         <div class="flashcard-container" id="flashcardsContainer"></div>
@@ -83,18 +170,30 @@
           <h2>Seu Desempenho</h2>
           <div class="stats-grid">
             <div class="stat-card">
+              <div class="stat-icon matematica">
+                <span class="material-icons">calculate</span>
+              </div>
               <h3>Matemática</h3>
               <p id="stat-matematica">0/0</p>
             </div>
             <div class="stat-card">
+              <div class="stat-icon linguagens">
+                <span class="material-icons">language</span>
+              </div>
               <h3>Linguagens</h3>
               <p id="stat-linguagens">0/0</p>
             </div>
             <div class="stat-card">
+              <div class="stat-icon humanas">
+                <span class="material-icons">history_edu</span>
+              </div>
               <h3>Ciências Humanas</h3>
               <p id="stat-humanas">0/0</p>
             </div>
             <div class="stat-card">
+              <div class="stat-icon natureza">
+                <span class="material-icons">biotech</span>
+              </div>
               <h3>Ciências da Natureza</h3>
               <p id="stat-natureza">0/0</p>
             </div>

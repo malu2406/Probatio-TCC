@@ -1,4 +1,70 @@
+// Função para controlar o menu mobile
+function setupMobileMenu() {
+  const menuToggle = document.getElementById("menu-toggle");
+  const mainNav = document.getElementById("main-nav");
+  const userMenu = document.getElementById("user-menu");
+  const body = document.body;
+
+  // Criar overlay
+  const overlay = document.createElement("div");
+  overlay.className = "menu-overlay";
+  document.body.appendChild(overlay);
+
+  // Função para abrir/fechar o menu
+  function toggleMenu() {
+    const isOpen = menuToggle.classList.contains("active");
+
+    if (!isOpen) {
+      // Abrir menu
+      menuToggle.classList.add("active");
+      mainNav.classList.add("active");
+      userMenu.classList.add("active");
+      overlay.classList.add("active");
+      body.classList.add("menu-open");
+    } else {
+      // Fechar menu
+      closeMenu();
+    }
+  }
+
+  function closeMenu() {
+    menuToggle.classList.remove("active");
+    mainNav.classList.remove("active");
+    userMenu.classList.remove("active");
+    overlay.classList.remove("active");
+    body.classList.remove("menu-open");
+  }
+
+  // Event listeners
+  if (menuToggle) {
+    menuToggle.addEventListener("click", toggleMenu);
+  }
+
+  overlay.addEventListener("click", closeMenu);
+
+  // Fechar menu ao clicar em um link (para mobile)
+  const navLinks = document.querySelectorAll(".mobile-menu .nav-link");
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      if (window.innerWidth <= 900) {
+        closeMenu();
+      }
+    });
+  });
+
+  // Fechar menu ao redimensionar a janela para tamanho maior
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) {
+      closeMenu();
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+  // Configurar menu mobile
+  setupMobileMenu();
+
+  // Verificar se o usuário é bolsista
   fetch("/api/usuario")
     .then((response) => response.json())
     .then((data) => {
@@ -241,26 +307,26 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         flashcardElement.innerHTML = `
-                <div class="flashcard-materia">${
-                  materiaNames[flashcard.materia] || flashcard.materia
-                }</div>
-                <div class="flashcard-conteudo">Conteúdo: ${
-                  flashcard.conteudo
-                }</div>
-                <div class="flashcard-pergunta"><strong>P:</strong> ${
-                  flashcard.pergunta
-                }</div>
-                <div class="flashcard-resposta"><strong>R:</strong> ${
-                  flashcard.resposta
-                }</div>
-                <div class="flashcard-actions">
-                  <button class="btn-editar" data-id="${
-                    flashcard.id
-                  }">Editar</button>
-                  <button class="btn-excluir" data-id="${
-                    flashcard.id
-                  }">Excluir</button>
-                </div>`;
+                    <div class="flashcard-materia">${
+                      materiaNames[flashcard.materia] || flashcard.materia
+                    }</div>
+                    <div class="flashcard-conteudo">Conteúdo: ${
+                      flashcard.conteudo
+                    }</div>
+                    <div class="flashcard-pergunta"><strong>P:</strong> ${
+                      flashcard.pergunta
+                    }</div>
+                    <div class="flashcard-resposta"><strong>R:</strong> ${
+                      flashcard.resposta
+                    }</div>
+                    <div class="flashcard-actions">
+                        <button class="btn-editar" data-id="${
+                          flashcard.id
+                        }">Editar</button>
+                        <button class="btn-excluir" data-id="${
+                          flashcard.id
+                        }">Excluir</button>
+                    </div>`;
 
         flashcardsContainer.appendChild(flashcardElement);
 
