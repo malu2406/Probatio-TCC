@@ -589,3 +589,179 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* ============================================== */
+/* ADICIONE APENAS ESTAS REGRAS NO FINAL DO CSS  */
+/* PARA O MENU RESPONSIVO SEM MEXER NO RESTO     */
+/* ============================================== */
+
+/* BOTÃO DO MENU SANDUÍCHE */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  z-index: 1001;
+}
+
+.menu-toggle .bar {
+  height: 3px;
+  width: 100%;
+  background-color: #202f5a;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Menu mobile aberto - animação do botão */
+.menu-toggle.active .bar:nth-child(1) {
+  transform: translateY(10.5px) rotate(45deg);
+}
+
+.menu-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+  transform: translateY(-10.5px) rotate(-45deg);
+}
+
+/* Overlay para quando o menu estiver aberto */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
+/* Para tablets menores e celulares (até 900px) */
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  /* Esconder menu normal */
+  .nav-principal:not(.mobile-menu),
+  .menu-usuario:not(.mobile-menu) {
+    display: none;
+  }
+
+  /* Menu mobile - estado fechado */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    padding: 80px 20px 20px;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+  }
+
+  .mobile-menu.active {
+    right: 0;
+  }
+
+  /* Estilos específicos para o menu principal no mobile */
+  .nav-principal.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Estilos específicos para o menu do usuário no mobile */
+  .menu-usuario.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    top: auto;
+    bottom: 0;
+    height: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-top: 1px solid #eee;
+  }
+
+  .menu-usuario.mobile-menu .nav-link {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Ajustar layout do header */
+  #header_esquerda {
+    justify-content: space-between;
+  }
+
+  /* Ajustar padding do body quando o menu estiver aberto */
+  body.menu-open {
+    overflow: hidden;
+  }
+}
+
+/* Para celulares (até 768px) */
+@media (max-width: 768px) {
+  header {
+    padding: 0.5rem 0;
+  }
+
+  body {
+    padding-top: 70px;
+  }
+
+  .mobile-menu {
+    width: 80%;
+  }
+}
+
+/* Para celulares pequenos (até 480px) */
+@media (max-width: 480px) {
+  .mobile-menu {
+    width: 85%;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
+    font-size: 15px;
+    padding: 10px 0;
+  }
+
+  #logo {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+}
+
+/* Para telas muito pequenas (até 360px) */
+@media (max-width: 360px) {
+  #logo {
+    font-size: 16px;
+  }
+}
