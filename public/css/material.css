@@ -94,7 +94,6 @@ header {
   flex-shrink: 0;
 }
 
-/* MENU DO USUÁRIO (Perfil e Sair) */
 .menu-usuario {
   display: flex;
   align-items: center;
@@ -103,13 +102,11 @@ header {
   flex-shrink: 0;
 }
 
-/* ÍCONE DO PERFIL */
 .icon {
   width: 24px;
   height: 24px;
 }
 
-/* ===== EFEITOS HOVER ===== */
 #logo:hover,
 .nav-link:hover {
   color: #f6b737;
@@ -170,6 +167,7 @@ h1 {
 h2 {
   color: #202f5a;
   font-family: "titulos";
+  margin-bottom: 3vh;
 }
 
 h3 {
@@ -269,6 +267,12 @@ h3 {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-left: 4px solid #4d69d5;
+  transition: all 0.3s ease;
+}
+
+.flashcard-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 4px 12px rgba(26, 42, 108, 0.4);
 }
 
 .flashcard-materia {
