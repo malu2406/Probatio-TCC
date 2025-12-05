@@ -465,6 +465,10 @@ h3 {
   background-color: #fff8f8;
 }
 
+.status-indicator {
+  display: none;
+}
+
 /* Ajuste para o posicionamento dos elementos no card */
 .flashcard {
   position: relative;
@@ -526,6 +530,7 @@ h3 {
 .feedback-buttons {
   display: none;
   gap: 3vh;
+  flex-direction: row;
 }
 
 .btn {
@@ -642,27 +647,6 @@ h3 {
   font-weight: bold;
   color: #333;
   font-family: "texto";
-}
-
-.status-indicator {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.7rem;
-  font-weight: bold;
-  font-family: "texto";
-}
-
-.status-indicator.acerto {
-  background-color: #4caf50;
-  color: white;
-}
-
-.status-indicator.erro {
-  background-color: #f44336;
-  color: white;
 }
 
 /* FOOTER */
@@ -957,8 +941,7 @@ hr {
     padding: 12px;
   }
 
-  .materia-tag,
-  .status-indicator {
+  .materia-tag {
     font-size: 0.7rem;
     padding: 3px 8px;
   }

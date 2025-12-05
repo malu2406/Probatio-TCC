@@ -203,6 +203,12 @@ function setupModernFilters() {
         filtrosAtivos.status = "todas";
       }
 
+      // Mostrar TODOS os flashcards novamente
+      const flashcards = document.querySelectorAll(".flashcard");
+      flashcards.forEach((card) => {
+        card.style.display = "flex";
+      });
+
       aplicarFiltrosImediatamente();
 
       // Feedback visual
@@ -217,8 +223,46 @@ function setupModernFilters() {
 
   // Função para aplicar filtros e atualizar contador IMEDIATAMENTE
   function aplicarFiltrosImediatamente() {
-    filterFlashcards(filtrosAtivos.materia);
-    filterByStatus(filtrosAtivos.status);
+    const flashcards = document.querySelectorAll(".flashcard");
+    const materia = filtrosAtivos.materia;
+    const status = filtrosAtivos.status;
+
+    flashcards.forEach((card) => {
+      const cardMateria = card.getAttribute("data-materia");
+      const cardId = card.getAttribute("data-id");
+
+      // Primeiro: filtrar por matéria
+      let mostraPorMateria = materia === "todas" || cardMateria === materia;
+
+      // Segundo: filtrar por status (usando classes CSS para determinar status)
+      let mostraPorStatus = true;
+
+      if (status !== "todas") {
+        const temClasseAcerto = card.classList.contains("respondida-acerto");
+        const temClasseErro = card.classList.contains("respondida-erro");
+        const jaRespondida = temClasseAcerto || temClasseErro;
+
+        switch (status) {
+          case "nao-respondidas":
+            mostraPorStatus = !jaRespondida;
+            break;
+          case "respondidas":
+            mostraPorStatus = jaRespondida;
+            break;
+          case "acertadas":
+            mostraPorStatus = temClasseAcerto;
+            break;
+          case "erradas":
+            mostraPorStatus = temClasseErro;
+            break;
+        }
+      }
+
+      // Mostrar ou esconder baseado nos dois filtros
+      card.style.display =
+        mostraPorMateria && mostraPorStatus ? "flex" : "none";
+    });
+
     updateContador();
   }
 
@@ -226,7 +270,7 @@ function setupModernFilters() {
   function updateContador() {
     const flashcards = document.querySelectorAll(".flashcard");
     const visiveis = Array.from(flashcards).filter(
-      (card) => card.style.display !== "none" && card.style.display !== ""
+      (card) => card.style.display !== "none"
     ).length;
 
     contadorTotal.textContent = `${visiveis} flashcards encontrados`;
@@ -321,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const chaveUsuario = `historicoRespostas_${userId}`;
     localStorage.setItem(chaveUsuario, JSON.stringify(historicoRespostas));
 
-    console.log(" Resposta salva para usuário:", userId, flashcardId, acertou);
+    console.log("Resposta salva para usuário:", userId, flashcardId, acertou);
   }
 
   function mapearNomeConteudo(value) {
@@ -361,6 +405,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     reapplyEventListeners();
+    updateContador(); // Atualizar contador após exibir flashcards
   }
 
   function createFlashcardElement(flashcard) {
@@ -398,13 +443,6 @@ document.addEventListener("DOMContentLoaded", function () {
             <span class="materia-tag ${materiaClass}">${
       materiaNames[flashcard.materia] || flashcard.materia
     }</span>
-            ${
-              jaRespondida
-                ? `<div class="status-indicator ${
-                    acertou ? "acerto" : "erro"
-                  }">${acertou ? "✓ Acertou" : "✗ Errou"}</div>`
-                : ""
-            }
             <div class="conteudo-tag">${mapearNomeConteudo(
               flashcard.conteudo
             )}</div>
@@ -451,8 +489,8 @@ document.addEventListener("DOMContentLoaded", function () {
         registerAnswer(materia, conteudo, true);
         salvarResposta(flashcardId, true);
         card.classList.add("respondida-acerto");
+        // Esconder o card imediatamente após responder
         card.style.display = "none";
-        aplicarFiltrosImediatamente();
         updateContador();
       });
     });
@@ -467,59 +505,10 @@ document.addEventListener("DOMContentLoaded", function () {
         registerAnswer(materia, conteudo, false);
         salvarResposta(flashcardId, false);
         card.classList.add("respondida-erro");
+        // Esconder o card imediatamente após responder
         card.style.display = "none";
-        aplicarFiltrosImediatamente();
         updateContador();
       });
-    });
-  }
-
-  function filterFlashcards(materia) {
-    const flashcards = document.querySelectorAll(".flashcard");
-    flashcards.forEach((card) => {
-      if (
-        materia === "todas" ||
-        card.getAttribute("data-materia") === materia
-      ) {
-        // Primeiro mostra todos os cards da matéria selecionada
-        card.style.display = "flex";
-      } else {
-        card.style.display = "none";
-      }
-    });
-  }
-
-  function filterByStatus(status) {
-    const flashcards = document.querySelectorAll(".flashcard");
-    flashcards.forEach((card) => {
-      const cardId = card.getAttribute("data-id");
-      const resposta = historicoRespostas[cardId];
-      const respostaDesteUsuario = resposta && resposta.userId === userId;
-
-      let mostrar = false;
-
-      switch (status) {
-        case "todas":
-          mostrar = true;
-          break;
-        case "nao-respondidas":
-          mostrar = !respostaDesteUsuario;
-          break;
-        case "respondidas":
-          mostrar = respostaDesteUsuario;
-          break;
-        case "acertadas":
-          mostrar = respostaDesteUsuario && resposta.acertou;
-          break;
-        case "erradas":
-          mostrar = respostaDesteUsuario && !resposta.acertou;
-          break;
-      }
-
-      // Só aplicar o filtro de status se o card já não estiver escondido pelo filtro de matéria
-      if (card.style.display === "flex") {
-        card.style.display = mostrar ? "flex" : "none";
-      }
     });
   }
 
@@ -549,7 +538,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       await updateStatsDisplay();
     } catch (error) {
-      console.error(" Erro ao registrar resposta:", error);
+      console.error("Erro ao registrar resposta:", error);
     }
   }
 
