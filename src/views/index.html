@@ -11,9 +11,17 @@
     <div id="container">
       <header>
         <div id="header_esquerda">
-          <nav>
+          <a href="#inicio" id="logo">PROBATIO</a>
+
+          <!-- Botão do menu sanduíche -->
+          <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+
+          <nav id="main-nav">
             <ul>
-              <li><a href="#inicio" id="logo">PROBATIO</a></li>
               <li><a href="#inicio">Inicio</a></li>
               <li><a href="#plataforma">Plataforma</a></li>
               <li><a href="#sobre">Sobre o Enem</a></li>
@@ -25,11 +33,12 @@
 
       <main>
         <div class="interface">
+          <!-- Resto do seu conteúdo permanece igual -->
           <section id="inicio" class="page1">
             <div class="texto">
               <h1>Bem vindo!</h1>
               <div class="pezinho">
-                <h2>Seu espaço de estudos focado no ENEM</h2>
+                <h2>Seu espaço de estudos</h2>
               </div>
               <div class="pezao">
                 <p>
@@ -49,18 +58,13 @@
 
           <section id="plataforma" class="page1">
             <div class="texto">
-              <h2>Conheça o Probatio</h2>
-              <div class="pezinho">
-                <div class="beneficios-video">
-                  <img src="/images/video.png" alt="ariana" />
-                </div>
-              </div>
+              <h2>Conheça o Probatio,</h2>
+              <h2>Aqui você poderá</h2>
               <div class="pezao">
-                <h2>Aqui você poderá</h2>
                 <div class="beneficios_lista">
                   <div class="beneficios">
                     <img src="/images/estudo.png" alt="ariana" />
-                    <p>Estudar com <b>resumos prontos</b> de alta qualidade</p>
+                    <p>Estudar com <b>Flashcards</b> de alta qualidade</p>
                   </div>
                   <div class="beneficios">
                     <img src="/images/grafico.png" alt="jungkook" />
@@ -69,16 +73,12 @@
                   <div class="beneficios">
                     <img src="/images/diario.png" alt="renee" />
                     <p>
-                      Fazer <b>exercicios</b> para fixação do conteúdo com
-                      metodo <b>Pomodoro</b>
+                      Focar em seus <b>estudos</b> com o metodo <b>Pomodoro</b>
                     </p>
                   </div>
                   <div class="beneficios">
                     <img src="/images/lista-de-desejos.png" alt="carol" />
-                    <p>
-                      Realizar <b>simulados</b> com questões de provas
-                      anteriores
-                    </p>
+                    <p>Temporizar seus estudos com <b>crônometro</b></p>
                   </div>
                 </div>
               </div>
@@ -164,5 +164,29 @@
         </div>
       </footer>
     </div>
+
+    <script>
+      // Menu sanduíche simples
+      document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.getElementById("menu-toggle");
+        const mainNav = document.getElementById("main-nav");
+
+        if (menuToggle) {
+          menuToggle.addEventListener("click", function () {
+            mainNav.classList.toggle("active");
+            menuToggle.classList.toggle("active");
+          });
+
+          // Fechar menu ao clicar em um link
+          const navLinks = mainNav.querySelectorAll("a");
+          navLinks.forEach((link) => {
+            link.addEventListener("click", () => {
+              mainNav.classList.remove("active");
+              menuToggle.classList.remove("active");
+            });
+          });
+        }
+      });
+    </script>
   </body>
 </html>

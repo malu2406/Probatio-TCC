@@ -21,6 +21,26 @@ body {
   /* Isso faz com que o body ocupe pelo menos a altura total da tela */
 }
 
+.nav-link.active {
+  color: #f6b737 !important;
+  text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548) !important;
+  transform: translateY(-2px) !important;
+  position: relative;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 3px;
+  background-color: #f6b737;
+  border-radius: 2px;
+}
+
+
 #container {
   width: 100%;
   max-width: 1200px;

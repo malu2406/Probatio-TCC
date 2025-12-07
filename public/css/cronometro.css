@@ -13,18 +13,6 @@
   src: url("/fonts/Poppins-Medium.ttf") format("opentype");
 }
 
-.titulos {
-  font-family: "titulos", sans-serif;
-}
-
-.texto {
-  font-family: "texto", sans-serif;
-}
-
-.probatio {
-  font-family: "probatio", sans-serif;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -38,13 +26,23 @@ body {
   min-height: 100vh;
 }
 
-#container {
+.container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
-
+main {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 200px); /* Ajuste para centralizar verticalmente */
+}
 header {
   position: fixed;
   top: 0;
@@ -126,11 +124,10 @@ header:hover {
 }
 
 #logo:hover,
-.nav-link:hover,
-a:hover {
+.nav-link:hover {
   color: #f6b737;
-  transform: translateY(-2px);
   text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
+  transform: translateY(-2px);
 }
 
 .menu-usuario {
@@ -146,53 +143,71 @@ a:hover {
   height: 24px;
 }
 
+/* Estilo para link ativo no menu */
+.nav-link.active {
+  color: #f6b737 !important;
+  text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548) !important;
+  transform: translateY(-2px) !important;
+  position: relative;
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 3px;
+  background-color: #f6b737;
+  border-radius: 2px;
+}
+
+/* Estilos do cronômetro */
 h1 {
   color: #202f5a;
   font-family: "titulos";
-  justify-self: start;
+  text-align: center;
 }
-
 .cronometro-container {
   background-color: #1a2a6c;
   width: 100%;
-  height: 430px;
+  max-width: 800px; /* Limita a largura máxima */
+  height: 400px;
   padding: 20px;
-  gap: 20px;
   border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* Centraliza horizontalmente */
 }
-
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+.timer-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-body {
-  background-color: #fafbfc;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  padding-top: 80px;
-}
-
-main {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  justify-content: center;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  border-radius: 10px;
+  border: 2px solid #f6b737;
+  height: 100%;
+  width: 100%;
+  text-align: center;
 }
 
 #counter {
   font-family: "titulos";
-  font-size: 7rem;
+  font-size: clamp(3rem, 10vw, 7rem);
   color: #f6b737;
+  margin-bottom: 30px;
+  line-height: 1;
+}
+
+.controls-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  width: 100%;
+  justify-content: center;
 }
 
 .start,
@@ -206,32 +221,22 @@ main {
   transition: all 0.3s ease;
   background-color: #f6b737;
   cursor: pointer;
+  font-family: "texto";
+  font-size: 16px;
 }
 
-.controls-container {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-  width: 100%;
-  justify-content: center;
-}
-
-.timer-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  border-radius: 10px;
-  border: 2px solid #f6b737;
-  height: 100%;
-  width: 100%;
+.start:hover,
+.reset:hover {
+  background-color: #202f5a;
+  color: #f6b737;
+  transform: translateY(-2px);
 }
 
 .wrapper {
   width: 80%;
 }
 
+/* Footer */
 footer {
   display: flex;
   flex-direction: column;
@@ -240,19 +245,310 @@ footer {
   padding: 1rem 0;
 }
 
-footer .logofinal {
-  left: 50%;
-  right: 50%;
-}
-
 .linha {
   width: 100%;
   max-width: 1200px;
+  margin-top: 40px;
 }
 
-.start:hover,
-.reset:hover {
-  background-color: #202f5a;
+hr {
+  border: 0;
+  border-top: medium double #ccc;
+  height: 1px;
+  overflow: visible;
+  padding: 0;
+  color: #ccc;
+  text-align: center;
+}
+
+.logofinal {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.logofinal a {
+  color: #202f5a;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: "probatio";
+  text-align: center;
+}
+
+.logofinal a:hover {
   color: #f6b737;
+  text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
   transform: translateY(-2px);
+}
+
+/* ============================================== */
+/* REGRAS PARA O MENU RESPONSIVO - SANDUÍCHE     */
+/* ============================================== */
+
+/* BOTÃO DO MENU SANDUÍCHE */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  z-index: 1001;
+}
+
+.menu-toggle .bar {
+  height: 3px;
+  width: 100%;
+  background-color: #202f5a;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Menu mobile aberto - animação do botão */
+.menu-toggle.active .bar:nth-child(1) {
+  transform: translateY(10.5px) rotate(45deg);
+}
+
+.menu-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+  transform: translateY(-10.5px) rotate(-45deg);
+}
+
+/* Overlay para quando o menu estiver aberto */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
+/* Para tablets menores e celulares (até 900px) */
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  /* Esconder menu normal que não tem a classe mobile-menu */
+  .nav-principal:not(.mobile-menu),
+  .menu-usuario:not(.mobile-menu) {
+    display: none;
+  }
+
+  /* Menu mobile - estado fechado */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    padding: 80px 20px 20px;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+  }
+
+  .mobile-menu.active {
+    right: 0;
+  }
+
+  /* Estilos específicos para o menu principal no mobile */
+  .nav-principal.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .nav-principal.mobile-menu .nav-link.bolsista-only {
+    background: linear-gradient(45deg, #1a2a6c, #4d69d5);
+    color: white !important;
+    border-radius: 20px;
+    padding: 10px 16px;
+    margin: 5px 0;
+    display: inline-block;
+    width: auto;
+    text-align: center;
+  }
+
+  /* Estilos específicos para o menu do usuário no mobile */
+  .menu-usuario.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    top: auto;
+    bottom: 0;
+    height: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-top: 1px solid #eee;
+  }
+
+  .menu-usuario.mobile-menu .nav-link {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Ajustar layout do header */
+  #header_esquerda {
+    justify-content: space-between;
+  }
+
+  /* Ajustar padding do body quando o menu estiver aberto */
+  body.menu-open {
+    overflow: hidden;
+  }
+}
+
+/* Responsividade do cronômetro */
+@media (max-width: 1024px) {
+  .wrapper {
+    width: 90%;
+  }
+
+  .cronometro-container {
+    height: 380px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    width: 95%;
+  }
+
+  .cronometro-container {
+    height: 320px;
+    padding: 15px;
+  }
+
+  .timer-container {
+    padding: 15px;
+  }
+
+  .controls-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .start,
+  .reset {
+    width: 180px;
+    padding: 10px 20px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cronometro-container {
+    height: 280px;
+    padding: 10px;
+  }
+
+  .timer-container {
+    padding: 10px;
+  }
+
+  .start,
+  .reset {
+    width: 160px;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  #counter {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cronometro-container {
+    height: 250px;
+  }
+
+  .start,
+  .reset {
+    width: 140px;
+    font-size: 13px;
+  }
+
+  .controls-container {
+    gap: 10px;
+  }
+}
+
+/* Para celulares (até 768px) */
+@media (max-width: 768px) {
+  header {
+    padding: 0.5rem 0;
+  }
+
+  body {
+    padding-top: 70px;
+  }
+
+  .mobile-menu {
+    width: 80%;
+  }
+}
+
+/* Para celulares pequenos (até 480px) */
+@media (max-width: 480px) {
+  .mobile-menu {
+    width: 85%;
+  }
+
+  .nav-principal.mobile-menu .nav-link {
+    font-size: 15px;
+    padding: 10px 0;
+  }
+
+  #logo {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+}
+
+/* Para telas muito pequenas (até 360px) */
+@media (max-width: 360px) {
+  #logo {
+    font-size: 16px;
+  }
 }

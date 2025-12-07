@@ -178,12 +178,18 @@ pezao {
 
 .beneficios {
   max-width: 15rem;
-  padding: 3rem;
+  padding: 1rem;
 }
+
 .beneficios img {
   max-width: 90px; /* diminui largura */
   max-height: 90px; /* diminui altura */
   margin-bottom: 1rem; /* espaçamento do texto */
+  transition: all 0.3s ease-in-out;
+}
+.beneficios img:hover {
+  transform: scale(1.1);
+  transition: all 0.5s;
 }
 .beneficios-video {
   max-width: 15rem;
@@ -324,6 +330,222 @@ hr {
   }
 }
 @media (max-width: 768px) {
+  .beneficios img {
+    max-width: 60px;
+    max-height: 60px;
+  }
+}
+/* ============================================== */
+/* MENU SANDUÍCHE E RESPONSIVIDADE               */
+/* ============================================== */
+
+/* Botão do menu sanduíche */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  z-index: 1001;
+}
+
+.menu-toggle .bar {
+  height: 3px;
+  width: 100%;
+  background-color: #202f5a;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Menu mobile aberto - animação do botão */
+.menu-toggle.active .bar:nth-child(1) {
+  transform: translateY(10.5px) rotate(45deg);
+}
+
+.menu-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+  transform: translateY(-10.5px) rotate(-45deg);
+}
+
+/* Para tablets menores e celulares (até 768px) */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  #header_esquerda {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  nav#main-nav {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: 1rem 0;
+  }
+
+  nav#main-nav.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  nav#main-nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  nav#main-nav ul li {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  nav#main-nav ul li a {
+    display: block;
+    padding: 1rem;
+    width: 100%;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+  }
+
+  nav#main-nav ul li a:hover {
+    background-color: #f6f8fa;
+  }
+
+  #button_login {
+    margin-top: 0;
+    order: 3;
+  }
+}
+
+/* Ajustes para layout responsivo */
+@media (max-width: 768px) {
+  header {
+    flex-wrap: wrap;
+    padding: 0.8rem 5%;
+  }
+
+  #header_esquerda {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  #logo {
+    margin-right: auto;
+  }
+
+  .page1 {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem 0;
+  }
+
+  .texto {
+    order: 2;
+    text-align: center;
+    width: 100%;
+  }
+
+  .dragon {
+    order: 1;
+    max-width: 250px;
+    margin-bottom: 2rem;
+  }
+
+  .beneficios_lista {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .beneficios {
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .prgta {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .texto_prgta {
+    padding-left: 0;
+    padding-top: 1rem;
+  }
+
+  .interrogacao {
+    max-width: 3rem;
+    max-height: 3rem;
+  }
+
+  #plataforma,
+  #sobre {
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 32px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  p {
+    font-size: 15px;
+  }
+
+  #button_login,
+  #button_cadastro {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+
+  .beneficios img {
+    max-width: 70px;
+    max-height: 70px;
+  }
+}
+
+@media (max-width: 360px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  #button_login,
+  #button_cadastro {
+    padding: 8px 20px;
+    font-size: 13px;
+  }
+
   .beneficios img {
     max-width: 60px;
     max-height: 60px;

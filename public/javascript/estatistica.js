@@ -82,13 +82,18 @@ document.addEventListener("DOMContentLoaded", function () {
   // Carregar estatísticas
   carregarEstatisticas();
 
-  // Event listeners para a legenda
+  // Event listeners para a legenda - CORRIGIDO
   document.querySelectorAll(".legenda-item").forEach((item) => {
     item.addEventListener("click", function () {
       const materia = this.getAttribute("data-materia");
-      if (modoVisualizacao === "geral") {
-        mostrarDetalhesMateria(materia);
+
+      // Se já estamos na matéria clicada, não faz nada
+      if (modoVisualizacao === "detalhado" && materiaSelecionada === materia) {
+        return;
       }
+
+      // Mostra os detalhes da matéria clicada
+      mostrarDetalhesMateria(materia);
     });
   });
 
@@ -137,6 +142,11 @@ document.addEventListener("DOMContentLoaded", function () {
     modoVisualizacao = "geral";
     materiaSelecionada = "";
 
+    // Remover classe ativa da legenda
+    document.querySelectorAll(".legenda-item").forEach((item) => {
+      item.classList.remove("active");
+    });
+
     document.getElementById("grafico-titulo").textContent =
       "Desempenho por Matéria";
     document.getElementById("btn-voltar-geral").style.display = "none";
@@ -158,6 +168,14 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("grafico-titulo").textContent =
       "Desempenho em " + titulos[materia];
     document.getElementById("btn-voltar-geral").style.display = "block";
+
+    // Atualizar classe ativa na legenda
+    document.querySelectorAll(".legenda-item").forEach((item) => {
+      item.classList.remove("active");
+      if (item.getAttribute("data-materia") === materia) {
+        item.classList.add("active");
+      }
+    });
 
     // Chamar a função apropriada baseada na matéria selecionada
     switch (materia) {
@@ -263,9 +281,15 @@ document.addEventListener("DOMContentLoaded", function () {
       if (materia.clicavel) {
         barraItem.style.cursor = "pointer";
         barraItem.title = `Clique para ver detalhes de ${materia.nome}`;
-        barraItem.addEventListener("click", () =>
-          mostrarDetalhesMateria(materia.tipo)
-        );
+        barraItem.addEventListener("click", () => {
+          // Evita navegar para a mesma matéria se já estiver nela
+          if (
+            modoVisualizacao !== "detalhado" ||
+            materiaSelecionada !== materia.tipo
+          ) {
+            mostrarDetalhesMateria(materia.tipo);
+          }
+        });
       }
 
       const barraValor = document.createElement("div");
