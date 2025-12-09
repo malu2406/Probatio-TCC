@@ -74,8 +74,30 @@ header {
   position: relative;
 }
 
+.logofinal {
+  width: 100%;
+  text-align: center;
+  padding: 3vh;
+}
+
+.logo-footer {
+  font-family: "probatio";
+  font-size: clamp(16px, 3vh, 24px);
+  text-decoration: none;
+  color: #202f5a;
+  display: inline-block;
+  margin: 0 auto; /* Centraliza horizontalmente */
+}
+
+.logo-footer:hover {
+  color: #f6b737;
+  text-shadow: 0 2px 8px rgba(246, 182, 55, 0.548);
+  transform: translateY(-2px);
+  transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
 .nav-link.active::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 50%;
