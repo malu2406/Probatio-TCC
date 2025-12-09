@@ -78,6 +78,68 @@ const authController = {
     }
   },
 
+  // --- NOVO MÉTODO: ATUALIZAR PERFIL ---
+  updateProfile: async (req, res) => {
+    try {
+      // Verifica se o usuário está logado na sessão
+      if (!req.session.user) {
+        return res.status(401).json({ error: "Usuário não autenticado." });
+      }
+
+      const userId = req.session.user.id;
+      const { nome, nickname, email, senha } = req.body;
+
+      // Objeto base de atualização
+      const dataToUpdate = {
+        nome,
+        nickname,
+        email,
+      };
+
+      // Só atualiza a senha se o usuário digitou algo novo
+      if (senha && senha.trim() !== "") {
+        if (senha.length < 7) {
+          return res
+            .status(400)
+            .json({ error: "A nova senha deve ter pelo menos 7 caracteres." });
+        }
+        dataToUpdate.senha = await bcrypt.hash(senha, 10);
+      }
+
+      // Atualiza no Banco de Dados
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: dataToUpdate,
+      });
+
+      // IMPORTANTE: Atualiza a sessão com os novos dados
+      // Se não fizer isso, o site vai continuar mostrando o nome antigo até relogar
+      req.session.user = {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        nome: updatedUser.nome,
+        nickname: updatedUser.nickname,
+        tipo: updatedUser.tipo,
+      };
+
+      res.json({
+        message: "Perfil atualizado com sucesso!",
+        user: updatedUser,
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
+
+      // Tratamento para e-mail duplicado (P2002 é o código do Prisma para Unique Constraint)
+      if (error.code === "P2002") {
+        return res
+          .status(400)
+          .json({ error: "Este e-mail já está em uso por outro usuário." });
+      }
+
+      res.status(500).json({ error: "Erro interno ao atualizar perfil." });
+    }
+  },
+
   logout: (req, res) => {
     req.session.destroy();
     res.redirect("/");

@@ -1,3 +1,18 @@
+// Mapa para formatar os nomes das disciplinas
+const nomesDisciplinas = {
+  portugues: "Português",
+  ingles: "Inglês",
+  espanhol: "Espanhol",
+  historia: "História",
+  geografia: "Geografia",
+  sociologia: "Sociologia",
+  filosofia: "Filosofia",
+  biologia: "Biologia",
+  fisica: "Física",
+  quimica: "Química",
+  matematica: "Matemática",
+};
+
 // Função para controlar o menu mobile
 function setupMobileMenu() {
   const menuToggle = document.getElementById("menu-toggle");
@@ -87,25 +102,101 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Erro ao carregar dados do usuário:", error);
     });
 
-  // Carregar estatísticas do banco de dados
+  // Carregar estatísticas do banco de dados (Geral e Disciplinas)
   loadEstatisticasInicio();
 });
 
+// NOVA FUNÇÃO DE CARREGAMENTO (Busca geral e específica)
 async function loadEstatisticasInicio() {
   try {
-    const response = await fetch("/api/estatisticas");
-    const stats = await response.json();
-    generateChartInicio(stats);
-    updateNivelDesempenho(stats);
+    const [responseGeral, responseDisciplinas] = await Promise.all([
+      fetch("/api/estatisticas"),
+      fetch("/api/estatisticas-disciplinas"),
+    ]);
+
+    const statsGeral = await responseGeral.json();
+    const statsDisciplinas = await responseDisciplinas.json();
+
+    generateChartInicio(statsGeral);
+    updateNivelDesempenho(statsGeral);
+    
+    // Chama a nova função de recomendação
+    updateDisciplinaAtencao(statsDisciplinas);
+
   } catch (error) {
     console.error("Erro ao carregar estatísticas:", error);
-    // Em caso de erro, exibir gráfico vazio
+    // Em caso de erro, exibir gráfico vazio e traço na recomendação
     generateChartInicio({
       matematica: { total: 0, acertos: 0 },
       linguagens: { total: 0, acertos: 0 },
       humanas: { total: 0, acertos: 0 },
       natureza: { total: 0, acertos: 0 },
     });
+    document.getElementById("disciplina-atencao").textContent = "-";
+  }
+}
+
+// NOVA FUNÇÃO LÓGICA: Determina a disciplina que precisa de atenção
+function updateDisciplinaAtencao(statsDisciplinas) {
+  const elementoAlvo = document.getElementById("disciplina-atencao");
+  let todasDisciplinas = [];
+
+  // 1. Aplanar os dados: extrair disciplinas de dentro das áreas
+  Object.keys(statsDisciplinas).forEach((area) => {
+    const disciplinasDaArea = statsDisciplinas[area];
+
+    if (disciplinasDaArea) {
+      Object.keys(disciplinasDaArea).forEach((disciplinaKey) => {
+        const dados = disciplinasDaArea[disciplinaKey];
+
+        // Só consideramos disciplinas que o aluno realmente tentou responder
+        if (dados.total > 0) {
+          todasDisciplinas.push({
+            chave: disciplinaKey,
+            nome: nomesDisciplinas[disciplinaKey] || disciplinaKey,
+            total: dados.total,
+            acertos: dados.acertos,
+            taxaAcerto: dados.acertos / dados.total,
+          });
+        }
+      });
+    }
+  });
+
+  // 2. Regra: Se tiver menos de 3 matérias respondidas
+  if (todasDisciplinas.length < 3) {
+    elementoAlvo.textContent = "Responda mais flashcards para receber feedback";
+    elementoAlvo.style.fontSize = "0.9rem"; 
+    elementoAlvo.style.lineHeight = "1.2";
+    return;
+  }
+
+  // 3. Regra: Ordenar pela menor taxa de acerto
+  todasDisciplinas.sort((a, b) => {
+    if (a.taxaAcerto === b.taxaAcerto) {
+      // Desempate: quem tem mais erros absolutos vem primeiro (é mais urgente)
+      const errosA = a.total - a.acertos;
+      const errosB = b.total - b.acertos;
+      return errosB - errosA; 
+    }
+    return a.taxaAcerto - b.taxaAcerto; // Menor % primeiro
+  });
+
+  // A primeira da lista é a "pior"
+  const piorDisciplina = todasDisciplinas[0];
+
+  // 4. Atualizar o texto na tela
+  elementoAlvo.textContent = piorDisciplina.nome;
+  
+  // Reseta estilos caso tenham sido alterados
+  elementoAlvo.style.fontSize = ""; 
+  elementoAlvo.style.lineHeight = "";
+  
+  // Opcional: Destacar em vermelho se for crítico (< 50%)
+  if(piorDisciplina.taxaAcerto < 0.5) {
+      elementoAlvo.style.color = "#ff4444"; 
+  } else {
+      elementoAlvo.style.color = ""; 
   }
 }
 
@@ -122,7 +213,7 @@ function updateNivelDesempenho(stats) {
     stats.humanas.acertos +
     stats.natureza.acertos;
 
-  let nivel = "Baixo";
+  let nivel = "Iniciante";
   let cor = "#ff6b6b";
 
   if (totalQuestoes > 0) {
@@ -141,7 +232,7 @@ function updateNivelDesempenho(stats) {
       nivel = "Básico";
       cor = "#e67e22";
     } else {
-      nivel = "Baixo";
+      nivel = "Iniciante";
       cor = "#ff6b6b";
     }
   }

@@ -1,128 +1,112 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Página Inicial</title>
-    <link rel="stylesheet" href="/css/inicio.css" />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"
-      rel="stylesheet"
-    />
-    <link rel="icon" href="/images/dragon-remove.png" />
-  </head>
-  <body>
-    <!-- HEADER -->
-    <header>
-      <div id="header_esquerda">
-        <a href="/inicio" id="logo">PROBATIO</a>
 
-        <!-- Botão do menu sanduíche (visível apenas em mobile) -->
-        <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página Inicial</title>
+  <link rel="stylesheet" href="/css/inicio.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel="icon" href="/images/dragon-remove.png" />
+</head>
 
-        <!-- Nav principal com a classe para controle mobile -->
-        <div class="nav-principal mobile-menu" id="main-nav">
-          <!-- Link de Matérias - será mostrado apenas para bolsistas -->
-          <a
-            href="/material"
-            class="nav-link bolsista-only"
-            id="link-materias"
-            style="display: none"
-            >Material</a
-          >
-          <a href="/estatistica" class="nav-link">Estatísticas</a>
-          <a href="/flashcards" class="nav-link">Flashcards</a>
-          <a href="/noticias" class="nav-link">Portais de Notícia</a>
-          <a href="/pomodoro" class="nav-link">Pomodoro</a>
-          <a href="/cronometro" class="nav-link">Cronômetro</a>
-        </div>
+<body>
+  <header>
+    <div id="header_esquerda">
+      <a href="/inicio" id="logo">PROBATIO</a>
 
-        <!-- Menu do usuário também dentro do menu mobile -->
-        <div class="menu-usuario mobile-menu" id="user-menu">
-          <a href="/perfil" class="nav-link">
-            <img src="/images/user.png" alt="Perfil" class="icon" />
-          </a>
-          <a href="/logout" class="nav-link">Sair</a>
-        </div>
+      <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <div class="nav-principal mobile-menu" id="main-nav">
+        <a href="/material" class="nav-link bolsista-only" id="link-materias" style="display: none">Material</a>
+        <a href="/estatistica" class="nav-link">Estatísticas</a>
+        <a href="/flashcards" class="nav-link">Flashcards</a>
+        <a href="/noticias" class="nav-link">Portais de Notícia</a>
+        <a href="/pomodoro" class="nav-link">Pomodoro</a>
+        <a href="/cronometro" class="nav-link">Cronômetro</a>
       </div>
-    </header>
 
-    <div id="container">
-      <main>
-        <!-- Mensagem de Bem-Vindo -->
-        <div class="saudacao">
-          <h1>
-            Olá, <span id="nomeUsuario">Usuario</span>! Hora de começar os
-            estudos!
-          </h1>
-        </div>
-
-        <!-- Métricas -->
-        <div class="metricas">
-          <div class="metrica-card">
-            <h3>Disciplina que necessita atenção:</h3>
-            <div class="metrica-valor">Química</div>
-          </div>
-          <div class="metrica-card">
-            <h3>Nível de desempenho:</h3>
-            <div class="metrica-valor" id="nivel-desempenho">Médio</div>
-          </div>
-        </div>
-
-        <!-- Atividades do Dia -->
-        <h2 class="titulo-sessao">Atividades:</h2>
-        <div class="box-maior">
-          <div class="grafico-wrapper">
-            <div class="grafico-titulo">Desempenho por Matéria</div>
-            <div class="chart-container-inicio" id="chart-container-inicio">
-              <!-- Gráfico será gerado aqui -->
-            </div>
-          </div>
-        </div>
-
-        <div class="box-atividades">
-          <a href="/flashcards" class="box-link">
-            <div class="box">
-              <h2>Rápido e Fácil</h2>
-              <span class="material-symbols-outlined imagenzinhas"> bolt </span>
-            </div>
-          </a>
-
-          <a href="/pomodoro" class="box-link">
-            <div class="box">
-              <h2>Dê play no método mais eficaz do mundo!</h2>
-              <span class="material-symbols-outlined imagenzinhas">
-                av_timer
-              </span>
-            </div>
-          </a>
-
-          <a href="/noticias" class="box-link">
-            <div class="box">
-              <h2>Notícias e Repertórios</h2>
-              <span class="material-symbols-outlined imagenzinhas">
-                newsmode
-              </span>
-            </div>
-          </a>
-        </div>
-      </main>
-
-      <!-- Footer -->
-      <div class="linha">
-        <hr />
+      <div class="menu-usuario mobile-menu" id="user-menu">
+        <a href="/perfil" class="nav-link">
+          <img src="/images/user.png" alt="Perfil" class="icon" />
+        </a>
+        <a href="/logout" class="nav-link">Sair</a>
       </div>
-      <footer>
-        <div class="logofinal">
-          <a href="/inicio" class="logo-footer">PROBATIO</a>
-        </div>
-      </footer>
     </div>
+  </header>
 
-    <script src="/javascript/inicio.js"></script>
-  </body>
+  <div id="container">
+    <main>
+      <div class="saudacao">
+        <h1>
+          Olá, <span id="nomeUsuario">Usuario</span>! Hora de começar os
+          estudos!
+        </h1>
+      </div>
+
+      <div class="metricas">
+        <div class="metrica-card">
+          <h3>Disciplina que necessita atenção:</h3>
+          <div class="metrica-valor" id="disciplina-atencao">Calculando...</div>
+        </div>
+        <div class="metrica-card">
+          <h3>Nível de desempenho:</h3>
+          <div class="metrica-valor" id="nivel-desempenho">Médio</div>
+        </div>
+      </div>
+
+      <h2 class="titulo-sessao">Atividades:</h2>
+      <div class="box-maior">
+        <div class="grafico-wrapper">
+          <div class="grafico-titulo">Desempenho por Matéria</div>
+          <div class="chart-container-inicio" id="chart-container-inicio">
+          </div>
+        </div>
+      </div>
+
+      <div class="box-atividades">
+        <a href="/flashcards" class="box-link">
+          <div class="box">
+            <h2>Rápido e Fácil</h2>
+            <span class="material-symbols-outlined imagenzinhas"> bolt </span>
+          </div>
+        </a>
+
+        <a href="/pomodoro" class="box-link">
+          <div class="box">
+            <h2>Dê play no método mais eficaz do mundo!</h2>
+            <span class="material-symbols-outlined imagenzinhas">
+              av_timer
+            </span>
+          </div>
+        </a>
+
+        <a href="/noticias" class="box-link">
+          <div class="box">
+            <h2>Notícias e Repertórios</h2>
+            <span class="material-symbols-outlined imagenzinhas">
+              newsmode
+            </span>
+          </div>
+        </a>
+      </div>
+    </main>
+
+    <div class="linha">
+      <hr />
+    </div>
+    <footer>
+      <div class="logofinal">
+        <a href="/inicio" class="logo-footer">PROBATIO</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/javascript/inicio.js"></script>
+</body>
+
 </html>

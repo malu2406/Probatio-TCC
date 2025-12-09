@@ -35,6 +35,8 @@ router.get('/flashcards', checkAuth, pageController.getFlashcards);
 
 // API - Usuário
 router.get('/api/usuario', checkAuth, userController.getUsuario);
+// NOVA ROTA: Atualizar perfil (PUT)
+router.put('/api/usuario', checkAuth, authController.updateProfile);
 
 // API - Tarefas
 router.get('/tasks', checkAuth, taskController.getTasks);
