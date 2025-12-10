@@ -214,7 +214,6 @@ header:hover {
   background: linear-gradient(45deg, #1a2a6c, #4d69d5);
   color: white !important;
   border-radius: 20px;
-  padding: 8px 16px;
   margin: 0 5px;
   transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
@@ -292,12 +291,22 @@ h3 {
 .form-group textarea {
   width: 100%;
   padding: 12px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #909090;
   border-radius: 8px;
   font-size: 16px;
   font-family: "texto";
   transition: border-color 0.3s ease;
   box-sizing: border-box;
+}
+
+#editMateria,
+#editConteudo,
+#editPergunta,
+#editResposta {
+  border-style: dashed;
+  background-color: #e8c888;
+  border-color: #1a2a6c;
+  border: 2px solid dashed;
 }
 
 .form-group textarea {
@@ -442,11 +451,23 @@ h3 {
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: #ffd889;
   margin: 5% auto;
-  padding: 30px;
+  padding: 3vh;
   border-radius: 12px;
   width: 90%;
+  max-width: 600px;
+  border-style: dashed;
+  border: 2px solid dashed;
+  border-color: #1a2a6c;
+}
+
+.modal-content-fora {
+  background-color: #ffd889;
+  margin: 2% auto;
+  padding: 0.1vh;
+  border-radius: 3vh;
+  width: 50%;
   max-width: 600px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
@@ -535,6 +556,18 @@ hr {
     display: flex;
   }
 
+  header:hover {
+    box-shadow: none;
+    transform: none;
+    background-color: #ffffffa3;
+    transition: none;
+  }
+  header {
+    box-shadow: none !important;
+    transform: none !important;
+    background-color: #ffffffa3;
+  }
+
   /* Esconder menu normal */
   .nav-principal:not(.mobile-menu),
   .menu-usuario:not(.mobile-menu) {
@@ -570,10 +603,7 @@ hr {
   }
 
   .nav-principal.mobile-menu .nav-link {
-    width: 100%;
-    padding: 12px 0;
-    font-size: 16px;
-    border-bottom: 1px solid #eee;
+    font-size: 15px;
   }
 
   /* Estilos específicos para o menu do usuário no mobile */
@@ -674,7 +704,6 @@ hr {
 
   .nav-principal.mobile-menu .nav-link {
     font-size: 15px;
-    padding: 10px 0;
   }
 
   #logo {

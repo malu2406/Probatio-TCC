@@ -446,6 +446,18 @@ hr {
     justify-content: space-between;
   }
 
+  header:hover {
+    box-shadow: none;
+    transform: none;
+    background-color: #ffffffa3;
+    transition: none;
+  }
+  header {
+    box-shadow: none !important;
+    transform: none !important;
+    background-color: #ffffffa3;
+  }
+
   /* Ajustar padding do body quando o menu estiver aberto */
   body.menu-open {
     overflow: hidden;

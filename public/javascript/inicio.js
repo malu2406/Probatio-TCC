@@ -119,10 +119,9 @@ async function loadEstatisticasInicio() {
 
     generateChartInicio(statsGeral);
     updateNivelDesempenho(statsGeral);
-    
+
     // Chama a nova função de recomendação
     updateDisciplinaAtencao(statsDisciplinas);
-
   } catch (error) {
     console.error("Erro ao carregar estatísticas:", error);
     // Em caso de erro, exibir gráfico vazio e traço na recomendação
@@ -166,7 +165,7 @@ function updateDisciplinaAtencao(statsDisciplinas) {
   // 2. Regra: Se tiver menos de 3 matérias respondidas
   if (todasDisciplinas.length < 3) {
     elementoAlvo.textContent = "Responda mais flashcards para receber feedback";
-    elementoAlvo.style.fontSize = "0.9rem"; 
+    elementoAlvo.style.fontSize = "0.9rem";
     elementoAlvo.style.lineHeight = "1.2";
     return;
   }
@@ -177,7 +176,7 @@ function updateDisciplinaAtencao(statsDisciplinas) {
       // Desempate: quem tem mais erros absolutos vem primeiro (é mais urgente)
       const errosA = a.total - a.acertos;
       const errosB = b.total - b.acertos;
-      return errosB - errosA; 
+      return errosB - errosA;
     }
     return a.taxaAcerto - b.taxaAcerto; // Menor % primeiro
   });
@@ -187,16 +186,16 @@ function updateDisciplinaAtencao(statsDisciplinas) {
 
   // 4. Atualizar o texto na tela
   elementoAlvo.textContent = piorDisciplina.nome;
-  
+
   // Reseta estilos caso tenham sido alterados
-  elementoAlvo.style.fontSize = ""; 
+  elementoAlvo.style.fontSize = "";
   elementoAlvo.style.lineHeight = "";
-  
+
   // Opcional: Destacar em vermelho se for crítico (< 50%)
-  if(piorDisciplina.taxaAcerto < 0.5) {
-      elementoAlvo.style.color = "#ff4444"; 
+  if (piorDisciplina.taxaAcerto < 0.5) {
+    elementoAlvo.style.color = "#ff4444";
   } else {
-      elementoAlvo.style.color = ""; 
+    elementoAlvo.style.color = "";
   }
 }
 

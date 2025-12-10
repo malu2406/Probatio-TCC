@@ -138,6 +138,7 @@ header:hover {
   box-shadow: -2px 2px 20px rgba(142, 142, 142, 0.53);
   transform: translateY(-2px);
 }
+
 /*FIM HEADER*/
 
 h1 {
@@ -503,32 +504,37 @@ hr {
   }
 }
 
-/* Para tablets menores e celulares (até 900px) - Menu sanduíche */
 @media (max-width: 900px) {
   .menu-toggle {
     display: flex;
   }
-
-  /* Esconder menu normal */
   .nav-principal:not(.mobile-menu),
   .menu-usuario:not(.mobile-menu) {
     display: none;
   }
 
   /* Menu mobile - estado fechado */
+  /* @media (max-width: 900px) */
+  /* ... */
+
   .mobile-menu {
     position: fixed;
     top: 0;
     right: -100%;
     width: 70%;
     max-width: 300px;
-    height: 100vh;
+    height: 100vh; /* OK */
     background-color: #ffffff;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    padding: 80px 20px 20px;
+    /* Remova o padding superior e inferior daqui, vamos aplicar no flex container */
+    padding: 0; /* <--- Mude de 80px 20px 20px para 0, ou para 20px 0 20px */
     z-index: 1000;
     overflow-y: auto;
     transition: right 0.3s ease;
+
+    /* Torne o mobile-menu um contêiner flexível de coluna */
+    display: flex; /* Adicionar */
+    flex-direction: column; /* Adicionar */
   }
 
   .mobile-menu.active {
@@ -536,18 +542,34 @@ hr {
   }
 
   /* Estilos específicos para o menu principal no mobile */
+  /* Estilos específicos para o menu principal no mobile */
   .nav-principal.mobile-menu {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
+    /* Adicione o padding superior e lateral aqui */
+    padding: 80px 20px 20px; /* <--- Adicione o padding superior (para a barra de cabeçalho) */
+    flex-grow: 1; /* Permite que ele cresça e empurre o menu do usuário para baixo se houver muito conteúdo */
   }
 
-  .nav-principal.mobile-menu .nav-link {
-    width: 100%;
-    padding: 12px 0;
-    font-size: 16px;
-    border-bottom: 1px solid #eee;
+  /* Estilos específicos para o menu do usuário no mobile */
+  .menu-usuario.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    /* Remova as propriedades de posicionamento que causam o problema */
+    /* top: auto; (Remova) */
+    /* bottom: 0; (Remova) */
+    /* height: auto; (Mantenha ou remova) */
+    background-color: #f8f9fa;
+    padding: 20px; /* <--- Mantenha o padding inferior e lateral */
+    border-top: 1px solid #eee;
+    flex-shrink: 0; /* Impede que ele encolha */
+
+    /* Ajuste a margem superior se for necessário, mas com o flex-grow acima, pode não ser */
+    /* margin-top: auto; (Opcional: para empurrar para o final) */
   }
 
   /* Estilos específicos para o menu do usuário no mobile */
@@ -589,6 +611,22 @@ hr {
 
   .box {
     height: 25vh;
+  }
+
+  /* início.css */
+
+  /* ... (seus estilos anteriores) ... */
+
+  header:hover {
+    box-shadow: none;
+    transform: none;
+    background-color: #ffffffa3;
+    transition: none;
+  }
+  header {
+    box-shadow: none !important;
+    transform: none !important;
+    background-color: #ffffffa3;
   }
 }
 
@@ -632,7 +670,6 @@ hr {
 
   .nav-principal.mobile-menu .nav-link {
     font-size: 15px;
-    padding: 10px 0;
   }
 
   #logo {

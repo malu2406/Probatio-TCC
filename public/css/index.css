@@ -282,6 +282,22 @@ hr {
   }
 }
 
+
+@media (max-width: 900px){
+  
+  header:hover {
+    box-shadow: none;
+    transform: none;
+    background-color: #ffffffa3;
+    transition: none;
+  }
+  header {
+    box-shadow: none !important;
+    transform: none !important;
+    background-color: #ffffffa3;
+  }
+
+}
 @media (max-width: 768px) {
   header {
     flex-direction: column;

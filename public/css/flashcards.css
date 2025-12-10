@@ -152,7 +152,6 @@ header {
   color: white !important;
   border-radius: 20px;
   padding: 8px 16px;
-  margin: 0 5px;
   transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
@@ -752,6 +751,18 @@ hr {
 @media (max-width: 900px) {
   .menu-toggle {
     display: flex;
+  }
+
+  header:hover {
+    box-shadow: none;
+    transform: none;
+    background-color: #ffffffa3;
+    transition: none;
+  }
+  header {
+    box-shadow: none !important;
+    transform: none !important;
+    background-color: #ffffffa3;
   }
 
   /* Esconder menu normal */
