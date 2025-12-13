@@ -108,57 +108,57 @@
     </footer>
     <div id="editModal" class="modal">
       <div class="modal-content-fora">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Editar Flashcard</h2>
-        <form id="editFlashcardForm">
-          <input type="hidden" id="editFlashcardId" />
-          <div class="form-group">
-            <label for="editMateria">Matéria:</label>
-            <select name="materia" id="editMateria" required>
-              <option value="">Selecione a matéria</option>
-              <option value="CH">Ciências Humanas</option>
-              <option value="CN">Ciências da Natureza</option>
-              <option value="LINGUAGENS">Linguagens</option>
-              <option value="MATEMATICA">Matemática</option>
-            </select>
-          </div>
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Editar Flashcard</h2>
+          <form id="editFlashcardForm">
+            <input type="hidden" id="editFlashcardId" />
+            <div class="form-group">
+              <label for="editMateria">Matéria:</label>
+              <select name="materia" id="editMateria" required>
+                <option value="">Selecione a matéria</option>
+                <option value="CH">Ciências Humanas</option>
+                <option value="CN">Ciências da Natureza</option>
+                <option value="LINGUAGENS">Linguagens</option>
+                <option value="MATEMATICA">Matemática</option>
+              </select>
+            </div>
 
-          <div class="form-group">
-            <label for="editConteudo">Conteúdo:</label>
-            <select name="conteudo" id="editConteudo" required disabled>
-              <option value="">Primeiro, selecione a área</option>
-            </select>
-          </div>
+            <div class="form-group">
+              <label for="editConteudo">Conteúdo:</label>
+              <select name="conteudo" id="editConteudo" required disabled>
+                <option value="">Primeiro, selecione a área</option>
+              </select>
+            </div>
 
-          <div class="form-group">
-            <label for="editPergunta">Pergunta:</label>
-            <textarea
-              name="pergunta"
-              id="editPergunta"
-              placeholder="Digite a pergunta do flashcard..."
-              required
-            ></textarea>
-          </div>
+            <div class="form-group">
+              <label for="editPergunta">Pergunta:</label>
+              <textarea
+                name="pergunta"
+                id="editPergunta"
+                placeholder="Digite a pergunta do flashcard..."
+                required
+              ></textarea>
+            </div>
 
-          <div class="form-group">
-            <label for="editResposta">Resposta:</label>
-            <textarea
-              name="resposta"
-              id="editResposta"
-              placeholder="Digite a resposta do flashcard..."
-              required
-            ></textarea>
-          </div>
+            <div class="form-group">
+              <label for="editResposta">Resposta:</label>
+              <textarea
+                name="resposta"
+                id="editResposta"
+                placeholder="Digite a resposta do flashcard..."
+                required
+              ></textarea>
+            </div>
 
-          <div class="modal-buttons">
-            <button type="button" class="btn-cancelar" id="cancelEdit">
-              Cancelar
-            </button>
-            <button type="submit" class="btn">Salvar Alterações</button>
-          </div>
-        </form>
-      </div>
+            <div class="modal-buttons">
+              <button type="button" class="btn-cancelar" id="cancelEdit">
+                Cancelar
+              </button>
+              <button type="submit" class="btn">Salvar Alterações</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 
