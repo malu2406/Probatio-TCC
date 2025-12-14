@@ -1,21 +1,17 @@
-// FUNÇÃO PARA O MENU RESPONSIVO - ADICIONE ESTA FUNÇÃO NO INÍCIO
 function setupMobileMenu() {
   const menuToggle = document.getElementById("menu-toggle");
   const mainNav = document.getElementById("main-nav");
   const userMenu = document.getElementById("user-menu");
   const body = document.body;
 
-  // Criar overlay
   const overlay = document.createElement("div");
   overlay.className = "menu-overlay";
   document.body.appendChild(overlay);
 
-  // Função para abrir/fechar o menu
   function toggleMenu() {
     const isOpen = menuToggle.classList.contains("active");
 
     if (!isOpen) {
-      // Abrir menu
       menuToggle.classList.add("active");
       mainNav.classList.add("active");
       userMenu.classList.add("active");
@@ -35,14 +31,12 @@ function setupMobileMenu() {
     body.classList.remove("menu-open");
   }
 
-  // Event listeners
   if (menuToggle) {
     menuToggle.addEventListener("click", toggleMenu);
   }
 
   overlay.addEventListener("click", closeMenu);
 
-  // Fechar menu ao clicar em um link (para mobile)
   const navLinks = document.querySelectorAll(".mobile-menu .nav-link");
   navLinks.forEach((link) => {
     link.addEventListener("click", () => {
@@ -52,7 +46,6 @@ function setupMobileMenu() {
     });
   });
 
-  // Fechar menu ao redimensionar a janela para tamanho maior
   window.addEventListener("resize", () => {
     if (window.innerWidth > 900) {
       closeMenu();
@@ -60,9 +53,7 @@ function setupMobileMenu() {
   });
 }
 
-// AGORA O SEU CÓDIGO ORIGINAL CONTINUA AQUI
 document.addEventListener("DOMContentLoaded", function () {
-  // Configurar menu mobile - ADICIONE ESTA LINHA
   setupMobileMenu();
 
   let estatisticasAtuais = {};
@@ -79,10 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-  // Carregar estatísticas
   carregarEstatisticas();
 
-  // Event listeners para a legenda - CORRIGIDO
+  // Event listeners para a legenda 
   document.querySelectorAll(".legenda-item").forEach((item) => {
     item.addEventListener("click", function () {
       const materia = this.getAttribute("data-materia");

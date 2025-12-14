@@ -1,5 +1,6 @@
 const prisma = require("../models");
 
+//vendo statistics antiga ne
 const statisticsController = {
   getStatistics: async (req, res) => {
     try {
@@ -28,7 +29,7 @@ const statisticsController = {
     }
   },
 
-  //Registro de acerto/erro de falshcards
+  //adicionando novas statistics ne
   postStatistics: async (req, res) => {
     const { materia, disciplina, acertou } = req.body;
 
@@ -41,9 +42,10 @@ const statisticsController = {
         where: { userId_materia: { userId: req.session.user.id, materia } },
         update: {
           total: { increment: 1 },
-          acertos: { increment: acertou ? 1 : 0 },  //adiciona mais um acerto
+          acertos: { increment: acertou ? 1 : 0 }, //adiciona mais um acerto
         },
-        create: {                                   //cria uma nova base de statistics
+        create: {
+          //cria uma nova base de statistics se o user nao tinha statiscs antigos ne
           userId: req.session.user.id,
           materia,
           total: 1,
@@ -101,6 +103,7 @@ const statisticsController = {
     }
   },
 
+  //statistics detalhadas ne, eu pego aqui a historia, geo e coisas assim
   getStatisticsByDiscipline: async (req, res) => {
     try {
       const estatisticas = await prisma.estatisticasDisciplina.findMany({
