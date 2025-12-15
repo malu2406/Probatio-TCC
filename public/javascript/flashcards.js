@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let userId = null;
 
   fetch("/api/usuario")
-    .then((response) => response.json())
+    .then((resposta) => resposta.json())
     .then((data) => {
       userId = data.id;
       if (data.tipo === "BOLSISTA") {
@@ -281,10 +281,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateStatsDisplay();
 
+  //exibe todos mais mais flashcards
   async function loadFlashcardsFromDB() {
     try {
-      const response = await fetch("/api/todos-flashcards");
-      todasQuestoes = await response.json();
+      const resposta = await fetch("/api/todos-flashcards");
+      todasQuestoes = await resposta.json();
     } catch (error) {
       console.error("Erro ao carregar flashcards:", error);
     }
@@ -346,6 +347,8 @@ document.addEventListener("DOMContentLoaded", function () {
     return mapeamento[value] || value;
   }
 
+  //agora sim exibe todos os flashcards babilonicos com html fofinho
+
   function exibirFlashcards() {
     const container = document.getElementById("flashcardsContainer");
     container.innerHTML = "";
@@ -366,7 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     reapplyEventListeners();
-    updateContador(); // Atualizar contador após exibir flashcards
+    updateContador();
   }
 
   function createFlashcardElement(flashcard) {
@@ -401,28 +404,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     div.innerHTML = `
-            <span class="materia-tag ${materiaClass}">${
+              <span class="materia-tag ${materiaClass}">${
       materiaNames[flashcard.materia] || flashcard.materia
     }</span>
-            <div class="conteudo-tag">${mapearNomeConteudo(
-              flashcard.conteudo
-            )}</div>
-            <div class="pergunta">${flashcard.pergunta}</div>
-            <div class="resposta">${flashcard.resposta}</div>
-            <div class="controles">
-                <button class="btn mostrar-resposta">Mostrar Resposta</button>
-                <div class="feedback-buttons" style="display: none">
-                    <button class="btn acertou">Acertou</button>
-                    <button class="btn errou">Errou</button>
-                </div>
-            </div>
-        `;
+              <div class="conteudo-tag">${mapearNomeConteudo(
+                flashcard.conteudo
+              )}</div>
+              <div class="pergunta">${flashcard.pergunta}</div>
+              <div class="resposta">${flashcard.resposta}</div>
+              <div class="controles">
+                  <button class="btn mostrar-resposta">Mostrar Resposta</button>
+                  <div class="feedback-buttons" style="display: none">
+                      <button class="btn acertou">Acertou</button>
+                      <button class="btn errou">Errou</button>
+                  </div>
+              </div>
+          `;
 
     return div;
   }
 
   function reapplyEventListeners() {
-    // Mostrar/ocultar respostas
     const mostrarRespostaButtons =
       document.querySelectorAll(".mostrar-resposta");
     mostrarRespostaButtons.forEach((button) => {
@@ -483,7 +485,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const materiaBackend =
         materiaMapToBackend[materiaFrontend] || materiaFrontend;
 
-      const response = await fetch("/api/estatisticas", {
+      const resposta = await fetch("/api/estatisticas", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -503,8 +505,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function updateStatsDisplay() {
     try {
-      const response = await fetch("/api/estatisticas");
-      const stats = await response.json();
+      const resposta = await fetch("/api/estatisticas");
+      const stats = await resposta.json();
 
       document.getElementById(
         "stat-matematica"
