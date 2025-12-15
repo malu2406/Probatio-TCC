@@ -72,29 +72,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   carregarEstatisticas();
 
-  // Event listeners para a legenda 
   document.querySelectorAll(".legenda-item").forEach((item) => {
     item.addEventListener("click", function () {
       const materia = this.getAttribute("data-materia");
-
-      // Se já estamos na matéria clicada, não faz nada
       if (modoVisualizacao === "detalhado" && materiaSelecionada === materia) {
         return;
       }
-
-      // Mostra os detalhes da matéria clicada
       mostrarDetalhesMateria(materia);
     });
   });
-
-  // Botão voltar
   document
     .getElementById("btn-voltar-geral")
     .addEventListener("click", function () {
       voltarParaVisualizacaoGeral();
     });
-
-  // Botão resetar
   document.getElementById("btn-resetar").addEventListener("click", function () {
     if (
       confirm(
@@ -104,6 +95,8 @@ document.addEventListener("DOMContentLoaded", function () {
       resetarEstatisticas();
     }
   });
+
+  //mostra as estatisticas do usuario
 
   async function carregarEstatisticas() {
     try {
@@ -127,23 +120,19 @@ document.addEventListener("DOMContentLoaded", function () {
       gerarGraficoVazio();
     }
   }
-
+  //carregan quando eu volto pra pagina de estastisticas
   function atualizarVisualizacaoGeral() {
     modoVisualizacao = "geral";
     materiaSelecionada = "";
-
-    // Remover classe ativa da legenda
     document.querySelectorAll(".legenda-item").forEach((item) => {
       item.classList.remove("active");
     });
-
     document.getElementById("grafico-titulo").textContent =
       "Desempenho por Matéria";
     document.getElementById("btn-voltar-geral").style.display = "none";
-
     gerarGraficoGeral(estatisticasAtuais.geral);
   }
-
+ //quando eu clico na materia, aparece o conteudo
   function mostrarDetalhesMateria(materia) {
     modoVisualizacao = "detalhado";
     materiaSelecionada = materia;
@@ -159,7 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
       "Desempenho em " + titulos[materia];
     document.getElementById("btn-voltar-geral").style.display = "block";
 
-    // Atualizar classe ativa na legenda
     document.querySelectorAll(".legenda-item").forEach((item) => {
       item.classList.remove("active");
       if (item.getAttribute("data-materia") === materia) {
@@ -167,7 +155,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // Chamar a função apropriada baseada na matéria selecionada
     switch (materia) {
       case "linguagens":
         gerarGraficoLinguagens(estatisticasAtuais.disciplinas);
@@ -192,8 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function gerarGraficoGeral(stats) {
     const chartContainer = document.getElementById("chart-container");
-
-    // Calcular percentuais
     const percentuais = {
       matematica:
         stats.matematica.total > 0
