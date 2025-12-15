@@ -174,6 +174,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  //edit do flashcard
+
   function setupEditButton(button, flashcard) {
     button.addEventListener("click", function () {
       document.getElementById("editFlashcardId").value = flashcard.id;
@@ -188,6 +190,8 @@ document.addEventListener("DOMContentLoaded", function () {
       editModal.style.display = "block";
     });
   }
+
+  //delet do flashcard
 
   function setupDeleteButton(button, flashcardId) {
     button.addEventListener("click", async function () {

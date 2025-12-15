@@ -52,7 +52,9 @@ function setupMobileMenu() {
   });
 }
 
-function setupModernFilters() {
+//function dos filtros
+
+function filtrosFlashcards() {
   const filtrosMobileToggle = document.getElementById("filtrosMobileToggle");
   const filtrosWrapper = document.getElementById("filtrosWrapper");
   const filtroGroups = document.querySelectorAll(".filtro-group");
@@ -93,7 +95,6 @@ function setupModernFilters() {
     });
   }
 
-  // filtros fofes
   filtroGroups.forEach((group) => {
     const header = group.querySelector(".filtro-header");
     const content = group.querySelector(".filtro-content");
@@ -254,7 +255,7 @@ function setupModernFilters() {
 document.addEventListener("DOMContentLoaded", function () {
   setupMobileMenu();
 
-  const { aplicarFiltrosImediatamente, updateContador } = setupModernFilters();
+  const { aplicarFiltrosImediatamente, updateContador } = filtrosFlashcards();
 
   let todasQuestoes = [];
   let historicoRespostas = {};
@@ -271,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Promise.all([loadFlashcardsFromDB(), loadHistoricoRespostas()]).then(
         () => {
           exibirFlashcards();
-          aplicarFiltrosImediatamente(); // Aplicar filtros iniciais
+          aplicarFiltrosImediatamente();
         }
       );
     })
@@ -281,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateStatsDisplay();
 
-  //exibe todos mais mais flashcards
+  //exibe todos mais mais flashcards🦆
   async function loadFlashcardsFromDB() {
     try {
       const resposta = await fetch("/api/todos-flashcards");
@@ -291,6 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // se acertou ou errou🦆
   async function loadHistoricoRespostas() {
     try {
       if (!userId) return;
@@ -315,6 +317,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  //se ele responder dnv, salva dnv no localstorage
+
   function salvarResposta(flashcardId, acertou) {
     if (!userId) return;
 
@@ -329,6 +333,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("Resposta salva para usuário:", userId, flashcardId, acertou);
   }
+
+  //converte os nomes babadeiros
 
   function mapearNomeConteudo(value) {
     const mapeamento = {
@@ -347,12 +353,12 @@ document.addEventListener("DOMContentLoaded", function () {
     return mapeamento[value] || value;
   }
 
-  //agora sim exibe todos os flashcards babilonicos com html fofinho
+  //agora sim exibe todos os flashcards babilonicos com html fofinho🦆
 
   function exibirFlashcards() {
     const container = document.getElementById("flashcardsContainer");
     container.innerHTML = "";
-
+    //aqui é só caso eu reinicie o banco e perca todos meus flashcards, dai aparece mensagem dizendo que deu ruim
     if (todasQuestoes.length === 0) {
       container.innerHTML =
         '<div class="no-flashcards">' +
@@ -368,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function () {
       container.appendChild(flashcardElement);
     });
 
-    reapplyEventListeners();
+    interacoesFlashcards();
     updateContador();
   }
 
@@ -424,7 +430,9 @@ document.addEventListener("DOMContentLoaded", function () {
     return div;
   }
 
-  function reapplyEventListeners() {
+  //salva se ele acertou, acertou==true errou igual acertou==false
+
+  function interacoesFlashcards() {
     const mostrarRespostaButtons =
       document.querySelectorAll(".mostrar-resposta");
     mostrarRespostaButtons.forEach((button) => {
@@ -449,7 +457,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const conteudo = card.getAttribute("data-conteudo");
         const flashcardId = card.getAttribute("data-id");
 
-        registerAnswer(materia, conteudo, true);
+        registrarResposta(materia, conteudo, true);
         salvarResposta(flashcardId, true);
         card.classList.add("respondida-acerto");
         card.style.display = "none";
@@ -464,7 +472,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const conteudo = card.getAttribute("data-conteudo");
         const flashcardId = card.getAttribute("data-id");
 
-        registerAnswer(materia, conteudo, false);
+        registrarResposta(materia, conteudo, false);
         salvarResposta(flashcardId, false);
         card.classList.add("respondida-erro");
         card.style.display = "none";
@@ -473,7 +481,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  async function registerAnswer(materiaFrontend, conteudo, acertou) {
+  async function registrarResposta(materiaFrontend, conteudo, acertou) {
     try {
       const materiaMapToBackend = {
         matematica: "matematica",
