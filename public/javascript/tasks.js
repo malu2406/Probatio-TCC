@@ -39,6 +39,7 @@ function renderTask(taskData) {
   tasksOl.appendChild(taskTemplateClone);
 }
 
+//carrega a lista de tarefas do banco de dados
 async function loadTasksFromDB() {
   try {
     tasksOl.innerHTML = "";
