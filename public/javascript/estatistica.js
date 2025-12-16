@@ -100,13 +100,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function carregarEstatisticas() {
     try {
-      const [responseGeral, responseDisciplinas] = await Promise.all([
+      const [respostaGeral, respostaDisciplinas] = await Promise.all([
         fetch("/api/estatisticas"),
         fetch("/api/estatisticas-disciplinas"),
       ]);
 
-      const statsGeral = await responseGeral.json();
-      const statsDisciplinas = await responseDisciplinas.json();
+      const statsGeral = await respostaGeral.json();
+      const statsDisciplinas = await respostaDisciplinas.json();
 
       estatisticasAtuais = {
         geral: statsGeral,
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btn-voltar-geral").style.display = "none";
     gerarGraficoGeral(estatisticasAtuais.geral);
   }
- //quando eu clico na materia, aparece o conteudo
+  //quando eu clico na materia, aparece o conteudo
   function mostrarDetalhesMateria(materia) {
     modoVisualizacao = "detalhado";
     materiaSelecionada = materia;

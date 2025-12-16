@@ -78,10 +78,8 @@ const authController = {
     }
   },
 
-  // --- NOVO MÉTODO: ATUALIZAR PERFIL ---
   updateProfile: async (req, res) => {
     try {
-      // Verifica se o usuário está logado na sessão
       if (!req.session.user) {
         return res.status(401).json({ error: "Usuário não autenticado." });
       }
@@ -89,14 +87,12 @@ const authController = {
       const userId = req.session.user.id;
       const { nome, nickname, email, senha } = req.body;
 
-      // Objeto base de atualização
       const dataToUpdate = {
         nome,
         nickname,
         email,
       };
 
-      // Só atualiza a senha se o usuário digitou algo novo
       if (senha && senha.trim() !== "") {
         if (senha.length < 7) {
           return res
@@ -106,13 +102,11 @@ const authController = {
         dataToUpdate.senha = await bcrypt.hash(senha, 10);
       }
 
-      // Atualiza no Banco de Dados
       const updatedUser = await prisma.user.update({
         where: { id: userId },
         data: dataToUpdate,
       });
 
-      // IMPORTANTE: Atualiza a sessão com os novos dados
       // Se não fizer isso, o site vai continuar mostrando o nome antigo até relogar
       req.session.user = {
         id: updatedUser.id,
