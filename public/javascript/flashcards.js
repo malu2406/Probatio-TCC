@@ -1,28 +1,23 @@
-// Função para controlar o menu mobile
 function setupMobileMenu() {
   const menuToggle = document.getElementById("menu-toggle");
   const mainNav = document.getElementById("main-nav");
   const userMenu = document.getElementById("user-menu");
   const body = document.body;
 
-  // Criar overlay
   const overlay = document.createElement("div");
   overlay.className = "menu-overlay";
   document.body.appendChild(overlay);
 
-  // Função para abrir/fechar o menu
   function toggleMenu() {
     const isOpen = menuToggle.classList.contains("active");
 
     if (!isOpen) {
-      // Abrir menu
       menuToggle.classList.add("active");
       mainNav.classList.add("active");
       userMenu.classList.add("active");
       overlay.classList.add("active");
       body.classList.add("menu-open");
     } else {
-      // Fechar menu
       closeMenu();
     }
   }
@@ -35,14 +30,12 @@ function setupMobileMenu() {
     body.classList.remove("menu-open");
   }
 
-  // Event listeners
   if (menuToggle) {
     menuToggle.addEventListener("click", toggleMenu);
   }
 
   overlay.addEventListener("click", closeMenu);
 
-  // Fechar menu ao clicar em um link (para mobile)
   const navLinks = document.querySelectorAll(".mobile-menu .nav-link");
   navLinks.forEach((link) => {
     link.addEventListener("click", () => {
@@ -52,7 +45,6 @@ function setupMobileMenu() {
     });
   });
 
-  // Fechar menu ao redimensionar a janela para tamanho maior
   window.addEventListener("resize", () => {
     if (window.innerWidth > 900) {
       closeMenu();
@@ -60,8 +52,9 @@ function setupMobileMenu() {
   });
 }
 
-// Função para controlar os filtros modernos
-function setupModernFilters() {
+//function dos filtros
+
+function filtrosFlashcards() {
   const filtrosMobileToggle = document.getElementById("filtrosMobileToggle");
   const filtrosWrapper = document.getElementById("filtrosWrapper");
   const filtroGroups = document.querySelectorAll(".filtro-group");
@@ -73,17 +66,13 @@ function setupModernFilters() {
     status: "todas",
   };
 
-  // Verificar se estamos em mobile
   const isMobile = window.innerWidth <= 900;
 
-  // Toggle do menu de filtros em mobile
   if (filtrosMobileToggle && filtrosWrapper) {
     if (isMobile) {
-      // Em mobile, começa fechado
       filtrosMobileToggle.classList.remove("active");
       filtrosWrapper.classList.remove("active");
     } else {
-      // Em desktop, sempre visível
       filtrosMobileToggle.style.display = "none";
       filtrosWrapper.classList.add("active");
       filtrosWrapper.style.display = "flex";
@@ -94,7 +83,6 @@ function setupModernFilters() {
         filtrosMobileToggle.classList.toggle("active");
         filtrosWrapper.classList.toggle("active");
 
-        // Scroll suave para mostrar os filtros
         if (filtrosWrapper.classList.contains("active")) {
           setTimeout(() => {
             filtrosWrapper.scrollIntoView({
@@ -107,18 +95,14 @@ function setupModernFilters() {
     });
   }
 
-  // Configurar comportamento dos grupos de filtros
   filtroGroups.forEach((group) => {
     const header = group.querySelector(".filtro-header");
     const content = group.querySelector(".filtro-content");
     const toggleIcon = group.querySelector(".toggle-icon");
 
     if (isMobile) {
-      // Em mobile, grupos começam fechados
       group.classList.remove("active");
       content.style.display = "none";
-
-      // Adicionar evento de clique para expandir/recolher
       header.addEventListener("click", () => {
         group.classList.toggle("active");
 
@@ -135,7 +119,6 @@ function setupModernFilters() {
         }
       });
     } else {
-      // Em desktop, grupos sempre expandidos
       group.classList.add("active");
       content.style.display = "block";
       if (toggleIcon) {
@@ -144,11 +127,9 @@ function setupModernFilters() {
     }
   });
 
-  // Configurar botões de filtro
   const filtroBtns = document.querySelectorAll(".filtro-btn");
   const filtroStatusBtns = document.querySelectorAll(".filtro-status-btn");
 
-  // Selecionar filtro de matéria - APLICA IMEDIATAMENTE
   filtroBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       filtroBtns.forEach((b) => b.classList.remove("ativo"));
@@ -156,7 +137,6 @@ function setupModernFilters() {
       filtrosAtivos.materia = btn.getAttribute("data-materia");
       aplicarFiltrosImediatamente();
 
-      // Em mobile, fechar menu de filtros após seleção
       if (isMobile && filtrosMobileToggle) {
         filtrosMobileToggle.classList.remove("active");
         filtrosWrapper.classList.remove("active");
@@ -164,7 +144,6 @@ function setupModernFilters() {
     });
   });
 
-  // Selecionar filtro de status - APLICA IMEDIATAMENTE
   filtroStatusBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       filtroStatusBtns.forEach((b) => b.classList.remove("ativo"));
@@ -172,7 +151,6 @@ function setupModernFilters() {
       filtrosAtivos.status = btn.getAttribute("data-status");
       aplicarFiltrosImediatamente();
 
-      // Em mobile, fechar menu de filtros após seleção
       if (isMobile && filtrosMobileToggle) {
         filtrosMobileToggle.classList.remove("active");
         filtrosWrapper.classList.remove("active");
@@ -180,10 +158,8 @@ function setupModernFilters() {
     });
   });
 
-  // Botão limpar filtros
   if (limparFiltrosBtn) {
     limparFiltrosBtn.addEventListener("click", () => {
-      // Resetar filtros de matéria
       const todasMateria = document.querySelector(
         '.filtro-btn[data-materia="todas"]'
       );
@@ -193,7 +169,6 @@ function setupModernFilters() {
         filtrosAtivos.materia = "todas";
       }
 
-      // Resetar filtros de status
       const todasStatus = document.querySelector(
         '.filtro-status-btn[data-status="todas"]'
       );
@@ -203,7 +178,6 @@ function setupModernFilters() {
         filtrosAtivos.status = "todas";
       }
 
-      // Mostrar TODOS os flashcards novamente
       const flashcards = document.querySelectorAll(".flashcard");
       flashcards.forEach((card) => {
         card.style.display = "flex";
@@ -211,7 +185,6 @@ function setupModernFilters() {
 
       aplicarFiltrosImediatamente();
 
-      // Feedback visual
       limparFiltrosBtn.innerHTML =
         '<span class="material-icons">check</span> Filtros Limpos';
       setTimeout(() => {
@@ -221,7 +194,6 @@ function setupModernFilters() {
     });
   }
 
-  // Função para aplicar filtros e atualizar contador IMEDIATAMENTE
   function aplicarFiltrosImediatamente() {
     const flashcards = document.querySelectorAll(".flashcard");
     const materia = filtrosAtivos.materia;
@@ -230,11 +202,7 @@ function setupModernFilters() {
     flashcards.forEach((card) => {
       const cardMateria = card.getAttribute("data-materia");
       const cardId = card.getAttribute("data-id");
-
-      // Primeiro: filtrar por matéria
       let mostraPorMateria = materia === "todas" || cardMateria === materia;
-
-      // Segundo: filtrar por status (usando classes CSS para determinar status)
       let mostraPorStatus = true;
 
       if (status !== "todas") {
@@ -258,7 +226,6 @@ function setupModernFilters() {
         }
       }
 
-      // Mostrar ou esconder baseado nos dois filtros
       card.style.display =
         mostraPorMateria && mostraPorStatus ? "flex" : "none";
     });
@@ -266,7 +233,6 @@ function setupModernFilters() {
     updateContador();
   }
 
-  // Atualizar contador
   function updateContador() {
     const flashcards = document.querySelectorAll(".flashcard");
     const visiveis = Array.from(flashcards).filter(
@@ -276,9 +242,7 @@ function setupModernFilters() {
     contadorTotal.textContent = `${visiveis} flashcards encontrados`;
   }
 
-  // Lidar com redimensionamento da janela
   window.addEventListener("resize", () => {
-    // Se mudou de mobile para desktop ou vice-versa, recarregar a página para garantir comportamento correto
     const newIsMobile = window.innerWidth <= 900;
     if (isMobile !== newIsMobile) {
       location.reload();
@@ -289,18 +253,16 @@ function setupModernFilters() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Configurar menu mobile
   setupMobileMenu();
 
-  // Configurar filtros modernos
-  const { aplicarFiltrosImediatamente, updateContador } = setupModernFilters();
+  const { aplicarFiltrosImediatamente, updateContador } = filtrosFlashcards();
 
   let todasQuestoes = [];
   let historicoRespostas = {};
   let userId = null;
 
   fetch("/api/usuario")
-    .then((response) => response.json())
+    .then((resposta) => resposta.json())
     .then((data) => {
       userId = data.id;
       if (data.tipo === "BOLSISTA") {
@@ -310,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Promise.all([loadFlashcardsFromDB(), loadHistoricoRespostas()]).then(
         () => {
           exibirFlashcards();
-          aplicarFiltrosImediatamente(); // Aplicar filtros iniciais
+          aplicarFiltrosImediatamente();
         }
       );
     })
@@ -320,15 +282,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateStatsDisplay();
 
+  //exibe todos mais mais flashcards🦆
   async function loadFlashcardsFromDB() {
     try {
-      const response = await fetch("/api/todos-flashcards");
-      todasQuestoes = await response.json();
+      const resposta = await fetch("/api/todos-flashcards");
+      todasQuestoes = await resposta.json();
     } catch (error) {
       console.error("Erro ao carregar flashcards:", error);
     }
   }
 
+  // se acertou ou errou🦆
   async function loadHistoricoRespostas() {
     try {
       if (!userId) return;
@@ -353,6 +317,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  //se ele responder dnv, salva dnv no localstorage
+
   function salvarResposta(flashcardId, acertou) {
     if (!userId) return;
 
@@ -367,6 +333,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("Resposta salva para usuário:", userId, flashcardId, acertou);
   }
+
+  //converte os nomes babadeiros
 
   function mapearNomeConteudo(value) {
     const mapeamento = {
@@ -385,10 +353,12 @@ document.addEventListener("DOMContentLoaded", function () {
     return mapeamento[value] || value;
   }
 
+  //agora sim exibe todos os flashcards babilonicos com html fofinho🦆
+
   function exibirFlashcards() {
     const container = document.getElementById("flashcardsContainer");
     container.innerHTML = "";
-
+    //aqui é só caso eu reinicie o banco e perca todos meus flashcards, dai aparece mensagem dizendo que deu ruim
     if (todasQuestoes.length === 0) {
       container.innerHTML =
         '<div class="no-flashcards">' +
@@ -404,8 +374,8 @@ document.addEventListener("DOMContentLoaded", function () {
       container.appendChild(flashcardElement);
     });
 
-    reapplyEventListeners();
-    updateContador(); // Atualizar contador após exibir flashcards
+    interacoesFlashcards();
+    updateContador();
   }
 
   function createFlashcardElement(flashcard) {
@@ -440,28 +410,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     div.innerHTML = `
-            <span class="materia-tag ${materiaClass}">${
+              <span class="materia-tag ${materiaClass}">${
       materiaNames[flashcard.materia] || flashcard.materia
     }</span>
-            <div class="conteudo-tag">${mapearNomeConteudo(
-              flashcard.conteudo
-            )}</div>
-            <div class="pergunta">${flashcard.pergunta}</div>
-            <div class="resposta">${flashcard.resposta}</div>
-            <div class="controles">
-                <button class="btn mostrar-resposta">Mostrar Resposta</button>
-                <div class="feedback-buttons" style="display: none">
-                    <button class="btn acertou">Acertou</button>
-                    <button class="btn errou">Errou</button>
-                </div>
-            </div>
-        `;
+              <div class="conteudo-tag">${mapearNomeConteudo(
+                flashcard.conteudo
+              )}</div>
+              <div class="pergunta">${flashcard.pergunta}</div>
+              <div class="resposta">${flashcard.resposta}</div>
+              <div class="controles">
+                  <button class="btn mostrar-resposta">Mostrar Resposta</button>
+                  <div class="feedback-buttons" style="display: none">
+                      <button class="btn acertou">Acertou</button>
+                      <button class="btn errou">Errou</button>
+                  </div>
+              </div>
+          `;
 
     return div;
   }
 
-  function reapplyEventListeners() {
-    // Mostrar/ocultar respostas
+  //salva se ele acertou, acertou==true errou igual acertou==false
+
+  function interacoesFlashcards() {
     const mostrarRespostaButtons =
       document.querySelectorAll(".mostrar-resposta");
     mostrarRespostaButtons.forEach((button) => {
@@ -486,10 +457,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const conteudo = card.getAttribute("data-conteudo");
         const flashcardId = card.getAttribute("data-id");
 
-        registerAnswer(materia, conteudo, true);
+        registrarResposta(materia, conteudo, true);
         salvarResposta(flashcardId, true);
         card.classList.add("respondida-acerto");
-        // Esconder o card imediatamente após responder
         card.style.display = "none";
         updateContador();
       });
@@ -502,17 +472,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const conteudo = card.getAttribute("data-conteudo");
         const flashcardId = card.getAttribute("data-id");
 
-        registerAnswer(materia, conteudo, false);
+        registrarResposta(materia, conteudo, false);
         salvarResposta(flashcardId, false);
         card.classList.add("respondida-erro");
-        // Esconder o card imediatamente após responder
         card.style.display = "none";
         updateContador();
       });
     });
   }
 
-  async function registerAnswer(materiaFrontend, conteudo, acertou) {
+  async function registrarResposta(materiaFrontend, conteudo, acertou) {
     try {
       const materiaMapToBackend = {
         matematica: "matematica",
@@ -524,7 +493,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const materiaBackend =
         materiaMapToBackend[materiaFrontend] || materiaFrontend;
 
-      const response = await fetch("/api/estatisticas", {
+      const resposta = await fetch("/api/estatisticas", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -544,8 +513,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function updateStatsDisplay() {
     try {
-      const response = await fetch("/api/estatisticas");
-      const stats = await response.json();
+      const resposta = await fetch("/api/estatisticas");
+      const stats = await resposta.json();
 
       document.getElementById(
         "stat-matematica"

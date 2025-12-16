@@ -108,7 +108,7 @@ const authController = {
         data: dataToUpdate,
       });
 
-
+      // Se não fizer isso, o site vai continuar mostrando o nome antigo até relogar
       req.session.user = {
         id: updatedUser.id,
         email: updatedUser.email,

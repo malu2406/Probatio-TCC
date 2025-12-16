@@ -1,21 +1,17 @@
-// FUNÇÃO PARA O MENU RESPONSIVO - ADICIONE ESTA FUNÇÃO NO INÍCIO
 function setupMobileMenu() {
   const menuToggle = document.getElementById("menu-toggle");
   const mainNav = document.getElementById("main-nav");
   const userMenu = document.getElementById("user-menu");
   const body = document.body;
 
-  // Criar overlay
   const overlay = document.createElement("div");
   overlay.className = "menu-overlay";
   document.body.appendChild(overlay);
 
-  // Função para abrir/fechar o menu
   function toggleMenu() {
     const isOpen = menuToggle.classList.contains("active");
 
     if (!isOpen) {
-      // Abrir menu
       menuToggle.classList.add("active");
       mainNav.classList.add("active");
       userMenu.classList.add("active");
@@ -35,14 +31,12 @@ function setupMobileMenu() {
     body.classList.remove("menu-open");
   }
 
-  // Event listeners
   if (menuToggle) {
     menuToggle.addEventListener("click", toggleMenu);
   }
 
   overlay.addEventListener("click", closeMenu);
 
-  // Fechar menu ao clicar em um link (para mobile)
   const navLinks = document.querySelectorAll(".mobile-menu .nav-link");
   navLinks.forEach((link) => {
     link.addEventListener("click", () => {
@@ -52,7 +46,6 @@ function setupMobileMenu() {
     });
   });
 
-  // Fechar menu ao redimensionar a janela para tamanho maior
   window.addEventListener("resize", () => {
     if (window.innerWidth > 900) {
       closeMenu();
@@ -60,9 +53,7 @@ function setupMobileMenu() {
   });
 }
 
-// AGORA O SEU CÓDIGO ORIGINAL CONTINUA AQUI
 document.addEventListener("DOMContentLoaded", function () {
-  // Configurar menu mobile - ADICIONE ESTA LINHA
   setupMobileMenu();
 
   let estatisticasAtuais = {};
@@ -79,32 +70,22 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-  // Carregar estatísticas
   carregarEstatisticas();
 
-  // Event listeners para a legenda - CORRIGIDO
   document.querySelectorAll(".legenda-item").forEach((item) => {
     item.addEventListener("click", function () {
       const materia = this.getAttribute("data-materia");
-
-      // Se já estamos na matéria clicada, não faz nada
       if (modoVisualizacao === "detalhado" && materiaSelecionada === materia) {
         return;
       }
-
-      // Mostra os detalhes da matéria clicada
       mostrarDetalhesMateria(materia);
     });
   });
-
-  // Botão voltar
   document
     .getElementById("btn-voltar-geral")
     .addEventListener("click", function () {
       voltarParaVisualizacaoGeral();
     });
-
-  // Botão resetar
   document.getElementById("btn-resetar").addEventListener("click", function () {
     if (
       confirm(
@@ -115,15 +96,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  //mostra as estatisticas do usuario
+
   async function carregarEstatisticas() {
     try {
-      const [responseGeral, responseDisciplinas] = await Promise.all([
+      const [respostaGeral, respostaDisciplinas] = await Promise.all([
         fetch("/api/estatisticas"),
         fetch("/api/estatisticas-disciplinas"),
       ]);
 
-      const statsGeral = await responseGeral.json();
-      const statsDisciplinas = await responseDisciplinas.json();
+      const statsGeral = await respostaGeral.json();
+      const statsDisciplinas = await respostaDisciplinas.json();
 
       estatisticasAtuais = {
         geral: statsGeral,
@@ -137,23 +120,19 @@ document.addEventListener("DOMContentLoaded", function () {
       gerarGraficoVazio();
     }
   }
-
+  //carregan quando eu volto pra pagina de estastisticas
   function atualizarVisualizacaoGeral() {
     modoVisualizacao = "geral";
     materiaSelecionada = "";
-
-    // Remover classe ativa da legenda
     document.querySelectorAll(".legenda-item").forEach((item) => {
       item.classList.remove("active");
     });
-
     document.getElementById("grafico-titulo").textContent =
       "Desempenho por Matéria";
     document.getElementById("btn-voltar-geral").style.display = "none";
-
     gerarGraficoGeral(estatisticasAtuais.geral);
   }
-
+  //quando eu clico na materia, aparece o conteudo
   function mostrarDetalhesMateria(materia) {
     modoVisualizacao = "detalhado";
     materiaSelecionada = materia;
@@ -169,7 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
       "Desempenho em " + titulos[materia];
     document.getElementById("btn-voltar-geral").style.display = "block";
 
-    // Atualizar classe ativa na legenda
     document.querySelectorAll(".legenda-item").forEach((item) => {
       item.classList.remove("active");
       if (item.getAttribute("data-materia") === materia) {
@@ -177,7 +155,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // Chamar a função apropriada baseada na matéria selecionada
     switch (materia) {
       case "linguagens":
         gerarGraficoLinguagens(estatisticasAtuais.disciplinas);
@@ -202,8 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function gerarGraficoGeral(stats) {
     const chartContainer = document.getElementById("chart-container");
-
-    // Calcular percentuais
     const percentuais = {
       matematica:
         stats.matematica.total > 0
