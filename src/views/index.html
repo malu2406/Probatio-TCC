@@ -166,7 +166,6 @@
     </div>
 
     <script>
-      // Menu sanduíche simples
       document.addEventListener("DOMContentLoaded", function () {
         const menuToggle = document.getElementById("menu-toggle");
         const mainNav = document.getElementById("main-nav");
@@ -177,7 +176,6 @@
             menuToggle.classList.toggle("active");
           });
 
-          // Fechar menu ao clicar em um link
           const navLinks = mainNav.querySelectorAll("a");
           navLinks.forEach((link) => {
             link.addEventListener("click", () => {
