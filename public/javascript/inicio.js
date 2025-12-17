@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const saudacao = document.querySelector(".saudacao h1");
         const badge = document.createElement("span");
         badge.className = "badge-ADMIN";
-        badge.textContent = "ADMIN";
+        badge.textContent = "ADMINISTRADOR";
         saudacao.appendChild(badge);
       }
     })
