@@ -1,4 +1,3 @@
-// Mapa para formatar os nomes das disciplinas
 const nomesDisciplinas = {
   portugues: "Português",
   ingles: "Inglês",
@@ -13,19 +12,16 @@ const nomesDisciplinas = {
   matematica: "Matemática",
 };
 
-// Função para controlar o menu mobile
 function setupMobileMenu() {
   const menuToggle = document.getElementById("menu-toggle");
   const mainNav = document.getElementById("main-nav");
   const userMenu = document.getElementById("user-menu");
   const body = document.body;
 
-  // Criar overlay
   const overlay = document.createElement("div");
   overlay.className = "menu-overlay";
   document.body.appendChild(overlay);
 
-  // Função para abrir/fechar o menu
   function toggleMenu() {
     const isOpen = menuToggle.classList.contains("active");
 
@@ -37,7 +33,6 @@ function setupMobileMenu() {
       overlay.classList.add("active");
       body.classList.add("menu-open");
     } else {
-      // Fechar menu
       closeMenu();
     }
   }
@@ -50,14 +45,12 @@ function setupMobileMenu() {
     body.classList.remove("menu-open");
   }
 
-  // Event listeners
   if (menuToggle) {
     menuToggle.addEventListener("click", toggleMenu);
   }
 
   overlay.addEventListener("click", closeMenu);
 
-  // Fechar menu ao clicar em um link (para mobile)
   const navLinks = document.querySelectorAll(".mobile-menu .nav-link");
   navLinks.forEach((link) => {
     link.addEventListener("click", () => {
@@ -67,7 +60,6 @@ function setupMobileMenu() {
     });
   });
 
-  // Fechar menu ao redimensionar a janela para tamanho maior
   window.addEventListener("resize", () => {
     if (window.innerWidth > 900) {
       closeMenu();
@@ -76,21 +68,17 @@ function setupMobileMenu() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Configurar menu mobile
   setupMobileMenu();
 
-  // Carregar dados do usuário
   fetch("/api/usuario")
     .then((response) => response.json())
     .then((data) => {
       document.getElementById("nomeUsuario").textContent = data.nickname;
 
-      // Verificar se o usuário é bolsista e mostrar o link de Matérias
       if (data.tipo === "BOLSISTA") {
         const linkMaterias = document.getElementById("link-materias");
         linkMaterias.style.display = "block";
 
-        // Adicionar indicador visual no título
         const saudacao = document.querySelector(".saudacao h1");
         const badge = document.createElement("span");
         badge.className = "badge-bolsista";
@@ -102,11 +90,9 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Erro ao carregar dados do usuário:", error);
     });
 
-  // Carregar estatísticas do banco de dados (Geral e Disciplinas)
   loadEstatisticasInicio();
 });
 
-// NOVA FUNÇÃO DE CARREGAMENTO (Busca geral e específica)
 async function loadEstatisticasInicio() {
   try {
     const [responseGeral, responseDisciplinas] = await Promise.all([
@@ -181,17 +167,13 @@ function updateDisciplinaAtencao(statsDisciplinas) {
     return a.taxaAcerto - b.taxaAcerto; // Menor % primeiro
   });
 
-  // A primeira da lista é a "pior"
   const piorDisciplina = todasDisciplinas[0];
 
-  // 4. Atualizar o texto na tela
   elementoAlvo.textContent = piorDisciplina.nome;
 
   // Reseta estilos caso tenham sido alterados
   elementoAlvo.style.fontSize = "";
   elementoAlvo.style.lineHeight = "";
-
-  // Opcional: Destacar em vermelho se for crítico (< 50%)
   if (piorDisciplina.taxaAcerto < 0.5) {
     elementoAlvo.style.color = "#ff4444";
   } else {
@@ -282,7 +264,6 @@ function generateChartInicio(stats) {
     return;
   }
 
-  // Limpar container
   chartContainer.innerHTML = "";
 
   // Criar linhas guia de fundo

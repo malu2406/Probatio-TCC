@@ -209,7 +209,6 @@ header:hover {
   display: block;
 }
 
-/* ===== ESTILOS ESPECÍFICOS PARA BOLSISTA ===== */
 .nav-link.bolsista-only {
   background: linear-gradient(45deg, #1a2a6c, #4d69d5);
   color: white !important;
