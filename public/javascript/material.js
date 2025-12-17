@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("/api/usuario")
     .then((resposta) => resposta.json())
     .then((data) => {
-      if (data.tipo === "BOLSISTA") {
+      if (data.tipo === "ADMIN") {
         const linkMaterias = document.getElementById("link-materias");
         if (linkMaterias) linkMaterias.style.display = "block";
       } else {
@@ -158,7 +158,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (resposta.ok) {
         successMessage.style.display = "block";
         form.reset();
-        conteudoSelect.innerHTML = '<option value="">Primeiro, selecione a matéria</option>';
+        conteudoSelect.innerHTML =
+          '<option value="">Primeiro, selecione a matéria</option>';
         conteudoSelect.disabled = true;
         loadFlashcards();
 

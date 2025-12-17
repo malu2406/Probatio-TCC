@@ -47,7 +47,7 @@ const authController = {
       return res.status(400).send("A senha deve ter pelo menos 7 caracteres");
     }
 
-    if (!["USUARIO", "BOLSISTA"].includes(tipo)) {
+    if (!["USUARIO", "ADMIN"].includes(tipo)) {
       return res.status(400).send("Tipo de usuário inválido");
     }
 

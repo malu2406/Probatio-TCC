@@ -6,7 +6,7 @@ CREATE TABLE `User` (
     `nickname` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `senha` VARCHAR(191) NOT NULL,
-    `tipo` ENUM('BOLSISTA', 'USUARIO') NOT NULL DEFAULT 'USUARIO',
+    `tipo` ENUM('ADMIN', 'USUARIO') NOT NULL DEFAULT 'USUARIO',
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)

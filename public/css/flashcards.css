@@ -147,7 +147,7 @@ header {
   height: 24px;
 }
 
-.nav-link.bolsista-only {
+.nav-link.ADMIN-only {
   background: linear-gradient(45deg, #1a2a6c, #4d69d5);
   color: white !important;
   border-radius: 20px;
@@ -169,7 +169,7 @@ header:hover {
   transform: translateY(-2px);
 }
 
-.nav-link.bolsista-only:hover {
+.nav-link.ADMIN-only:hover {
   background: linear-gradient(45deg, #4d69d5, #1a2a6c);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(26, 42, 108, 0.4);

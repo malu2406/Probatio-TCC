@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .then((resposta) => resposta.json())
     .then((data) => {
       userId = data.id;
-      if (data.tipo === "BOLSISTA") {
+      if (data.tipo === "ADMIN") {
         const linkMaterias = document.getElementById("link-materias");
         if (linkMaterias) linkMaterias.style.display = "block";
       }

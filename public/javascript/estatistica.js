@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("/api/usuario")
     .then((response) => response.json())
     .then((data) => {
-      if (data.tipo === "BOLSISTA") {
+      if (data.tipo === "ADMIN") {
         const linkMaterias = document.getElementById("link-materias");
         if (linkMaterias) linkMaterias.style.display = "block";
       }

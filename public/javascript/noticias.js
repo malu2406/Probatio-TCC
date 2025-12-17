@@ -69,8 +69,8 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("/api/usuario")
     .then((response) => response.json())
     .then((data) => {
-      // Verificar se o usuário é bolsista e mostrar o link de Matérias
-      if (data.tipo === "BOLSISTA") {
+      // Verificar se o usuário é ADMIN e mostrar o link de Matérias
+      if (data.tipo === "ADMIN") {
         const linkMaterias = document.getElementById("link-materias");
         if (linkMaterias) linkMaterias.style.display = "block";
       }

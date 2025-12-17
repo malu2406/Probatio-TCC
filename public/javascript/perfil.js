@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (emailDisplay) emailDisplay.innerText = user.email;
       if (nicknameDisplay) nicknameDisplay.innerText = user.nickname;
 
-      // Lógica específica para BOLSISTA (mostrar link de material)
-      if (user.tipo === "BOLSISTA") {
+      // Lógica específica para ADMIN (mostrar link de material)
+      if (user.tipo === "ADMIN") {
         const linkMaterias = document.getElementById("link-materias");
         if (linkMaterias) linkMaterias.style.display = "block";
       }

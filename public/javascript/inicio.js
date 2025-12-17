@@ -75,14 +75,14 @@ document.addEventListener("DOMContentLoaded", function () {
     .then((data) => {
       document.getElementById("nomeUsuario").textContent = data.nickname;
 
-      if (data.tipo === "BOLSISTA") {
+      if (data.tipo === "ADMIN") {
         const linkMaterias = document.getElementById("link-materias");
         linkMaterias.style.display = "block";
 
         const saudacao = document.querySelector(".saudacao h1");
         const badge = document.createElement("span");
-        badge.className = "badge-bolsista";
-        badge.textContent = "Bolsista";
+        badge.className = "badge-ADMIN";
+        badge.textContent = "ADMIN";
         saudacao.appendChild(badge);
       }
     })

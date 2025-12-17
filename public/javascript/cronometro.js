@@ -65,11 +65,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // Configurar menu mobile
   setupMobileMenu();
 
-  // Verificar se usuário é bolsista e mostrar botão de Material
+  // Verificar se usuário é ADMIN e mostrar botão de Material
   fetch("/api/usuario")
     .then((response) => response.json())
     .then((data) => {
-      if (data.tipo === "BOLSISTA") {
+      if (data.tipo === "ADMIN") {
         const linkMaterias = document.getElementById("link-materias");
         if (linkMaterias) linkMaterias.style.display = "block";
       }
