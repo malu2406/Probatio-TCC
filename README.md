@@ -1,1 +1,1 @@
-# Probatio: Site para estudos focado no ENEM
+# Probatio: Plataforma para estudos
